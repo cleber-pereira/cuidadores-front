@@ -130,20 +130,20 @@
         <i class="bi bi-person-plus me-1"></i>Seja Cuidador
       </button>
       <div id="auth-area">
-        <div id="user-info" style="display:none;" class="d-flex align-items-center gap-2">
-          <span id="user-email" class="text-muted small"></span>
-          <button id="logout-button" class="btn btn-sm btn-outline-danger">Sair</button>
-        </div>
       </div>
       <button class="btn btn-sm btn-brand" id="nav-buscar">
         <i class="bi bi-search me-1"></i>Buscar
       </button>
+      <button id="login-button" class="btn btn-sm btn-outline-brand d-none d-md-inline-flex">
+        <i class="bi bi-box-arrow-in-right me-1"></i>Entrar
+      </button>
+      <div id="user-info" style="display:none;" class="d-flex align-items-center gap-2">
+        <!-- <span id="user-email" class="text-muted small"></span> -->
+        <button id="logout-button" class="btn btn-sm btn-outline-danger">Sair</button>
+      </div>
     </div>
   </div>
 </nav>
-<button id="login-button" class="btn btn-sm btn-outline-brand d-none d-md-inline-flex">
-  <i class="bi bi-box-arrow-in-right me-1"></i>Entrar
-</button>
 
 <!-- MODAL LOGIN com Google OAuth -->
 <div id="loginModal" class="login-modal">
@@ -377,7 +377,7 @@
           <img id="foto-preview" src="" alt="" style="display:none;width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--brand-light);margin-bottom:.75rem"/>
           <i class="bi bi-camera fs-2 mb-2" id="upload-icon" style="color:var(--brand)"></i>
           <div class="fw-500" id="upload-label">Clique para enviar sua foto</div>
-          <div class="text-muted small mt-1" id="upload-sub">JPG ou PNG · máx. 5 MB</div>
+          <div class="text-muted small mt-1" id="upload-sub">JPG ou PNG · máx. 500 KB</div>
         </div>
       </div>
       <div class="row g-3 mb-3">
@@ -527,7 +527,7 @@
         if (user) {
           loginBtn.style.display = 'none';
           userInfo.style.display = 'flex';
-          userEmailSpan.textContent = user.email;
+          // userEmailSpan.textContent = user.email;
         } else {
           loginBtn.style.display = 'inline-flex';
           userInfo.style.display = 'none';
@@ -792,14 +792,24 @@
             abrirModalLogin()
             return;
           }
-          // if (raw) {
             const data = JSON.parse(raw);
             const email = data.user.email;
-          // }          
 
           goTo('cadastro');
-        });        document.getElementById('hero-buscar').addEventListener('click', () => goTo('lista'));
-        document.getElementById('hero-cadastro').addEventListener('click', () => goTo('cadastro'));
+        });        
+        document.getElementById('hero-cadastro').addEventListener('click', () => {
+          const raw = localStorage.getItem('sb-duoobpxovvpxfgvvghgk-auth-token');
+          console.log('raw:',raw)
+          if (!raw) {
+            abrirModalLogin()
+            return;
+          }
+            const data = JSON.parse(raw);
+            const email = data.user.email;
+
+          goTo('cadastro');
+        });        
+        document.getElementById('hero-buscar').addEventListener('click', () => goTo('lista'));
         document.getElementById('btn-buscar-home').addEventListener('click', () => {
           const cidade = document.getElementById('input-cidade').value;
           const preco = document.getElementById('input-preco').value;
