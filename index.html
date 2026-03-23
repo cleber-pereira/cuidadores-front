@@ -765,7 +765,9 @@
         if (error) showToast('Erro: ' + error.message, 'danger');
         else { 
           showToast('Perfil publicado com sucesso! 🎉'); setTimeout(() => goTo('lista'), 2000); 
-          fetch('https://api.callmebot.com/whatsapp.php?source=php&phone=556193872684&apikey=977206&text=Novo Cadastro de Cuidador' + nome)
+          try{
+            fetch('https://api.callmebot.com/whatsapp.php?source=php&phone=556193872684&apikey=977206&text=AVISO: Novo Cadastro de Cuidador: ' + nome)
+          }catch (error){}
         }
       }
 
