@@ -786,7 +786,7 @@
         document.getElementById('nav-logo').addEventListener('click', () => goTo('home'));
         document.getElementById('nav-buscar').addEventListener('click', () => goTo('lista'));
         function handleCadastroClick() {
-          const token = localStorage.getItem('google_token');
+          const token = localStorage.getItem('google_user');
 
           if (!token) {
             const redirectUri = 'https://duoobpxovvpxfgvvghgk.supabase.co/auth/v1/callback'; // precisa estar configurado no Google
