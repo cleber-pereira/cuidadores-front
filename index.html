@@ -127,7 +127,7 @@
     <a class="navbar-brand" href="javascript:void(0)" id="nav-logo"><span>Cuida<em>Bem</em></span></a>
     <div class="d-flex gap-2 align-items-center">
       <button class="btn btn-sm btn-outline-brand d-none d-md-inline-flex" id="nav-cadastro">
-        <i class="bi bi-person-plus me-1"></i>Seja Cuidador
+        <i class="bi bi-person-plus me-1"></i>Sou Cuidador
       </button>
       <div id="auth-area">
       </div>
@@ -192,10 +192,10 @@
             </div>
             <div class="row g-3 mb-3">
               <div class="col-6">
-                <label class="form-label">Preço máx./hora</label>
+                <label class="form-label">Preço máx./plantão</label>
                 <select class="form-select" id="input-preco">
                   <option value="">Qualquer</option>
-                  <option>Até R$ 20</option><option>Até R$ 30</option><option>Até R$ 50</option><option>Acima de R$ 50</option>
+                  <option>Até R$ 80</option><option>Até R$ 100</option><option>Até R$ 150</option><option>Acima de R$ 150</option>
                 </select>
               </div>
               <div class="col-6">
@@ -260,7 +260,7 @@
       </select>
       <select id="f-preco" class="form-select form-select-sm" style="width:auto">
         <option value="">Qualquer preço</option>
-        <option>Até R$ 20</option><option>Até R$ 30</option><option>Até R$ 50</option><option>Acima de R$ 50</option>
+        <option>Até R$ 80</option><option>Até R$ 100</option><option>Até R$ 150</option><option>Acima de R$ 150</option>
       </select>
       <select id="f-disp" class="form-select form-select-sm" style="width:auto">
         <option value="">Disponibilidade</option>
@@ -366,7 +366,7 @@
     <div class="cadastro-wrap">
       <button class="btn btn-sm btn-outline-brand mb-4" id="cadastro-voltar">
         <i class="bi bi-arrow-left me-1"></i>Voltar
-      </button>
+      </button><br>
       <span class="step-pill">Cadastro Gratuito</span>
       <h2 class="font-display mt-2 mb-1">Ofereça seus serviços</h2>
       <p class="text-muted mb-5">Cadastre seu perfil em menos de 3 minutos e comece a receber contatos.</p>
@@ -397,8 +397,8 @@
           <input type="tel" id="cad-whatsapp" class="form-control" placeholder="(61) 9 9999-9999"/>
         </div>
         <div class="col-md-6">
-          <label class="form-label fw-500">Valor por hora (R$)</label>
-          <input type="number" id="cad-preco" class="form-control" placeholder="Ex: 25"/>
+          <label class="form-label fw-500">Valor por plantão (R$)</label>
+          <input type="number" id="cad-preco" class="form-control" placeholder="Ex: 120"/>
         </div>
         <div class="col-md-6">
           <label class="form-label fw-500">Experiência</label>
@@ -418,7 +418,7 @@
           </div>
         </div>
         <div class="col-12">
-          <label class="form-label fw-500">Sobre você <span class="text-muted fw-400">(opcional)</span></label>
+          <label class="form-label fw-500">Sobre você <span class="text-muted fw-400"><!-- (opcional) --></span></label>
           <textarea id="cad-sobre" class="form-control" rows="4" placeholder="Conte sua experiência e diferenciais..."></textarea>
         </div>
       </div>
@@ -489,7 +489,16 @@
     } else {
       init();
     }
-
+    document.addEventListener('DOMContentLoaded', function() {
+      const raw = localStorage.getItem('sb-duoobpxovvpxfgvvghgk-auth-token');
+      if (raw) {
+        document.querySelector('#login-button').classList.remove('d-md-inline-flex');
+        console.log('none')
+      } else {
+        document.querySelector('#login-button').classList.add('d-md-inline-flex');
+        console.log('block')
+      }
+    });
     async function init() {
       const supabase = window.supabase.createClient(
         'https://duoobpxovvpxfgvvghgk.supabase.co',
@@ -525,10 +534,14 @@
         const userInfo = document.getElementById('user-info');
         const userEmailSpan = document.getElementById('user-email');
         if (user) {
+          document.querySelector('#login-button').classList.remove('d-md-inline-flex');
+          document.querySelector('#logout-button').style.display = 'block';
           loginBtn.style.display = 'none';
           userInfo.style.display = 'flex';
           // userEmailSpan.textContent = user.email;
         } else {
+          document.querySelector('#login-button').classList.add('d-md-inline-flex');
+          document.querySelector('#logout-button').style.display = 'none';
           loginBtn.style.display = 'inline-flex';
           userInfo.style.display = 'none';
         }
@@ -542,6 +555,7 @@
           return false;
         }
         showToast('Login efetuado com sucesso!');
+        document.querySelector('#login-button').classList.remove('d-md-inline-flex');
         fecharModalLogin();
         return true;
       }
@@ -654,9 +668,9 @@
         if (error) { container.innerHTML = `<div class="col-12"><div class="alert alert-danger">Erro: ${error.message}</div></div>`; return; }
 
         let lista = data || [];
-        const maxP = { 'Até R$ 20':20,'Até R$ 30':30,'Até R$ 50':50 };
+        const maxP = { 'Até R$ 80':80,'Até R$ 100':100,'Até R$ 150':150 };
         if (maxP[fp]) lista = lista.filter(c => c.preco <= maxP[fp]);
-        if (fp === 'Acima de R$ 50') lista = lista.filter(c => c.preco > 50);
+        if (fp === 'Acima de R$ 150') lista = lista.filter(c => c.preco > 150);
         const minA = { '1+ ano':1,'3+ anos':3,'5+ anos':5 };
         if (minA[fe]) lista = lista.filter(c => expToAnos(c.experiencia) >= minA[fe]);
 
@@ -675,7 +689,7 @@
           col.className = 'col-md-6 col-lg-4';
           col.style.cssText = `opacity:0;transform:translateY(20px);transition:opacity .35s ${i*0.07}s ease,transform .35s ${i*0.07}s ease`;
           const foto = c.foto_url || `https://i.pravatar.cc/200?u=${c.id}`;
-          col.innerHTML = `<div class="cuidador-card h-100 p-4"><div class="d-flex align-items-start gap-3 mb-3"><img src="${foto}" class="avatar" alt="${c.nome}" onerror="this.src='https://i.pravatar.cc/200?u=${c.id}'"/><div class="flex-grow-1"><div class="fw-700 mb-1">${c.nome}</div><div class="d-flex flex-wrap gap-1 mb-1">${c.verificado ? '<span class="badge-verificado"><i class="bi bi-patch-check-fill me-1"></i>Verificado</span>' : ''}${c.disponivel ? '<span class="badge-disponivel"><i class="bi bi-circle-fill me-1" style="font-size:.55rem"></i>Disponível</span>' : '<span class="badge bg-secondary bg-opacity-10 text-secondary" style="font-size:.7rem;border-radius:2rem">Indisponível</span>'}</div><div class="stars">${stars(c.avaliacao)} <small class="text-muted ms-1">${(c.avaliacao||5).toFixed(1)} (${c.total_reviews||0})</small></div></div></div><div class="small text-muted mb-1"><i class="bi bi-geo-alt me-1"></i>${c.cidade}</div><div class="small text-muted mb-3"><i class="bi bi-briefcase me-1"></i>${c.experiencia} de experiência</div><div class="d-flex align-items-center justify-content-between"><div class="price-tag">R$ ${c.preco}<small>/h</small></div><button class="btn btn-brand btn-sm px-3">Ver perfil <i class="bi bi-arrow-right ms-1"></i></button></div></div>`;
+          col.innerHTML = `<div class="cuidador-card h-100 p-4"><div class="d-flex align-items-start gap-3 mb-3"><img src="${foto}" class="avatar" alt="${c.nome}" onerror="this.src='https://i.pravatar.cc/200?u=${c.id}'"/><div class="flex-grow-1"><div class="fw-700 mb-1">${c.nome}</div><div class="d-flex flex-wrap gap-1 mb-1">${c.verificado ? '<span class="badge-verificado"><i class="bi bi-patch-check-fill me-1"></i>Verificado</span>' : ''}${c.disponivel ? '<span class="badge-disponivel"><i class="bi bi-circle-fill me-1" style="font-size:.55rem"></i>Disponível</span>' : '<span class="badge bg-secondary bg-opacity-10 text-secondary" style="font-size:.7rem;border-radius:2rem">Indisponível</span>'}</div><div class="stars">${stars(c.avaliacao)} <small class="text-muted ms-1">${(c.avaliacao||5).toFixed(1)} (${c.total_reviews||0})</small></div></div></div><div class="small text-muted mb-1"><i class="bi bi-geo-alt me-1"></i>${c.cidade}</div><div class="small text-muted mb-3"><i class="bi bi-briefcase me-1"></i>${c.experiencia} de experiência</div><div class="d-flex align-items-center justify-content-between"><div class="price-tag">R$ ${c.preco}<small>/plantão</small></div><button class="btn btn-brand btn-sm px-3">Ver perfil <i class="bi bi-arrow-right ms-1"></i></button></div></div>`;
           col.querySelector('.cuidador-card').addEventListener('click', () => { perfilAtual = c; goTo('perfil'); });
           container.appendChild(col);
           setTimeout(() => { col.style.opacity = '1'; col.style.transform = 'translateY(0)'; }, 50 + i * 70);
@@ -689,13 +703,13 @@
         document.getElementById('p-local').innerHTML = `<i class="bi bi-geo-alt me-1"></i>${c.cidade} · ${c.experiencia} de exp.`;
         document.getElementById('p-avaliacao').innerHTML = `${stars(c.avaliacao)} <span class="text-white ms-1 fw-600">${(c.avaliacao||5).toFixed(1)}</span>`;
         document.getElementById('p-reviews').textContent = `(${c.total_reviews||0} avaliações)`;
-        document.getElementById('p-preco').innerHTML = `R$ ${c.preco}<small class="text-warning">/hora</small>`;
+        document.getElementById('p-preco').innerHTML = `R$ ${c.preco}<small class="text-warning">/plantão</small>`;
         document.getElementById('p-preco-dia').textContent = `Período integral: R$ ${(c.preco*8).toFixed(0)}/dia`;
         document.getElementById('p-sobre').textContent = c.sobre || 'Cuidador dedicado com experiência em acompanhamento e cuidados domiciliares.';
         document.getElementById('p-verificado').style.display = c.verificado ? '' : 'none';
         document.getElementById('p-disponivel').style.display = c.disponivel ? '' : 'none';
-        document.getElementById('p-preco-cta').innerHTML = `R$ ${c.preco}<span class="text-muted" style="font-size:.75rem;font-family:'DM Sans'">/h</span>`;
-        document.getElementById('p-preco-sidebar').innerHTML = `R$ ${c.preco}<small style="font-family:'DM Sans';font-size:.8rem;color:var(--muted);font-weight:400">/hora</small>`;
+        document.getElementById('p-preco-cta').innerHTML = `R$ ${c.preco}<span class="text-muted" style="font-size:.75rem;font-family:'DM Sans'">/plantão</span>`;
+        document.getElementById('p-preco-sidebar').innerHTML = `R$ ${c.preco}<small style="font-family:'DM Sans';font-size:.8rem;color:var(--muted);font-weight:400">/plantão</small>`;
         document.getElementById('p-preco-dia2').textContent = `R$ ${(c.preco*8).toFixed(0)}/dia integral`;
         const servicos = Array.isArray(c.servicos) ? c.servicos : [];
         document.getElementById('p-servicos').innerHTML = servicos.length ? servicos.map(s => `<span class="service-chip">${s}</span>`).join('') : '<span class="text-muted small">Não informado</span>';
@@ -717,7 +731,7 @@
         const fone = (c.whatsapp || '').replace(/\D/g, '');
         document.getElementById('wa-nome').textContent = `Fale com ${nome1}`;
         document.getElementById('wa-foto').src = foto;
-        document.getElementById('wa-info').innerHTML = `<strong>${c.nome}</strong> · R$${c.preco}/h`;
+        document.getElementById('wa-info').innerHTML = `<strong>${c.nome}</strong> · R$${c.preco}/plantão`;
         document.getElementById('wa-avaliacao').innerHTML = `<i class="bi bi-star-fill text-warning me-1"></i>${(c.avaliacao||5).toFixed(1)}`;
         document.getElementById('wa-msg').textContent = `Olá, ${nome1}! Vi seu perfil no CuidaBem e gostaria de saber mais sobre sua disponibilidade. Podemos conversar?`;
         document.getElementById('wa-link').href = fone ? `https://wa.me/55${fone}?text=${msg}` : '#';
@@ -737,8 +751,8 @@
         const servicos = Array.from(document.querySelectorAll('#servicos-check input:checked')).map(el => el.parentElement.textContent.trim());
         const fotoInput = document.getElementById('cad-foto-input');
 
-        if (!nome || !cidade || !whatsapp || !preco || !fotoInput.files[0]) {
-          showToast('Preencha nome, cidade, WhatsApp e preço!', 'danger'); return;
+        if (!nome || !cidade || !whatsapp || !preco || !fotoInput.files[0] || !sobre) {
+          showToast('Preencha foto, nome, cidade, WhatsApp, preço e sobre você!', 'danger'); return;
         }
 
         const btn = document.getElementById('btn-cadastrar');
@@ -792,25 +806,23 @@
         document.getElementById('nav-buscar').addEventListener('click', () => goTo('lista'));
         document.getElementById('nav-cadastro').addEventListener('click', () => {
           const raw = localStorage.getItem('sb-duoobpxovvpxfgvvghgk-auth-token');
-          console.log('raw:',raw)
           if (!raw) {
             abrirModalLogin()
             return;
           }
-            const data = JSON.parse(raw);
-            const email = data.user.email;
+          const data = JSON.parse(raw);
+          const email = data.user.email;
 
           goTo('cadastro');
         });        
         document.getElementById('hero-cadastro').addEventListener('click', () => {
           const raw = localStorage.getItem('sb-duoobpxovvpxfgvvghgk-auth-token');
-          console.log('raw:',raw)
           if (!raw) {
             abrirModalLogin()
             return;
           }
-            const data = JSON.parse(raw);
-            const email = data.user.email;
+          const data = JSON.parse(raw);
+          const email = data.user.email;
 
           goTo('cadastro');
         });        
