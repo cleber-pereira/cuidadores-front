@@ -704,7 +704,7 @@
         document.getElementById('p-avaliacao').innerHTML = `${stars(c.avaliacao)} <span class="text-white ms-1 fw-600">${(c.avaliacao||5).toFixed(1)}</span>`;
         document.getElementById('p-reviews').textContent = `(${c.total_reviews||0} avaliações)`;
         document.getElementById('p-preco').innerHTML = `R$ ${c.preco}<small class="text-warning">/plantão</small>`;
-        document.getElementById('p-preco-dia').textContent = `Período integral: R$ ${(c.preco*8).toFixed(0)}/dia`;
+        document.getElementById('p-preco-dia').textContent = `Período integral: R$ ${(c.preco*2).toFixed(0)}/dia`;
         document.getElementById('p-sobre').textContent = c.sobre || 'Cuidador dedicado com experiência em acompanhamento e cuidados domiciliares.';
         document.getElementById('p-verificado').style.display = c.verificado ? '' : 'none';
         document.getElementById('p-disponivel').style.display = c.disponivel ? '' : 'none';
