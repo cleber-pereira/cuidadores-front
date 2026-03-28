@@ -238,8 +238,42 @@
             <div class="mb-3">
               <label class="form-label">Cidade</label>
               <select class="form-select" id="input-cidade">
-                <option value="">Selecione uma cidade</option>
-                <option>Sobradinho, DF</option><option>Planaltina, DF</option><option>Paranoá, DF</option>
+                <option value="">Selecione</option>
+                <option>DF - Água Quente</option>
+                <option>DF - Arapoanga</option>
+                <option>DF - Águas Claras</option>
+                <option>DF - Arniqueira</option>
+                <option>DF - Brazlândia</option>
+                <option>DF - Candangolândia</option>
+                <option>DF - Ceilândia</option>
+                <option>DF - Cruzeiro</option>
+                <option>DF - Fercal</option>
+                <option>DF - Gama</option>
+                <option>DF - Guará</option>
+                <option>DF - Itapoã</option>
+                <option>DF - Jardim Botânico</option>
+                <option>DF - Lago Norte</option>
+                <option>DF - Lago Sul</option>
+                <option>DF - Núcleo Bandeirante</option>
+                <option>DF - Paranoá</option>
+                <option>DF - Park Way</option>
+                <option>DF - Planaltina</option>
+                <option>DF - Plano Piloto</option>
+                <option>DF - Recanto das Emas</option>
+                <option>DF - Riacho Fundo</option>
+                <option>DF - Riacho Fundo II</option>
+                <option>DF - Samambaia</option>
+                <option>DF - Santa Maria</option>
+                <option>DF - São Sebastião</option>
+                <option>DF - SCIA/Estrutural</option>
+                <option>DF - SIA</option>
+                <option>DF - Sobradinho</option>
+                <option>DF - Sobradinho II</option>
+                <option>DF - Sol Nascente</option>
+                <option>DF - Sudoeste/Octogonal</option>
+                <option>DF - Taguatinga</option>
+                <option>DF - Varjão</option>
+                <option>DF - Vicente Pires</option>
               </select>
             </div>
             <div class="row g-3 mb-3">
@@ -307,7 +341,44 @@
   <div class="filters-bar py-2">
     <div class="container d-flex flex-wrap gap-2 align-items-center">
       <span class="text-muted small me-2"><i class="bi bi-funnel me-1"></i>Filtros:</span>
-      <select id="f-cidade" class="form-select form-select-sm" style="width:auto"><option value="">Todas as cidades</option><option>Sobradinho, DF</option><option>Planaltina, DF</option><option>Paranoá, DF</option></select>
+      <select id="f-cidade" class="form-select form-select-sm" style="width:auto">
+        <option value="">Todas as cidades</option>
+        <option>DF - Água Quente</option>
+        <option>DF - Arapoanga</option>
+        <option>DF - Águas Claras</option>
+        <option>DF - Arniqueira</option>
+        <option>DF - Brazlândia</option>
+        <option>DF - Candangolândia</option>
+        <option>DF - Ceilândia</option>
+        <option>DF - Cruzeiro</option>
+        <option>DF - Fercal</option>
+        <option>DF - Gama</option>
+        <option>DF - Guará</option>
+        <option>DF - Itapoã</option>
+        <option>DF - Jardim Botânico</option>
+        <option>DF - Lago Norte</option>
+        <option>DF - Lago Sul</option>
+        <option>DF - Núcleo Bandeirante</option>
+        <option>DF - Paranoá</option>
+        <option>DF - Park Way</option>
+        <option>DF - Planaltina</option>
+        <option>DF - Plano Piloto</option>
+        <option>DF - Recanto das Emas</option>
+        <option>DF - Riacho Fundo</option>
+        <option>DF - Riacho Fundo II</option>
+        <option>DF - Samambaia</option>
+        <option>DF - Santa Maria</option>
+        <option>DF - São Sebastião</option>
+        <option>DF - SCIA/Estrutural</option>
+        <option>DF - SIA</option>
+        <option>DF - Sobradinho</option>
+        <option>DF - Sobradinho II</option>
+        <option>DF - Sol Nascente</option>
+        <option>DF - Sudoeste/Octogonal</option>
+        <option>DF - Taguatinga</option>
+        <option>DF - Varjão</option>
+        <option>DF - Vicente Pires</option>
+      </select>
       <select id="f-preco" class="form-select form-select-sm" style="width:auto"><option value="">Qualquer preço</option><option>Até R$ 80</option><option>Até R$ 100</option><option>Até R$ 150</option><option>Acima de R$ 150</option></select>
       <select id="f-disp" class="form-select form-select-sm" style="width:auto"><option value="">Verificado: todos</option><option value="Sim">Verificados</option><option value="Não">Não verificados</option></select>
       <select id="f-exp" class="form-select form-select-sm" style="width:auto"><option value="">Experiência</option><option>1+ ano</option><option>3+ anos</option><option>5+ anos</option></select>
@@ -375,7 +446,44 @@
       <div class="mb-4"><label class="form-label fw-600">Sua foto</label><input type="file" id="cad-foto-input" accept="image/*" style="display:none"/><div class="upload-area" id="upload-area"><img id="foto-preview" src="" alt="" style="display:none;width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--brand-light);margin-bottom:.75rem"/><i class="bi bi-camera fs-2 mb-2" id="upload-icon" style="color:var(--brand)"></i><div class="fw-500" id="upload-label">Clique para enviar sua foto</div><div class="text-muted small mt-1" id="upload-sub">JPG ou PNG · máx. 500 KB</div></div></div>
       <div class="row g-3 mb-3">
         <div class="col-12"><label class="form-label fw-500">Nome completo</label><input type="text" id="cad-nome" class="form-control" placeholder="Seu nome e sobrenome"/></div>
-        <div class="col-md-6"><label class="form-label fw-500">Cidade</label><select id="cad-cidade" class="form-select"><option value="">Selecione</option><option>Sobradinho, DF</option><option>Planaltina, DF</option><option>Paranoá, DF</option></select></div>
+        <div class="col-md-6"><label class="form-label fw-500">Cidade</label><select id="cad-cidade" class="form-select">
+          <option value="">Selecione</option>
+          <option>DF - Água Quente</option>
+          <option>DF - Arapoanga</option>
+          <option>DF - Águas Claras</option>
+          <option>DF - Arniqueira</option>
+          <option>DF - Brazlândia</option>
+          <option>DF - Candangolândia</option>
+          <option>DF - Ceilândia</option>
+          <option>DF - Cruzeiro</option>
+          <option>DF - Fercal</option>
+          <option>DF - Gama</option>
+          <option>DF - Guará</option>
+          <option>DF - Itapoã</option>
+          <option>DF - Jardim Botânico</option>
+          <option>DF - Lago Norte</option>
+          <option>DF - Lago Sul</option>
+          <option>DF - Núcleo Bandeirante</option>
+          <option>DF - Paranoá</option>
+          <option>DF - Park Way</option>
+          <option>DF - Planaltina</option>
+          <option>DF - Plano Piloto</option>
+          <option>DF - Recanto das Emas</option>
+          <option>DF - Riacho Fundo</option>
+          <option>DF - Riacho Fundo II</option>
+          <option>DF - Samambaia</option>
+          <option>DF - Santa Maria</option>
+          <option>DF - São Sebastião</option>
+          <option>DF - SCIA/Estrutural</option>
+          <option>DF - SIA</option>
+          <option>DF - Sobradinho</option>
+          <option>DF - Sobradinho II</option>
+          <option>DF - Sol Nascente</option>
+          <option>DF - Sudoeste/Octogonal</option>
+          <option>DF - Taguatinga</option>
+          <option>DF - Varjão</option>
+          <option>DF - Vicente Pires</option>
+        </select></div>
         <div class="col-md-6"><label class="form-label fw-500">WhatsApp</label><input type="tel" id="cad-whatsapp" onkeyup="formatarCelular(this)" value="" oninput="this.value = this.value.replace(/[^0-9]/g, '');" class="form-control" placeholder="(61) 9 9999-9999"/></div>
         <div class="col-md-6"><label class="form-label fw-500">Valor por plantão (R$)</label><input type="number" id="cad-preco" class="form-control" placeholder="Ex: 120"/></div>
         <div class="col-md-6"><label class="form-label fw-500">Experiência</label><select id="cad-exp" class="form-select"><option>Menos de 1 ano</option><option>1 a 2 anos</option><option>3 a 5 anos</option><option>Mais de 5 anos</option></select></div>
@@ -400,7 +508,44 @@
       <div class="mb-4"><label class="form-label fw-600">Sua foto</label><input type="file" id="edit-foto-input" accept="image/*" style="display:none"/><div class="upload-area" id="edit-upload-area"><img id="edit-foto-preview" src="" alt="" style="display:none;width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--brand-light);margin-bottom:.75rem"/><i class="bi bi-camera fs-2 mb-2" id="edit-upload-icon" style="color:var(--brand)"></i><div class="fw-500" id="edit-upload-label">Clique para alterar a foto</div><div class="text-muted small mt-1" id="edit-upload-sub">JPG ou PNG · máx. 500 KB</div></div></div>
       <div class="row g-3 mb-3">
         <div class="col-12"><label class="form-label fw-500">Nome completo</label><input type="text" id="edit-nome" class="form-control" readonly/></div>
-        <div class="col-md-6"><label class="form-label fw-500">Cidade</label><select id="edit-cidade" class="form-select"><option value="">Selecione</option><option>Sobradinho, DF</option><option>Planaltina, DF</option><option>Paranoá, DF</option></select></div>
+        <div class="col-md-6"><label class="form-label fw-500">Cidade</label><select id="edit-cidade" class="form-select">
+          <option value="">Selecione</option>
+          <option>DF - Água Quente</option>
+          <option>DF - Arapoanga</option>
+          <option>DF - Águas Claras</option>
+          <option>DF - Arniqueira</option>
+          <option>DF - Brazlândia</option>
+          <option>DF - Candangolândia</option>
+          <option>DF - Ceilândia</option>
+          <option>DF - Cruzeiro</option>
+          <option>DF - Fercal</option>
+          <option>DF - Gama</option>
+          <option>DF - Guará</option>
+          <option>DF - Itapoã</option>
+          <option>DF - Jardim Botânico</option>
+          <option>DF - Lago Norte</option>
+          <option>DF - Lago Sul</option>
+          <option>DF - Núcleo Bandeirante</option>
+          <option>DF - Paranoá</option>
+          <option>DF - Park Way</option>
+          <option>DF - Planaltina</option>
+          <option>DF - Plano Piloto</option>
+          <option>DF - Recanto das Emas</option>
+          <option>DF - Riacho Fundo</option>
+          <option>DF - Riacho Fundo II</option>
+          <option>DF - Samambaia</option>
+          <option>DF - Santa Maria</option>
+          <option>DF - São Sebastião</option>
+          <option>DF - SCIA/Estrutural</option>
+          <option>DF - SIA</option>
+          <option>DF - Sobradinho</option>
+          <option>DF - Sobradinho II</option>
+          <option>DF - Sol Nascente</option>
+          <option>DF - Sudoeste/Octogonal</option>
+          <option>DF - Taguatinga</option>
+          <option>DF - Varjão</option>
+          <option>DF - Vicente Pires</option>
+        </select></div>
         <div class="col-md-6"><label class="form-label fw-500">WhatsApp</label><input type="tel" id="edit-whatsapp" oninput="this.value = this.value.replace(/[^0-9]/g, '');" class="form-control"/></div>
         <div class="col-md-6"><label class="form-label fw-500">Valor por plantão (R$)</label><input type="number" id="edit-preco" class="form-control"/></div>
         <div class="col-md-6"><label class="form-label fw-500">Experiência</label><select id="edit-exp" class="form-select"><option>Menos de 1 ano</option><option>1 a 2 anos</option><option>3 a 5 anos</option><option>Mais de 5 anos</option></select></div>
@@ -424,7 +569,44 @@
       <div class="mb-4"><label class="form-label fw-600">Sua foto</label><input type="file" id="user-foto-input" accept="image/*" style="display:none"/><div class="upload-area" id="user-upload-area"><img id="user-foto-preview" src="" alt="" style="display:none;width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--brand-light);margin-bottom:.75rem"/><i class="bi bi-camera fs-2 mb-2" id="user-upload-icon" style="color:var(--brand)"></i><div class="fw-500" id="user-upload-label">Clique para enviar sua foto</div><div class="text-muted small mt-1" id="user-upload-sub">JPG ou PNG · máx. 500 KB</div></div></div>
       <div class="row g-3 mb-3">
         <div class="col-12"><label class="form-label fw-500">Nome completo</label><input type="text" id="user-nome" class="form-control" placeholder="Seu nome e sobrenome"/></div>
-        <div class="col-md-6"><label class="form-label fw-500">Cidade</label><select id="user-cidade" class="form-select"><option value="">Selecione</option><option>Sobradinho, DF</option><option>Planaltina, DF</option><option>Paranoá, DF</option></select></div>
+        <div class="col-md-6"><label class="form-label fw-500">Cidade</label><select id="user-cidade" class="form-select">
+          <option value="">Selecione</option>
+          <option>DF - Água Quente</option>
+          <option>DF - Arapoanga</option>
+          <option>DF - Águas Claras</option>
+          <option>DF - Arniqueira</option>
+          <option>DF - Brazlândia</option>
+          <option>DF - Candangolândia</option>
+          <option>DF - Ceilândia</option>
+          <option>DF - Cruzeiro</option>
+          <option>DF - Fercal</option>
+          <option>DF - Gama</option>
+          <option>DF - Guará</option>
+          <option>DF - Itapoã</option>
+          <option>DF - Jardim Botânico</option>
+          <option>DF - Lago Norte</option>
+          <option>DF - Lago Sul</option>
+          <option>DF - Núcleo Bandeirante</option>
+          <option>DF - Paranoá</option>
+          <option>DF - Park Way</option>
+          <option>DF - Planaltina</option>
+          <option>DF - Plano Piloto</option>
+          <option>DF - Recanto das Emas</option>
+          <option>DF - Riacho Fundo</option>
+          <option>DF - Riacho Fundo II</option>
+          <option>DF - Samambaia</option>
+          <option>DF - Santa Maria</option>
+          <option>DF - São Sebastião</option>
+          <option>DF - SCIA/Estrutural</option>
+          <option>DF - SIA</option>
+          <option>DF - Sobradinho</option>
+          <option>DF - Sobradinho II</option>
+          <option>DF - Sol Nascente</option>
+          <option>DF - Sudoeste/Octogonal</option>
+          <option>DF - Taguatinga</option>
+          <option>DF - Varjão</option>
+          <option>DF - Vicente Pires</option>
+        </select></div>
         <div class="col-md-6"><label class="form-label fw-500">WhatsApp</label><input type="tel" id="user-whatsapp" onkeyup="formatarCelular(this)" value="" oninput="this.value = this.value.replace(/[^0-9]/g, '');" class="form-control" placeholder="(61) 9 9999-9999"/></div>
       </div>
       <button id="btn-cadastrar-usuario" class="btn btn-brand btn-lg w-100 py-3"><i class="bi bi-check2-circle me-2"></i>Criar minha conta</button>
