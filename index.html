@@ -630,7 +630,8 @@
   (function() {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); 
     else { 
-        init();
+      console.log('init')
+      init();
     }
 
     async function init() {
@@ -638,9 +639,26 @@
         'https://duoobpxovvpxfgvvghgk.supabase.co',
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1b29icHhvdnZweGZndnZnaGdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMDcyMjMsImV4cCI6MjA4OTY4MzIyM30.NcqCsxqs-1LeS6RLb_UbLv7AmehsgrRJqTnEcthSEY8'
       );
-
+      
       let perfilAtual = null;
       let currentUserRole = null; // 'cuidador' ou 'usuario'
+
+      setTimeout(() => {
+        // Inicialização e estado de autenticação
+        try{ const { data: { session } } = supabase.auth.getSession() } catch (e) {}
+        
+        try {
+          updateAuthUI(session?.user ?? null);
+        } catch (error) {}
+
+        try {
+          if (session?.user) redirecionarAposLogin(session.user);
+          supabase.auth.onAuthStateChange(async (event, session) => {
+            updateAuthUI(session?.user ?? null);
+            if (event === 'SIGNED_IN' && session?.user) redirecionarAposLogin(session.user);
+          });
+        } catch (error) {}
+      }, 7000); 
 
       function stars(n) {
         n = n || 5;
@@ -678,7 +696,7 @@
           // Determinar papel (cuidador ou usuario)
           const { data: cuidador } = await supabase.from('cuidadores').select('id').eq('id', user.id).single();
           if (cuidador) {
-            console.log('c')
+            // console.log('c')
             currentUserRole = 'cuidador';
             userRoleSpan.textContent = 'Cuidador';
             userRoleSpan.className = 'badge bg-success text-white';
@@ -1148,6 +1166,12 @@
 
       // Navegação
       function goTo(id) {
+        supabase.auth.onAuthStateChange((event, session) => {
+          if (session) {
+            // console.log('goTo');
+          }
+        });
+        // console.log(error);
         const current = document.querySelector('.screen.active');
         const next = document.getElementById('screen-' + id);
         if (!next || next === current) return;
@@ -1185,7 +1209,7 @@
         if (fc) query = query.ilike('cidade', `%${fc.split(',')[0].trim()}%`);
         if (fv === 'Sim') query = query.eq('verificado', true);
         else if (fv === 'Não') query = query.eq('verificado', false);
-
+        
         const { data, error } = await query;
         if (error) {
           container.innerHTML = `<div class="col-12"><div class="alert alert-danger">Erro: ${error.message}</div></div>`;
@@ -1342,7 +1366,8 @@
         document.getElementById('nav-logo').addEventListener('click', () => goTo('home'));
         document.getElementById('nav-buscar').addEventListener('click', () => goTo('lista'));
         document.getElementById('hero-buscar').addEventListener('click', () => goTo('lista'));
-        document.getElementById('btn-buscar-home').addEventListener('click', () => {
+        document.getElementById('btn-buscar-home').addEventListener('click', () => goTo('lista'));
+        /* document.getElementById('btn-buscar-home').addEventListener('click', () => {
           const cidade = document.getElementById('input-cidade').value;
           const preco = document.getElementById('input-preco').value;
           const verificado = document.getElementById('input-disp').value;
@@ -1355,7 +1380,7 @@
             if (exp) document.getElementById('f-exp').value = exp;
             carregarLista();
           }, 350);
-        });
+        }); */
         document.getElementById('lista-voltar').addEventListener('click', () => goTo('home'));
         document.getElementById('perfil-voltar').addEventListener('click', () => goTo('lista'));
         document.getElementById('perfil-contato-desktop').addEventListener('click', () => goTo('whatsapp'));
@@ -1417,16 +1442,6 @@
           });
         });
       }
-
-      // Inicialização e estado de autenticação
-      const { data: { session } } = await supabase.auth.getSession();
-      await updateAuthUI(session?.user ?? null);
-      if (session?.user) await redirecionarAposLogin(session.user);
-      supabase.auth.onAuthStateChange(async (event, session) => {
-        await updateAuthUI(session?.user ?? null);
-        if (event === 'SIGNED_IN' && session?.user) await redirecionarAposLogin(session.user);
-      });
-
       bindEvents();
       document.getElementById('screen-home').style.display = 'block';
     }
