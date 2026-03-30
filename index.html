@@ -651,13 +651,13 @@
           updateAuthUI(session?.user ?? null);
         } catch (error) {}
 
-        try {
+       /*  try {
           if (session?.user) redirecionarAposLogin(session.user);
           supabase.auth.onAuthStateChange(async (event, session) => {
             updateAuthUI(session?.user ?? null);
             if (event === 'SIGNED_IN' && session?.user) redirecionarAposLogin(session.user);
           });
-        } catch (error) {}
+        } catch (error) {} */
       }, 7000); 
 
       function stars(n) {
@@ -696,7 +696,7 @@
           // Determinar papel (cuidador ou usuario)
           const { data: cuidador } = await supabase.from('cuidadores').select('id').eq('id', user.id).single();
           if (cuidador) {
-            // console.log('c')
+            console.log('cuidador')
             currentUserRole = 'cuidador';
             userRoleSpan.textContent = 'Cuidador';
             userRoleSpan.className = 'badge bg-success text-white';
@@ -705,11 +705,12 @@
           } else {
             const { data: usuario } = await supabase.from('usuarios').select('id').eq('id', user.id).single();
             if (usuario) {
-                currentUserRole = 'usuario';
-                userRoleSpan.textContent = 'Usuário';
-                userRoleSpan.className = 'badge bg-info text-dark';
-                document.getElementById('nav-cadastro').classList.remove('d-md-inline-flex');
-                document.getElementById('nav-cadastro-usuario').classList.add('d-md-inline-flex');
+              console.log('usuario')
+              currentUserRole = 'usuario';
+              userRoleSpan.textContent = 'Usuário';
+              userRoleSpan.className = 'badge bg-info text-dark';
+              document.getElementById('nav-cadastro').classList.remove('d-md-inline-flex');
+              document.getElementById('nav-cadastro-usuario').classList.add('d-md-inline-flex');
             } else {
               currentUserRole = null;
               userRoleSpan.textContent = 'Sem perfil';
@@ -754,12 +755,21 @@
       }
 
       async function loginWithGoogle() {
+        console.log('loginWithGoogle')
         const { error } = await supabase.auth.signInWithOAuth({
           provider: 'google',
           options: {
-            redirectTo: window.location.origin + window.location.pathname,
+            redirectTo: window.location.origin + window.location.pathname + '?i=' + localStorage.getItem('intencao'),
             queryParams: { access_type: 'offline', prompt: 'consent' }
           }
+        });
+        
+        updateAuthUI(session?.user ?? null);
+
+        if (session?.user) redirecionarAposLogin(session.user);
+        supabase.auth.onAuthStateChange(async (event, session) => {
+          updateAuthUI(session?.user ?? null);
+          if (event === 'SIGNED_IN' && session?.user) redirecionarAposLogin(session.user);
         });
         if (error) showToast('Erro ao iniciar login com Google: ' + error.message, 'danger');
       }
@@ -800,12 +810,14 @@
 
       // Verificação de perfil (cuidador)
       async function verificarPerfilAtivo(userId) {
+        console.log('verificarPerfilAtivo')
         const { data, error } = await supabase.from('cuidadores').select('*').eq('id', userId).single();
         if (error && error.code !== 'PGRST116') { console.error('Erro ao verificar perfil:', error); return null; }
         return data;
       }
 
       async function redirecionarAposLogin(user) {
+        console.log('redirecionarAposLogin')
         if (!user) return;
         const perfil = await verificarPerfilAtivo(user.id);
         if (perfil) {
@@ -1394,17 +1406,38 @@
         document.getElementById('wa-voltar').addEventListener('click', () => goTo('perfil'));
         ['f-cidade', 'f-preco', 'f-disp', 'f-exp'].forEach(id => document.getElementById(id).addEventListener('change', carregarLista));
 
+        if (localStorage.getItem('intencao') == 'c') {
+          handleSouCuidador();
+        }
+        if (localStorage.getItem('intencao') == 'u') {
+          handleSouUsuario();
+        }
+
         // Botões "Sou Cuidador" e "Sou Usuário"
         async function handleSouCuidador() {
           const { data: { session } } = await supabase.auth.getSession();
-          if (!session) { abrirModalLogin(); return; }
+
+          if (!session) {
+            localStorage.setItem('intencao', 'c');
+            abrirModalLogin(); 
+            return; 
+          }
           const perfil = await verificarPerfilAtivo(session.user.id);
           if (perfil) { await preencherFormularioEdicao(perfil); goTo('editar'); }
           else goTo('cadastro');
+
+          localStorage.removeItem('intencao');
+          document.getElementById('nav-cadastro').classList.add('d-md-inline-flex');
+          document.getElementById('nav-cadastro-usuario').classList.remove('d-md-inline-flex');
         }
         async function handleSouUsuario() {
+          console.log('handleSouUsuario')
           const { data: { session } } = await supabase.auth.getSession();
-          if (!session) { abrirModalLogin(); return; }
+          if (!session) { 
+            localStorage.setItem('intencao', 'u');
+            abrirModalLogin(); 
+            return; 
+          }
           const { data: usuario } = await supabase.from('usuarios').select('id').eq('id', session.user.id).single();
           if (usuario) {
             showToast('Você já possui um perfil de usuário.');
@@ -1412,6 +1445,10 @@
           } else {
             goTo('cadastro-usuario');
           }
+
+          localStorage.removeItem('intencao');
+          document.getElementById('nav-cadastro').classList.remove('d-md-inline-flex');
+          document.getElementById('nav-cadastro-usuario').classList.add('d-md-inline-flex');
         }
         document.getElementById('nav-cadastro').addEventListener('click', handleSouCuidador);
         document.getElementById('hero-cadastro').addEventListener('click', handleSouCuidador);
@@ -1441,6 +1478,11 @@
             });
           });
         });
+      }
+      const { data: { session } } = await supabase.auth.getSession();
+      console.log(session?.user)
+      if(session) {
+        updateAuthUI(session?.user ?? null);
       }
       bindEvents();
       document.getElementById('screen-home').style.display = 'block';
