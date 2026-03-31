@@ -1529,7 +1529,7 @@
       debugger
       const { data: { session } } = await supabase.auth.getSession();
       console.log(session?.user)
-      if(session) {
+      if(session != undefined) {
         updateAuthUI(session?.user ?? null);
       }
       bindEvents();
