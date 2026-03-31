@@ -1453,7 +1453,47 @@
         document.getElementById('wa-voltar').addEventListener('click', () => goTo('perfil'));
         ['f-cidade', 'f-preco', 'f-disp', 'f-exp'].forEach(id => document.getElementById(id).addEventListener('change', carregarLista));
 
-        if (localStorage.getItem('intencao') == 'c') {
+        document.getElementById('nav-cadastro').addEventListener('click', handleSouCuidador);
+        document.getElementById('hero-cadastro').addEventListener('click', handleSouCuidador);
+        document.getElementById('nav-cadastro-usuario').addEventListener('click', handleSouUsuario);
+        document.getElementById('hero-cadastro-usuario').addEventListener('click', handleSouUsuario);
+
+        // Avaliação modal
+        document.getElementById('btn-avaliar-cuidador').addEventListener('click', abrirModalAvaliacao);
+        document.getElementById('close-avaliacao-modal').addEventListener('click', fecharModalAvaliacao);
+        document.getElementById('btn-enviar-avaliacao').addEventListener('click', enviarAvaliacao);
+
+        // Estrelas no modal de avaliação
+        document.querySelectorAll('#rating-stars i').forEach(star => {
+          star.addEventListener('click', () => {
+            const value = parseInt(star.getAttribute('data-value'));
+            avaliacaoNota = value;
+            document.getElementById('avaliacao-nota').value = value;
+            document.querySelectorAll('#rating-stars i').forEach(s => {
+              const sVal = parseInt(s.getAttribute('data-value'));
+              if (sVal <= value) {
+                s.classList.remove('bi-star');
+                s.classList.add('bi-star-fill', 'active');
+              } else {
+                s.classList.remove('bi-star-fill', 'active');
+                s.classList.add('bi-star');
+              }
+            });
+          });
+        });
+      }
+      debugger
+      const { data: { session } } = await supabase.auth.getSession();
+      console.log(session?.user)
+      if(session != undefined) {
+        updateAuthUI(session?.user ?? null);
+      }
+      bindEvents();
+      document.getElementById('screen-home').style.display = 'block';
+    }
+  })();
+
+  if (localStorage.getItem('intencao') == 'c') {
           handleSouCuidador();
         }
         if (localStorage.getItem('intencao') == 'u') {
@@ -1497,46 +1537,6 @@
           document.getElementById('nav-cadastro').classList.remove('d-md-inline-flex');
           document.getElementById('nav-cadastro-usuario').classList.add('d-md-inline-flex');
         }
-        document.getElementById('nav-cadastro').addEventListener('click', handleSouCuidador);
-        document.getElementById('hero-cadastro').addEventListener('click', handleSouCuidador);
-        document.getElementById('nav-cadastro-usuario').addEventListener('click', handleSouUsuario);
-        document.getElementById('hero-cadastro-usuario').addEventListener('click', handleSouUsuario);
-
-        // Avaliação modal
-        document.getElementById('btn-avaliar-cuidador').addEventListener('click', abrirModalAvaliacao);
-        document.getElementById('close-avaliacao-modal').addEventListener('click', fecharModalAvaliacao);
-        document.getElementById('btn-enviar-avaliacao').addEventListener('click', enviarAvaliacao);
-
-        // Estrelas no modal de avaliação
-        document.querySelectorAll('#rating-stars i').forEach(star => {
-          star.addEventListener('click', () => {
-            const value = parseInt(star.getAttribute('data-value'));
-            avaliacaoNota = value;
-            document.getElementById('avaliacao-nota').value = value;
-            document.querySelectorAll('#rating-stars i').forEach(s => {
-              const sVal = parseInt(s.getAttribute('data-value'));
-              if (sVal <= value) {
-                s.classList.remove('bi-star');
-                s.classList.add('bi-star-fill', 'active');
-              } else {
-                s.classList.remove('bi-star-fill', 'active');
-                s.classList.add('bi-star');
-              }
-            });
-          });
-        });
-      }
-      debugger
-      const { data: { session } } = await supabase.auth.getSession();
-      console.log(session?.user)
-      if(session != undefined) {
-        updateAuthUI(session?.user ?? null);
-      }
-      bindEvents();
-      document.getElementById('screen-home').style.display = 'block';
-    }
-  })();
-
   function formatarCelular(input) {
     let value = input.value.replace(/\D/g, '');
     value = value.slice(0, 11);
