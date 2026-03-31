@@ -205,12 +205,12 @@
 <!-- MODAL LOGIN -->
 <div id="loginModal" class="login-modal">
   <div class="modal-content">
-    <h4 class="mb-3">Acesse sua conta</h4>
+    <!-- <h4 class="mb-3">Acesse sua conta</h4>
     <input type="email" id="login-email" class="form-control mb-2" placeholder="E-mail">
     <input type="password" id="login-password" class="form-control mb-2" placeholder="Senha">
     <button id="btn-login" class="btn btn-brand w-100 mb-2">Entrar</button>
     <button id="btn-signup" class="btn btn-outline-brand w-100 mb-3">Criar conta</button>
-    <div class="text-center text-muted mb-2">ou</div>
+    <div class="text-center text-muted mb-2">ou</div> -->
     <button id="google-login" class="btn google-btn w-100 d-flex align-items-center justify-content-center gap-2">
       <i class="bi bi-google fs-5"></i> Entrar com Google
     </button>
@@ -827,7 +827,7 @@
 
     //   document.getElementById('login-button').addEventListener('click', abrirModalLogin);
       document.getElementById('close-modal').addEventListener('click', fecharModalLogin);
-      document.getElementById('btn-login').addEventListener('click', async () => {
+      /* document.getElementById('btn-login').addEventListener('click', async () => {
         const email = document.getElementById('login-email').value.trim();
         const pass = document.getElementById('login-password').value;
         if (!email || !pass) { showToast('Preencha e-mail e senha', 'danger'); return; }
@@ -838,7 +838,7 @@
         const pass = document.getElementById('login-password').value;
         if (!email || !pass) { showToast('Preencha e-mail e senha', 'danger'); return; }
         await fazerCadastro(email, pass);
-      });
+      }); */
       document.getElementById('google-login').addEventListener('click', loginWithGoogle);
       document.getElementById('logout-button').addEventListener('click', fazerLogout);
 
@@ -907,6 +907,7 @@
         const quero_verificacao = document.getElementById('edit-quero-verificacao').checked;
         const servicos = Array.from(document.querySelectorAll('#edit-servicos-check input:checked')).map(el => el.parentElement.textContent.trim());
         const fotoInput = document.getElementById('edit-foto-input');
+
 
         if (!nome || !cidade || !whatsapp || !preco || !sobre) {
           showToast('Preencha todos os campos obrigatórios!', 'danger');
@@ -1526,12 +1527,13 @@
           });
         });
       }
-      debugger
+      
       const { data: { session } } = await supabase.auth.getSession();
       console.log(session?.user)
       if(session != undefined) {
         updateAuthUI(session?.user ?? null);
       }
+      localStorage.removeItem('intencao');
       bindEvents();
       document.getElementById('screen-home').style.display = 'block';
     }
