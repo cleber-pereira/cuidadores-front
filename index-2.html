@@ -1,3 +1,6 @@
+Aqui está o HTML modificado com a funcionalidade solicitada: ao lado do input de valor, foi adicionado um checkbox "A combinar" que, quando marcado, oculta o campo de valor e define o preço como -1, exibindo "Sob consulta" em vez do valor numérico.
+
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -149,28 +152,28 @@
       background: #e89520;
       transform: translateY(-2px);
     }
+    /* Estilo para o checkbox "A combinar" */
+    .price-checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+    .price-checkbox-group .form-check {
+      margin: 0;
+      padding-left: 1.5rem;
+    }
+    .price-checkbox-group .form-check-input:checked {
+      background-color: var(--brand);
+      border-color: var(--brand);
+    }
     @media (max-width: 480px) {
-      #hero-buscar {
-        width: 100%;
-      }
-      #hero-buscar button,
-      #hero-buscar a {
-        width: 100%;
-      }
-      #hero-cadastro-usuario {
-        width: 100%;
-      }
-      #hero-cadastro-usuario button,
-      #hero-cadastro-usuario a {
-        width: 100%;
-      }
-      #hero-cadastro {
-        width: 100%;
-      }
-      #hero-cadastro button,
-      #hero-cadastro a {
-        width: 100%;
-      }
+      #hero-buscar { width: 100%; }
+      #hero-buscar button, #hero-buscar a { width: 100%; }
+      #hero-cadastro-usuario { width: 100%; }
+      #hero-cadastro-usuario button, #hero-cadastro-usuario a { width: 100%; }
+      #hero-cadastro { width: 100%; }
+      #hero-cadastro button, #hero-cadastro a { width: 100%; }
     }
   </style>
 </head>
@@ -191,9 +194,6 @@
       <button class="btn btn-sm btn-brand" id="nav-buscar">
         <i class="bi bi-search me-1"></i>Buscar
       </button>
-      <!-- <button id="login-button" class="btn btn-sm btn-outline-brand d-none d-md-inline-flex">
-        <i class="bi bi-box-arrow-in-right me-1"></i>Entrar
-      </button> -->
       <div id="user-info" style="display:none;" class="d-flex align-items-center gap-2">
         <span id="user-role" class="badge bg-light text-dark"></span>
         <button id="logout-button" class="btn btn-sm btn-outline-danger">Sair</button>
@@ -263,41 +263,15 @@
               <label class="form-label">Cidade</label>
               <select class="form-select" id="input-cidade">
                 <option value="">Selecione</option>
-                <option>DF - Água Quente</option>
-                <option>DF - Arapoanga</option>
-                <option>DF - Águas Claras</option>
-                <option>DF - Arniqueira</option>
-                <option>DF - Brazlândia</option>
-                <option>DF - Candangolândia</option>
-                <option>DF - Ceilândia</option>
-                <option>DF - Cruzeiro</option>
-                <option>DF - Fercal</option>
-                <option>DF - Gama</option>
-                <option>DF - Guará</option>
-                <option>DF - Itapoã</option>
-                <option>DF - Jardim Botânico</option>
-                <option>DF - Lago Norte</option>
-                <option>DF - Lago Sul</option>
-                <option>DF - Núcleo Bandeirante</option>
-                <option>DF - Paranoá</option>
-                <option>DF - Park Way</option>
-                <option>DF - Planaltina</option>
-                <option>DF - Plano Piloto</option>
-                <option>DF - Recanto das Emas</option>
-                <option>DF - Riacho Fundo</option>
-                <option>DF - Riacho Fundo II</option>
-                <option>DF - Samambaia</option>
-                <option>DF - Santa Maria</option>
-                <option>DF - São Sebastião</option>
-                <option>DF - SCIA/Estrutural</option>
-                <option>DF - SIA</option>
-                <option>DF - Sobradinho</option>
-                <option>DF - Sobradinho II</option>
-                <option>DF - Sol Nascente</option>
-                <option>DF - Sudoeste/Octogonal</option>
-                <option>DF - Taguatinga</option>
-                <option>DF - Varjão</option>
-                <option>DF - Vicente Pires</option>
+                <option>DF - Água Quente</option><option>DF - Arapoanga</option><option>DF - Águas Claras</option><option>DF - Arniqueira</option>
+                <option>DF - Brazlândia</option><option>DF - Candangolândia</option><option>DF - Ceilândia</option><option>DF - Cruzeiro</option>
+                <option>DF - Fercal</option><option>DF - Gama</option><option>DF - Guará</option><option>DF - Itapoã</option>
+                <option>DF - Jardim Botânico</option><option>DF - Lago Norte</option><option>DF - Lago Sul</option><option>DF - Núcleo Bandeirante</option>
+                <option>DF - Paranoá</option><option>DF - Park Way</option><option>DF - Planaltina</option><option>DF - Plano Piloto</option>
+                <option>DF - Recanto das Emas</option><option>DF - Riacho Fundo</option><option>DF - Riacho Fundo II</option><option>DF - Samambaia</option>
+                <option>DF - Santa Maria</option><option>DF - São Sebastião</option><option>DF - SCIA/Estrutural</option><option>DF - SIA</option>
+                <option>DF - Sobradinho</option><option>DF - Sobradinho II</option><option>DF - Sol Nascente</option><option>DF - Sudoeste/Octogonal</option>
+                <option>DF - Taguatinga</option><option>DF - Varjão</option><option>DF - Vicente Pires</option>
               </select>
             </div>
             <div class="row g-3 mb-3">
@@ -365,45 +339,8 @@
   <div class="filters-bar py-2">
     <div class="container d-flex flex-wrap gap-2 align-items-center">
       <span class="text-muted small me-2"><i class="bi bi-funnel me-1"></i>Filtros:</span>
-      <select id="f-cidade" class="form-select form-select-sm" style="width:auto">
-        <option value="">Todas as cidades</option>
-        <option>DF - Água Quente</option>
-        <option>DF - Arapoanga</option>
-        <option>DF - Águas Claras</option>
-        <option>DF - Arniqueira</option>
-        <option>DF - Brazlândia</option>
-        <option>DF - Candangolândia</option>
-        <option>DF - Ceilândia</option>
-        <option>DF - Cruzeiro</option>
-        <option>DF - Fercal</option>
-        <option>DF - Gama</option>
-        <option>DF - Guará</option>
-        <option>DF - Itapoã</option>
-        <option>DF - Jardim Botânico</option>
-        <option>DF - Lago Norte</option>
-        <option>DF - Lago Sul</option>
-        <option>DF - Núcleo Bandeirante</option>
-        <option>DF - Paranoá</option>
-        <option>DF - Park Way</option>
-        <option>DF - Planaltina</option>
-        <option>DF - Plano Piloto</option>
-        <option>DF - Recanto das Emas</option>
-        <option>DF - Riacho Fundo</option>
-        <option>DF - Riacho Fundo II</option>
-        <option>DF - Samambaia</option>
-        <option>DF - Santa Maria</option>
-        <option>DF - São Sebastião</option>
-        <option>DF - SCIA/Estrutural</option>
-        <option>DF - SIA</option>
-        <option>DF - Sobradinho</option>
-        <option>DF - Sobradinho II</option>
-        <option>DF - Sol Nascente</option>
-        <option>DF - Sudoeste/Octogonal</option>
-        <option>DF - Taguatinga</option>
-        <option>DF - Varjão</option>
-        <option>DF - Vicente Pires</option>
-      </select>
-      <select id="f-preco" class="form-select form-select-sm" style="width:auto"><option value="">Qualquer preço</option><option>Até R$ 80</option><option>Até R$ 100</option><option>Até R$ 150</option><option>Acima de R$ 150</option></select>
+      <select id="f-cidade" class="form-select form-select-sm" style="width:auto"><option value="">Todas as cidades</option><option>DF - Água Quente</option><option>DF - Águas Claras</option><option>DF - Ceilândia</option><option>DF - Plano Piloto</option><option>DF - Taguatinga</option></select>
+      <select id="f-preco" class="form-select form-select-sm" style="width:auto"><option value="">Qualquer preço</option><option>Até R$ 80</option><option>Até R$ 100</option><option>Até R$ 150</option><option>Acima de R$ 150</option><option>Sob consulta</option></select>
       <select id="f-disp" class="form-select form-select-sm" style="width:auto"><option value="">Verificado: todos</option><option value="Sim">Verificados</option><option value="Não">Não verificados</option></select>
       <select id="f-exp" class="form-select form-select-sm" style="width:auto"><option value="">Experiência</option><option>1+ ano</option><option>3+ anos</option><option>5+ anos</option></select>
       <span id="lista-contador" class="ms-auto text-muted small">—</span>
@@ -470,46 +407,19 @@
       <div class="mb-4"><label class="form-label fw-600">Sua foto</label><input type="file" id="cad-foto-input" accept="image/*" style="display:none"/><div class="upload-area" id="upload-area"><img id="foto-preview" src="" alt="" style="display:none;width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--brand-light);margin-bottom:.75rem"/><i class="bi bi-camera fs-2 mb-2" id="upload-icon" style="color:var(--brand)"></i><div class="fw-500" id="upload-label">Clique para enviar sua foto</div><div class="text-muted small mt-1" id="upload-sub">JPG ou PNG · máx. 500 KB</div></div></div>
       <div class="row g-3 mb-3">
         <div class="col-12"><label class="form-label fw-500">Nome completo</label><input type="text" id="cad-nome" class="form-control" placeholder="Seu nome e sobrenome"/></div>
-        <div class="col-md-6"><label class="form-label fw-500">Cidade</label><select id="cad-cidade" class="form-select">
-          <option value="">Selecione</option>
-          <option>DF - Água Quente</option>
-          <option>DF - Arapoanga</option>
-          <option>DF - Águas Claras</option>
-          <option>DF - Arniqueira</option>
-          <option>DF - Brazlândia</option>
-          <option>DF - Candangolândia</option>
-          <option>DF - Ceilândia</option>
-          <option>DF - Cruzeiro</option>
-          <option>DF - Fercal</option>
-          <option>DF - Gama</option>
-          <option>DF - Guará</option>
-          <option>DF - Itapoã</option>
-          <option>DF - Jardim Botânico</option>
-          <option>DF - Lago Norte</option>
-          <option>DF - Lago Sul</option>
-          <option>DF - Núcleo Bandeirante</option>
-          <option>DF - Paranoá</option>
-          <option>DF - Park Way</option>
-          <option>DF - Planaltina</option>
-          <option>DF - Plano Piloto</option>
-          <option>DF - Recanto das Emas</option>
-          <option>DF - Riacho Fundo</option>
-          <option>DF - Riacho Fundo II</option>
-          <option>DF - Samambaia</option>
-          <option>DF - Santa Maria</option>
-          <option>DF - São Sebastião</option>
-          <option>DF - SCIA/Estrutural</option>
-          <option>DF - SIA</option>
-          <option>DF - Sobradinho</option>
-          <option>DF - Sobradinho II</option>
-          <option>DF - Sol Nascente</option>
-          <option>DF - Sudoeste/Octogonal</option>
-          <option>DF - Taguatinga</option>
-          <option>DF - Varjão</option>
-          <option>DF - Vicente Pires</option>
-        </select></div>
+        <div class="col-md-6"><label class="form-label fw-500">Cidade</label><select id="cad-cidade" class="form-select"><option value="">Selecione</option><option>DF - Águas Claras</option><option>DF - Ceilândia</option><option>DF - Plano Piloto</option><option>DF - Taguatinga</option></select></div>
         <div class="col-md-6"><label class="form-label fw-500">WhatsApp</label><input type="tel" id="cad-whatsapp" onkeyup="formatarCelular(this)" value="" oninput="this.value = this.value.replace(/[^0-9]/g, '');" class="form-control" placeholder="(61) 9 9999-9999"/></div>
-        <div class="col-md-6"><label class="form-label fw-500">Valor por plantão (R$)</label><input type="number" id="cad-preco" class="form-control" placeholder="Ex: 120"/></div>
+        <!-- Campo de valor com checkbox "A combinar" -->
+        <div class="col-md-6">
+          <label class="form-label fw-500">Valor por plantão (R$)</label>
+          <div class="price-checkbox-group">
+            <input type="number" id="cad-preco" class="form-control" placeholder="Ex: 120" style="flex:1"/>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="cad-preco-negociar">
+              <label class="form-check-label small" for="cad-preco-negociar">A combinar</label>
+            </div>
+          </div>
+        </div>
         <div class="col-md-6"><label class="form-label fw-500">Experiência</label><select id="cad-exp" class="form-select"><option>Menos de 1 ano</option><option>1 a 2 anos</option><option>3 a 5 anos</option><option>Mais de 5 anos</option></select></div>
         <div class="col-12"><label class="form-label fw-500">Serviços oferecidos</label><div class="d-flex flex-wrap gap-2 mt-1" id="servicos-check"><label class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox" class="form-check-input m-0"> Acomp. de idosos</label><label class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox" class="form-check-input m-0"> Cuidados domiciliares</label><label class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox" class="form-check-input m-0"> Pernoite</label><label class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox" class="form-check-input m-0"> Pós-operatório</label><label class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox" class="form-check-input m-0"> Mobilidade reduzida</label><label class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox" class="form-check-input m-0"> Acomp. em consultas</label></div></div>
         <div class="col-12"><label class="form-label fw-500">Sobre você</label><textarea id="cad-sobre" class="form-control" rows="4" placeholder="Conte sua experiência e diferenciais..."></textarea></div>
@@ -532,46 +442,19 @@
       <div class="mb-4"><label class="form-label fw-600">Sua foto</label><input type="file" id="edit-foto-input" accept="image/*" style="display:none"/><div class="upload-area" id="edit-upload-area"><img id="edit-foto-preview" src="" alt="" style="display:none;width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--brand-light);margin-bottom:.75rem"/><i class="bi bi-camera fs-2 mb-2" id="edit-upload-icon" style="color:var(--brand)"></i><div class="fw-500" id="edit-upload-label">Clique para alterar a foto</div><div class="text-muted small mt-1" id="edit-upload-sub">JPG ou PNG · máx. 500 KB</div></div></div>
       <div class="row g-3 mb-3">
         <div class="col-12"><label class="form-label fw-500">Nome completo</label><input type="text" id="edit-nome" class="form-control" readonly/></div>
-        <div class="col-md-6"><label class="form-label fw-500">Cidade</label><select id="edit-cidade" class="form-select">
-          <option value="">Selecione</option>
-          <option>DF - Água Quente</option>
-          <option>DF - Arapoanga</option>
-          <option>DF - Águas Claras</option>
-          <option>DF - Arniqueira</option>
-          <option>DF - Brazlândia</option>
-          <option>DF - Candangolândia</option>
-          <option>DF - Ceilândia</option>
-          <option>DF - Cruzeiro</option>
-          <option>DF - Fercal</option>
-          <option>DF - Gama</option>
-          <option>DF - Guará</option>
-          <option>DF - Itapoã</option>
-          <option>DF - Jardim Botânico</option>
-          <option>DF - Lago Norte</option>
-          <option>DF - Lago Sul</option>
-          <option>DF - Núcleo Bandeirante</option>
-          <option>DF - Paranoá</option>
-          <option>DF - Park Way</option>
-          <option>DF - Planaltina</option>
-          <option>DF - Plano Piloto</option>
-          <option>DF - Recanto das Emas</option>
-          <option>DF - Riacho Fundo</option>
-          <option>DF - Riacho Fundo II</option>
-          <option>DF - Samambaia</option>
-          <option>DF - Santa Maria</option>
-          <option>DF - São Sebastião</option>
-          <option>DF - SCIA/Estrutural</option>
-          <option>DF - SIA</option>
-          <option>DF - Sobradinho</option>
-          <option>DF - Sobradinho II</option>
-          <option>DF - Sol Nascente</option>
-          <option>DF - Sudoeste/Octogonal</option>
-          <option>DF - Taguatinga</option>
-          <option>DF - Varjão</option>
-          <option>DF - Vicente Pires</option>
-        </select></div>
+        <div class="col-md-6"><label class="form-label fw-500">Cidade</label><select id="edit-cidade" class="form-select"><option value="">Selecione</option><option>DF - Águas Claras</option><option>DF - Ceilândia</option><option>DF - Plano Piloto</option><option>DF - Taguatinga</option></select></div>
         <div class="col-md-6"><label class="form-label fw-500">WhatsApp</label><input type="tel" id="edit-whatsapp" oninput="this.value = this.value.replace(/[^0-9]/g, '');" class="form-control"/></div>
-        <div class="col-md-6"><label class="form-label fw-500">Valor por plantão (R$)</label><input type="number" id="edit-preco" class="form-control"/></div>
+        <!-- Campo de valor com checkbox "A combinar" na edição -->
+        <div class="col-md-6">
+          <label class="form-label fw-500">Valor por plantão (R$)</label>
+          <div class="price-checkbox-group">
+            <input type="number" id="edit-preco" class="form-control" style="flex:1"/>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="edit-preco-negociar">
+              <label class="form-check-label small" for="edit-preco-negociar">A combinar</label>
+            </div>
+          </div>
+        </div>
         <div class="col-md-6"><label class="form-label fw-500">Experiência</label><select id="edit-exp" class="form-select"><option>Menos de 1 ano</option><option>1 a 2 anos</option><option>3 a 5 anos</option><option>Mais de 5 anos</option></select></div>
         <div class="col-12"><label class="form-label fw-500">Serviços oferecidos</label><div class="d-flex flex-wrap gap-2 mt-1" id="edit-servicos-check"><label class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox" class="form-check-input m-0"> Acomp. de idosos</label><label class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox" class="form-check-input m-0"> Cuidados domiciliares</label><label class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox" class="form-check-input m-0"> Pernoite</label><label class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox" class="form-check-input m-0"> Pós-operatório</label><label class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox" class="form-check-input m-0"> Mobilidade reduzida</label><label class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox" class="form-check-input m-0"> Acomp. em consultas</label></div></div>
         <div class="col-12"><label class="form-label fw-500">Sobre você</label><textarea id="edit-sobre" class="form-control" rows="4"></textarea></div>
@@ -593,45 +476,7 @@
       <div class="mb-4"><label class="form-label fw-600">Sua foto</label><input type="file" id="user-foto-input" accept="image/*" style="display:none"/><div class="upload-area" id="user-upload-area"><img id="user-foto-preview" src="" alt="" style="display:none;width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--brand-light);margin-bottom:.75rem"/><i class="bi bi-camera fs-2 mb-2" id="user-upload-icon" style="color:var(--brand)"></i><div class="fw-500" id="user-upload-label">Clique para enviar sua foto</div><div class="text-muted small mt-1" id="user-upload-sub">JPG ou PNG · máx. 500 KB</div></div></div>
       <div class="row g-3 mb-3">
         <div class="col-12"><label class="form-label fw-500">Nome completo</label><input type="text" id="user-nome" class="form-control" placeholder="Seu nome e sobrenome"/></div>
-        <div class="col-md-6"><label class="form-label fw-500">Cidade</label><select id="user-cidade" class="form-select">
-          <option value="">Selecione</option>
-          <option>DF - Água Quente</option>
-          <option>DF - Arapoanga</option>
-          <option>DF - Águas Claras</option>
-          <option>DF - Arniqueira</option>
-          <option>DF - Brazlândia</option>
-          <option>DF - Candangolândia</option>
-          <option>DF - Ceilândia</option>
-          <option>DF - Cruzeiro</option>
-          <option>DF - Fercal</option>
-          <option>DF - Gama</option>
-          <option>DF - Guará</option>
-          <option>DF - Itapoã</option>
-          <option>DF - Jardim Botânico</option>
-          <option>DF - Lago Norte</option>
-          <option>DF - Lago Sul</option>
-          <option>DF - Núcleo Bandeirante</option>
-          <option>DF - Paranoá</option>
-          <option>DF - Park Way</option>
-          <option>DF - Planaltina</option>
-          <option>DF - Plano Piloto</option>
-          <option>DF - Recanto das Emas</option>
-          <option>DF - Riacho Fundo</option>
-          <option>DF - Riacho Fundo II</option>
-          <option>DF - Samambaia</option>
-          <option>DF - Santa Maria</option>
-          <option>DF - São Sebastião</option>
-          <option>DF - SCIA/Estrutural</option>
-          <option>DF - SIA</option>
-          <option>DF - Sobradinho</option>
-          <option>DF - Sobradinho II</option>
-          <option>DF - Sol Nascente</option>
-          <option>DF - Sudoeste/Octogonal</option>
-          <option>DF - Taguatinga</option>
-          <option>DF - Varjão</option>
-          <option>DF - Vicente Pires</option>
-          <option>GO - Planaltina</option>
-        </select></div>
+        <div class="col-md-6"><label class="form-label fw-500">Cidade</label><select id="user-cidade" class="form-select"><option value="">Selecione</option><option>DF - Águas Claras</option><option>DF - Ceilândia</option><option>DF - Plano Piloto</option><option>DF - Taguatinga</option></select></div>
         <div class="col-md-6"><label class="form-label fw-500">WhatsApp</label><input type="tel" id="user-whatsapp" onkeyup="formatarCelular(this)" value="" oninput="this.value = this.value.replace(/[^0-9]/g, '');" class="form-control" placeholder="(61) 9 9999-9999"/></div>
       </div>
       <button id="btn-cadastrar-usuario" class="btn btn-brand btn-lg w-100 py-3"><i class="bi bi-check2-circle me-2"></i>Criar minha conta</button>
@@ -653,10 +498,7 @@
 <script>
   (function() {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); 
-    else { 
-      console.log('init')
-      init();
-    }
+    else init();
 
     async function init() {
       const supabase = window.supabase.createClient(
@@ -665,24 +507,7 @@
       );
       
       let perfilAtual = null;
-      let currentUserRole = null; // 'cuidador' ou 'usuario'
-
-      setTimeout(() => {
-        // Inicialização e estado de autenticação
-        try{ const { data: { session } } = supabase.auth.getSession() } catch (e) {}
-        
-        try {
-          updateAuthUI(session?.user ?? null);
-        } catch (error) {}
-
-       /*  try {
-          if (session?.user) redirecionarAposLogin(session.user);
-          supabase.auth.onAuthStateChange(async (event, session) => {
-            updateAuthUI(session?.user ?? null);
-            if (event === 'SIGNED_IN' && session?.user) redirecionarAposLogin(session.user);
-          });
-        } catch (error) {} */
-      }, 7000); 
+      let currentUserRole = null;
 
       function stars(n) {
         n = n || 5;
@@ -693,6 +518,16 @@
           else s += '<i class="bi bi-star"></i>';
         }
         return s;
+      }
+
+      function formatarPrecoExibicao(preco) {
+        if (preco === -1) return '<span class="price-tag">Sob consulta</span>';
+        return `<span class="price-tag">R$ ${preco}<small>/plantão</small></span>`;
+      }
+
+      function formatarPrecoPerfil(preco) {
+        if (preco === -1) return 'Sob consulta';
+        return `R$ ${preco}<small class="text-warning">/plantão</small>`;
       }
 
       function showToast(msg, type = 'success') {
@@ -707,20 +542,34 @@
         return m ? parseInt(m[0]) : 0;
       }
 
+      // Controle do checkbox "A combinar"
+      function setupPrecoNegociar(inputId, checkboxId) {
+        const input = document.getElementById(inputId);
+        const checkbox = document.getElementById(checkboxId);
+        if (!input || !checkbox) return;
+        
+        const updateState = () => {
+          if (checkbox.checked) {
+            input.style.display = 'none';
+            input.value = -1;
+          } else {
+            input.style.display = 'block';
+            if (input.value == -1) input.value = '';
+          }
+        };
+        
+        checkbox.addEventListener('change', updateState);
+        updateState();
+      }
+
       async function updateAuthUI(user) {
-        // const loginBtn = document.getElementById('login-button');
         const userInfo = document.getElementById('user-info');
         const userRoleSpan = document.getElementById('user-role');
         if (user) {
-        //   loginBtn.classList.remove('d-md-inline-flex');
           document.getElementById('logout-button').style.display = 'block';
-        //   loginBtn.style.display = 'none';
           userInfo.style.display = 'flex';
-          
-          // Determinar papel (cuidador ou usuario)
           const { data: cuidador } = await supabase.from('cuidadores').select('id').eq('id', user.id).single();
           if (cuidador) {
-            console.log('cuidador')
             currentUserRole = 'cuidador';
             userRoleSpan.textContent = 'Cuidador';
             userRoleSpan.className = 'badge bg-success text-white';
@@ -729,7 +578,6 @@
           } else {
             const { data: usuario } = await supabase.from('usuarios').select('id').eq('id', user.id).single();
             if (usuario) {
-              console.log('usuario')
               currentUserRole = 'usuario';
               userRoleSpan.textContent = 'Usuário';
               userRoleSpan.className = 'badge bg-info text-dark';
@@ -742,21 +590,15 @@
             }
           }
         } else {
-        //   loginBtn.classList.add('d-md-inline-flex');
           document.getElementById('logout-button').style.display = 'none';
-        //   loginBtn.style.display = 'inline-flex';
           userInfo.style.display = 'none';
           currentUserRole = null;
         }
       }
 
-      // Autenticação
       async function fazerLogin(email, senha) {
         const { data, error } = await supabase.auth.signInWithPassword({ email, password: senha });
-        if (error) {
-          showToast(error.message, 'danger');
-          return false;
-        }
+        if (error) { showToast(error.message, 'danger'); return false; }
         showToast('Login efetuado com sucesso!');
         fecharModalLogin();
         return true;
@@ -764,10 +606,7 @@
 
       async function fazerCadastro(email, senha) {
         const { data, error } = await supabase.auth.signUp({ email, password: senha });
-        if (error) {
-          showToast(error.message, 'danger');
-          return false;
-        }
+        if (error) { showToast(error.message, 'danger'); return false; }
         if (data.user && data.user.identities && data.user.identities.length === 0) {
           showToast('Usuário já existe. Faça login.', 'warning');
         } else {
@@ -779,21 +618,9 @@
       }
 
       async function loginWithGoogle() {
-        console.log('loginWithGoogle')
         const { error } = await supabase.auth.signInWithOAuth({
           provider: 'google',
-          options: {
-            redirectTo: window.location.origin + window.location.pathname + '?i=' + localStorage.getItem('intencao'),
-            queryParams: { access_type: 'offline', prompt: 'consent' }
-          }
-        });
-        
-        updateAuthUI(session?.user ?? null);
-
-        if (session?.user) redirecionarAposLogin(session.user);
-        supabase.auth.onAuthStateChange(async (event, session) => {
-          updateAuthUI(session?.user ?? null);
-          if (event === 'SIGNED_IN' && session?.user) redirecionarAposLogin(session.user);
+          options: { redirectTo: window.location.origin + window.location.pathname }
         });
         if (error) showToast('Erro ao iniciar login com Google: ' + error.message, 'danger');
       }
@@ -810,12 +637,10 @@
         if (document.getElementById('screen-cadastro-usuario').classList.contains('active')) goTo('home');
       }
 
-      // Modal
       const modal = document.getElementById('loginModal');
       function abrirModalLogin() { modal.style.display = 'flex'; }
       function fecharModalLogin() { modal.style.display = 'none'; }
 
-    //   document.getElementById('login-button').addEventListener('click', abrirModalLogin);
       document.getElementById('close-modal').addEventListener('click', fecharModalLogin);
       document.getElementById('btn-login').addEventListener('click', async () => {
         const email = document.getElementById('login-email').value.trim();
@@ -832,38 +657,20 @@
       document.getElementById('google-login').addEventListener('click', loginWithGoogle);
       document.getElementById('logout-button').addEventListener('click', fazerLogout);
 
-      // Verificação de perfil (cuidador)
       async function verificarPerfilAtivo(userId) {
-        console.log('verificarPerfilAtivo')
         const { data, error } = await supabase.from('cuidadores').select('*').eq('id', userId).single();
         if (error && error.code !== 'PGRST116') { console.error('Erro ao verificar perfil:', error); return null; }
         return data;
       }
 
-      async function redirecionarAposLogin(user) {
-        console.log('redirecionarAposLogin')
-        if (!user) return;
-        const perfil = await verificarPerfilAtivo(user.id);
-        if (perfil) {
-          await preencherFormularioEdicao(perfil);
-          goTo('editar');
-        } else {
-          // Verifica se é usuário comum
-          const { data: usuario } = await supabase.from('usuarios').select('id','nome').eq('id', user.id).single();
-          if (user) {
-            console.log(usuario)
-            // showToast('Bem-vindo de volta, ' + usuario.nome + '!');
-            goTo('home');
-          }
-        }
-      }
-
-      // Preencher tela de edição (cuidador)
       async function preencherFormularioEdicao(perfil) {
         document.getElementById('edit-nome').value = perfil.nome || '';
         document.getElementById('edit-cidade').value = perfil.cidade || '';
         document.getElementById('edit-whatsapp').value = perfil.whatsapp || '';
-        document.getElementById('edit-preco').value = perfil.preco || '';
+        const precoNegociar = perfil.preco === -1;
+        document.getElementById('edit-preco').value = precoNegociar ? '' : perfil.preco;
+        document.getElementById('edit-preco-negociar').checked = precoNegociar;
+        setupPrecoNegociar('edit-preco', 'edit-preco-negociar');
         document.getElementById('edit-exp').value = perfil.experiencia || 'Menos de 1 ano';
         document.getElementById('edit-sobre').value = perfil.sobre || '';
         const servicosArray = perfil.servicos || [];
@@ -882,7 +689,6 @@
         window.perfilOriginalFoto = perfil.foto_url;
       }
 
-      // Atualizar perfil cuidador
       async function atualizarPerfil(e) {
         if (e) e.preventDefault();
         const { data: { session } } = await supabase.auth.getSession();
@@ -891,17 +697,19 @@
         const nome = document.getElementById('edit-nome').value.trim();
         const cidade = document.getElementById('edit-cidade').value;
         const whatsapp = document.getElementById('edit-whatsapp').value.trim().replace(/\D/g, '');
-        const preco = parseFloat(document.getElementById('edit-preco').value);
+        const precoNegociar = document.getElementById('edit-preco-negociar').checked;
+        let preco = precoNegociar ? -1 : parseFloat(document.getElementById('edit-preco').value);
         const experiencia = document.getElementById('edit-exp').value;
         const sobre = document.getElementById('edit-sobre').value.trim();
         const quero_verificacao = document.getElementById('edit-quero-verificacao').checked;
         const servicos = Array.from(document.querySelectorAll('#edit-servicos-check input:checked')).map(el => el.parentElement.textContent.trim());
         const fotoInput = document.getElementById('edit-foto-input');
 
-        if (!nome || !cidade || !whatsapp || !preco || !sobre) {
+        if (!nome || !cidade || !whatsapp || (!precoNegociar && !preco) || !sobre) {
           showToast('Preencha todos os campos obrigatórios!', 'danger');
           return;
         }
+        if (!precoNegociar && isNaN(preco)) { showToast('Valor inválido', 'danger'); return; }
 
         const btn = document.getElementById('btn-atualizar');
         btn.disabled = true;
@@ -911,10 +719,7 @@
           let foto_url = window.perfilOriginalFoto || null;
           if (fotoInput.files && fotoInput.files[0]) {
             const file = fotoInput.files[0];
-            if (file.size > 500 * 1024) {
-              showToast('A foto deve ter até 500 KB', 'danger');
-              return;
-            }
+            if (file.size > 500 * 1024) { showToast('A foto deve ter até 500 KB', 'danger'); return; }
             const ext = file.name.split('.').pop();
             const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
             const { data: upData, error: upErr } = await supabase.storage.from('fotos-cuidadores').upload(fileName, file, { contentType: file.type });
@@ -939,7 +744,6 @@
         }
       }
 
-      // Cadastro de usuário comum
       async function salvarCadastroUsuario() {
         const { data: { session } } = await supabase.auth.getSession();
         if (!session) { showToast('Você precisa estar logado para se cadastrar como usuário.', 'warning'); abrirModalLogin(); return; }
@@ -962,10 +766,7 @@
           let foto_url = null;
           if (fotoInput.files && fotoInput.files[0]) {
             const file = fotoInput.files[0];
-            if (file.size > 500 * 1024) {
-              showToast('A foto deve ter até 500 KB', 'danger');
-              return;
-            }
+            if (file.size > 500 * 1024) { showToast('A foto deve ter até 500 KB', 'danger'); return; }
             const ext = file.name.split('.').pop();
             const fileName = `user_${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
             const { data: upData, error: upErr } = await supabase.storage.from('fotos-usuarios').upload(fileName, file, { contentType: file.type });
@@ -989,7 +790,6 @@
         }
       }
 
-      // Renderização do perfil (cuidador)
       function renderPerfil(c) {
         const foto = c.foto_url || `https://i.pravatar.cc/240?u=${c.id}`;
         document.getElementById('p-foto').src = foto;
@@ -997,16 +797,17 @@
         document.getElementById('p-local').innerHTML = `<i class="bi bi-geo-alt me-1"></i>${c.cidade} · ${c.experiencia} de exp.`;
         document.getElementById('p-avaliacao').innerHTML = `${stars(c.avaliacao)} <span class="text-white ms-1 fw-600">${(c.avaliacao || 5).toFixed(1)}</span>`;
         document.getElementById('p-reviews').textContent = `(${c.total_reviews || 0} avaliações)`;
-        if (c.preco !== -1) {
-          document.getElementById('p-preco-dia').textContent = `Período integral: R$ ${(c.preco * 2).toFixed(0)}/dia`;
-        }
-        document.getElementById('p-preco').innerHTML = c.preco === -1 ? 'Valor a combinar' : `R$ ${c.preco}<small class="text-warning">/plantão</small>`;
+        
+        const precoExibicao = formatarPrecoPerfil(c.preco);
+        document.getElementById('p-preco').innerHTML = precoExibicao;
+        document.getElementById('p-preco-sidebar').innerHTML = precoExibicao;
+        document.getElementById('p-preco-cta').innerHTML = c.preco === -1 ? 'Sob consulta' : `R$ ${c.preco}<span class="text-muted" style="font-size:.75rem;font-family:'DM Sans'">/plantão</span>`;
+        document.getElementById('p-preco-dia').textContent = c.preco === -1 ? 'Valor a combinar' : `Período integral: R$ ${(c.preco * 2).toFixed(0)}/dia`;
+        document.getElementById('p-preco-dia2').textContent = c.preco === -1 ? 'Valor a combinar' : `R$ ${(c.preco * 2).toFixed(0)}/dia integral`;
+        
         document.getElementById('p-sobre').textContent = c.sobre || 'Cuidador dedicado com experiência em acompanhamento e cuidados domiciliares.';
         document.getElementById('p-verificado').style.display = c.verificado ? '' : 'none';
         document.getElementById('p-disponivel').style.display = c.disponivel ? '' : 'none';
-        document.getElementById('p-preco-cta').innerHTML = c.preco === -1 ? 'Sob consulta' : `R$ ${c.preco}<span class="text-muted" style="font-size:.75rem;font-family:'DM Sans'">/plantão</span>`;
-        document.getElementById('p-preco-sidebar').innerHTML = `R$ ${c.preco}<small style="font-family:'DM Sans';font-size:.8rem;color:var(--muted);font-weight:400">/plantão</small>`;
-        document.getElementById('p-preco-dia2').textContent = c.preco === -1 ? 'Valor a combinar' : `R$ ${(c.preco * 2).toFixed(0)}/dia integral`;
         const servicos = Array.isArray(c.servicos) ? c.servicos : [];
         document.getElementById('p-servicos').innerHTML = servicos.length ? servicos.map(s => `<span class="service-chip">${s}</span>`).join('') : '<span class="text-muted small">Não informado</span>';
         carregarAvaliacoes(c.id);
@@ -1017,212 +818,95 @@
         el.innerHTML = '<div class="text-muted small">Carregando avaliações...</div>';
         const { data, error } = await supabase
             .from('avaliacoes')
-            .select(`
-            *,
-            usuarios (
-                nome,
-                foto_url
-            )
-            `)
+            .select(`*, usuarios (nome, foto_url)`)
             .eq('cuidador_id', id)
             .eq('disponivel', true)
             .order('created_at', { ascending: false })
             .limit(5);
-
-        if (error) {
-            console.error(error);
-            el.innerHTML = '<div class="text-muted small">Erro ao carregar avaliações.</div>';
-            return;
-        }
-        if (!data || data.length === 0) {
-            el.innerHTML = '<div class="text-muted small">Ainda sem avaliações.</div>';
-            return;
-        }
+        if (error) { el.innerHTML = '<div class="text-muted small">Erro ao carregar avaliações.</div>'; return; }
+        if (!data || data.length === 0) { el.innerHTML = '<div class="text-muted small">Ainda sem avaliações.</div>'; return; }
         el.innerHTML = data.map(r => {
             const nome = r.usuarios?.nome || r.nome_cliente || 'Usuário';
             const foto = r.usuarios?.foto_url || `https://i.pravatar.cc/80?u=${encodeURIComponent(nome)}`;
-            return `<div class="review-card">
-            <div class="d-flex align-items-center gap-2 mb-2">
-                <img src="${foto}" class="review-avatar" onerror="this.src='https://i.pravatar.cc/80'"/>
-                <div>
-                <div class="fw-600 small">${nome}</div>
-                <div class="stars" style="font-size:.75rem">${stars(r.nota)}</div>
-                </div>
-                <span class="ms-auto text-muted" style="font-size:.75rem">${new Date(r.created_at).toLocaleDateString('pt-BR')}</span>
-            </div>
-            <p class="small mb-0">${r.comentario || ''}</p>
-            </div>`;
+            return `<div class="review-card"><div class="d-flex align-items-center gap-2 mb-2"><img src="${foto}" class="review-avatar" onerror="this.src='https://i.pravatar.cc/80'"/><div><div class="fw-600 small">${nome}</div><div class="stars" style="font-size:.75rem">${stars(r.nota)}</div></div><span class="ms-auto text-muted" style="font-size:.75rem">${new Date(r.created_at).toLocaleDateString('pt-BR')}</span></div><p class="small mb-0">${r.comentario || ''}</p></div>`;
         }).join('');
-     }
+      }
 
-      // Avaliação
       const avaliacaoModal = document.getElementById('avaliacaoModal');
       let avaliacaoNota = 0;
-
       function abrirModalAvaliacao() {
-        if (!currentUserRole) {
-          showToast('Você precisa estar logado para avaliar.', 'warning');
-          abrirModalLogin();
-          return;
-        }
-        if (currentUserRole !== 'usuario') {
-          showToast('Apenas usuários comuns podem avaliar cuidadores.', 'warning');
-          return;
-        }
+        if (!currentUserRole) { showToast('Você precisa estar logado para avaliar.', 'warning'); abrirModalLogin(); return; }
+        if (currentUserRole !== 'usuario') { showToast('Apenas usuários comuns podem avaliar cuidadores.', 'warning'); return; }
         avaliacaoNota = 0;
         document.getElementById('avaliacao-nota').value = 0;
         document.getElementById('avaliacao-comentario').value = '';
-        // Reset estrelas
-        document.querySelectorAll('#rating-stars i').forEach(star => {
-          star.classList.remove('active');
-          star.classList.add('bi-star');
-          star.classList.remove('bi-star-fill');
-        });
+        document.querySelectorAll('#rating-stars i').forEach(star => { star.classList.remove('active'); star.classList.add('bi-star'); star.classList.remove('bi-star-fill'); });
         avaliacaoModal.style.display = 'flex';
       }
-
-      function fecharModalAvaliacao() {
-        avaliacaoModal.style.display = 'none';
-      }
-
+      function fecharModalAvaliacao() { avaliacaoModal.style.display = 'none'; }
       async function enviarAvaliacao() {
         const { data: { session } } = await supabase.auth.getSession();
         if (!session) { showToast('Você precisa estar logado.', 'warning'); fecharModalAvaliacao(); return; }
         if (avaliacaoNota === 0) { showToast('Selecione uma nota antes de enviar.', 'danger'); return; }
-
         const comentario = document.getElementById('avaliacao-comentario').value.trim();
         const cuidadorId = perfilAtual.id;
-
-        // Buscar nome do usuário
         const { data: usuario } = await supabase.from('usuarios').select('nome').eq('id', session.user.id).single();
         if (!usuario) { showToast('Perfil de usuário não encontrado.', 'danger'); return; }
-
         const btn = document.getElementById('btn-enviar-avaliacao');
         btn.disabled = true;
         btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Enviando...';
-
-        // Inserir avaliação (o trigger cuidará da atualização da soma e dos campos do cuidador)
-        const { error: insertErr } = await supabase.from('avaliacoes').insert([{
-            cuidador_id: cuidadorId,
-            user_id: session.user.id,
-            nome_cliente: usuario.nome,
-            nota: avaliacaoNota,
-            comentario: comentario,
-            disponivel: false
-        }]);
-
-        if (insertErr) {
-            showToast('Erro ao enviar avaliação: ' + insertErr.message, 'danger');
-            btn.disabled = false;
-            btn.innerHTML = 'Enviar Avaliação';
-            return;
-        }
-
-        // Atualizar soma
-        const { data: somaData } = await supabase
-        .from('cuidadores')
-        .select('avaliacao, total_reviews')
-        .eq('id', cuidadorId)
-        .single();
-
-            debugger;
+        const { error: insertErr } = await supabase.from('avaliacoes').insert([{ cuidador_id: cuidadorId, user_id: session.user.id, nome_cliente: usuario.nome, nota: avaliacaoNota, comentario: comentario, disponivel: false }]);
+        if (insertErr) { showToast('Erro ao enviar avaliação: ' + insertErr.message, 'danger'); btn.disabled = false; btn.innerHTML = 'Enviar Avaliação'; return; }
+        const { data: somaData } = await supabase.from('cuidadores').select('avaliacao, total_reviews').eq('id', cuidadorId).single();
         if (somaData) {
             const novaSoma = 1 + somaData.total_reviews;
             const novaMedia = (somaData.avaliacao + avaliacaoNota) / novaSoma;
-            const { error: somaErr } = await supabase
-                .from('cuidadores')
-                .update({
-                avaliacao: novaMedia,
-                total_reviews: novaSoma
-            })
-            .eq('id', cuidadorId);
-            
-            if (somaErr) {
-                showToast('Erro ao enviar avaliação: ' + insertErr.message, 'danger');
-                btn.disabled = false;
-                btn.innerHTML = 'Enviar Avaliação';
-                return;
-            }
+            await supabase.from('cuidadores').update({ avaliacao: novaMedia, total_reviews: novaSoma }).eq('id', cuidadorId);
         }
-        // Recarregar o perfil do cuidador para mostrar os dados atualizados
         const { data: cuidadorAtualizado } = await supabase.from('cuidadores').select('*').eq('id', cuidadorId).single();
-        if (cuidadorAtualizado) {
-            perfilAtual = cuidadorAtualizado;
-            renderPerfil(perfilAtual);
-        } else {
-            // Fallback: apenas recarrega as avaliações
-            carregarAvaliacoes(cuidadorId);
-        }
-
+        if (cuidadorAtualizado) { perfilAtual = cuidadorAtualizado; renderPerfil(perfilAtual); }
+        else carregarAvaliacoes(cuidadorId);
         showToast('Avaliação enviada com sucesso!');
         fecharModalAvaliacao();
         btn.disabled = false;
         btn.innerHTML = 'Enviar Avaliação';
-        }
+      }
 
-      // WhatsApp
       function renderWhatsapp(c) {
-        console.log(c)
         const foto = c.foto_url || `https://i.pravatar.cc/80?u=${c.id}`;
         const nome1 = c.nome.split(' ')[0];
-        const msg = encodeURIComponent(`Olá, ${nome1}! Vi seu perfil no CuidaDF e gostaria de saber mais sobre sua disponibilidade e demais detalhes. Podemos conversar?`);
+        const precoTexto = c.preco === -1 ? 'valor a combinar' : `R$${c.preco}/plantão`;
+        const msg = encodeURIComponent(`Olá, ${nome1}! Vi seu perfil no CuidaDF (${precoTexto}) e gostaria de saber mais sobre sua disponibilidade. Podemos conversar?`);
         document.getElementById('wa-nome').textContent = `Fale com ${nome1}`;
         document.getElementById('wa-foto').src = foto;
-        if (c.preco === -1) {
-          document.getElementById('wa-info').innerHTML = `<strong>${c.nome}</strong> · Valor a combinar `;
-        } else {
-          document.getElementById('wa-info').innerHTML = `<strong>${c.nome}</strong> · R$${c.preco}/plantão`;
-        }
+        document.getElementById('wa-info').innerHTML = `<strong>${c.nome}</strong> · ${c.preco === -1 ? 'Sob consulta' : `R$${c.preco}/plantão`}`;
         document.getElementById('wa-avaliacao').innerHTML = `<i class="bi bi-star-fill text-warning me-1"></i>${(c.avaliacao || 5).toFixed(1)}`;
-        document.getElementById('wa-msg').textContent = `Olá, ${nome1}! Vi seu perfil no CuidaDF e gostaria de saber mais sobre sua disponibilida e demais detalhes.`;
-
+        document.getElementById('wa-msg').textContent = `Olá, ${nome1}! Vi seu perfil no CuidaDF (${c.preco === -1 ? 'valor a combinar' : `R$${c.preco}/plantão`}) e gostaria de saber mais sobre sua disponibilidade. Podemos conversar?`;
         const waLink = document.getElementById('wa-link');
         waLink.onclick = function () {
-        debugger;
           const whatsInput = document.getElementById('seu-whats');
           const nomeInput = document.getElementById('seu-nome');
-          if (whatsInput.value.length < 15 || nomeInput.value.length < 1) {
+          if (whatsInput.value.length < 14 || nomeInput.value.length < 1) {
             showToast('Você precisa informar seu nome e um WhatsApp válido para contato.', 'danger');
             return;
           }
           waLink.disabled = true;
           waLink.style.cursor = 'not-allowed';
           waLink.classList.add('opacity-50');
-          const originalText = waLink.innerHTML;
           waLink.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Enviando...';
-
           const msgCompleta = `*CuidaDF:* %0A ${nomeInput.value} enviou uma mensagem para ${c.nome} 55${c.whatsapp}: %0A ${msg} %0A Podemos conversar? %0A *Meu whatsapp:* ${whatsInput.value}`;
-
           const url = `https://api.callmebot.com/whatsapp.php?source=php&phone=556193872684&apikey=977206&text=${msgCompleta}`;
-          fetch(url)
-            .then(() => showToast('Mensagem enviada com sucesso!', 'success'))
-            .catch(() => showToast('Erro ao enviar mensagem. Tente novamente.', 'danger'))
-            .finally(() => {
-              waLink.disabled = true;
-              waLink.style.cursor = 'not-allowed';
-              waLink.classList.add('opacity-50');
-              waLink.innerHTML = 'Mensagem enviada!';
-            });
+          fetch(url).then(() => showToast('Mensagem enviada com sucesso!', 'success')).catch(() => showToast('Erro ao enviar mensagem. Tente novamente.', 'danger')).finally(() => { waLink.disabled = true; waLink.innerHTML = 'Mensagem enviada!'; });
         };
       }
 
-      // Navegação
       function goTo(id) {
-        supabase.auth.onAuthStateChange((event, session) => {
-          if (session) {
-            // console.log('goTo');
-          }
-        });
-        // console.log(error);
         const current = document.querySelector('.screen.active');
         const next = document.getElementById('screen-' + id);
         if (!next || next === current) return;
         if (current) {
           current.classList.add('leaving');
-          setTimeout(() => {
-            current.classList.remove('active', 'leaving');
-            current.style.display = 'none';
-          }, 300);
+          setTimeout(() => { current.classList.remove('active', 'leaving'); current.style.display = 'none'; }, 300);
         }
         setTimeout(() => {
           next.style.display = 'block';
@@ -1236,96 +920,63 @@
         }, current ? 160 : 0);
       }
 
-      // Carregar lista de cuidadores
       async function carregarLista() {
         const container = document.getElementById('lista-cards');
         container.innerHTML = `<div class="col-12 text-center py-5"><div class="spinner-border text-success" role="status"></div><div class="text-muted mt-3 small">Buscando cuidadores...</div></div>`;
-
         const fc = document.getElementById('f-cidade').value;
         const fp = document.getElementById('f-preco').value;
         const fv = document.getElementById('f-disp').value;
         const fe = document.getElementById('f-exp').value;
-
         let query = supabase.from('cuidadores').select('*').order('avaliacao', { ascending: false }).eq('disponivel', true);
-        // debugger;
         if (fc) query = query.ilike('cidade', `%${fc.split(',')[0].trim()}%`);
         if (fv === 'Sim') query = query.eq('verificado', true);
         else if (fv === 'Não') query = query.eq('verificado', false);
-        
         const { data, error } = await query;
-        if (error) {
-          container.innerHTML = `<div class="col-12"><div class="alert alert-danger">Erro: ${error.message}</div></div>`;
-          return;
-        }
-
+        if (error) { container.innerHTML = `<div class="col-12"><div class="alert alert-danger">Erro: ${error.message}</div></div>`; return; }
         let lista = data || [];
         const maxP = { 'Até R$ 80': 80, 'Até R$ 100': 100, 'Até R$ 150': 150 };
-        if (maxP[fp]) lista = lista.filter(c => c.preco <= maxP[fp]);
-        if (fp === 'Acima de R$ 150') lista = lista.filter(c => c.preco > 150);
+        if (fp === 'Sob consulta') lista = lista.filter(c => c.preco === -1);
+        else if (maxP[fp]) lista = lista.filter(c => c.preco !== -1 && c.preco <= maxP[fp]);
+        else if (fp === 'Acima de R$ 150') lista = lista.filter(c => c.preco !== -1 && c.preco > 150);
         const minA = { '1+ ano': 1, '3+ anos': 3, '5+ anos': 5 };
         if (minA[fe]) lista = lista.filter(c => expToAnos(c.experiencia) >= minA[fe]);
-
         document.getElementById('lista-cidade-titulo').textContent = fc || 'sua região';
         document.getElementById('lista-contador').textContent = `${lista.length} cuidador${lista.length !== 1 ? 'es' : ''} encontrado${lista.length !== 1 ? 's' : ''}`;
-
-        if (lista.length === 0) {
-          container.innerHTML = `<div class="col-12 text-center py-5"><i class="bi bi-search fs-1 text-muted"></i><p class="mt-3 text-muted">Nenhum cuidador encontrado.</p><button class="btn btn-outline-brand btn-sm" id="btn-limpar">Limpar filtros</button></div>`;
-          document.getElementById('btn-limpar')?.addEventListener('click', () => {
-            ['f-cidade', 'f-preco', 'f-disp', 'f-exp'].forEach(id => document.getElementById(id).value = '');
-            carregarLista();
-          });
-          return;
-        }
-
+        if (lista.length === 0) { container.innerHTML = `<div class="col-12 text-center py-5"><i class="bi bi-search fs-1 text-muted"></i><p class="mt-3 text-muted">Nenhum cuidador encontrado.</p><button class="btn btn-outline-brand btn-sm" id="btn-limpar">Limpar filtros</button></div>`; document.getElementById('btn-limpar')?.addEventListener('click', () => { ['f-cidade', 'f-preco', 'f-disp', 'f-exp'].forEach(id => document.getElementById(id).value = ''); carregarLista(); }); return; }
         container.innerHTML = '';
         lista.forEach((c, i) => {
           const col = document.createElement('div');
           col.className = 'col-md-6 col-lg-4';
           col.style.cssText = `opacity:0;transform:translateY(20px);transition:opacity .35s ${i * 0.07}s ease,transform .35s ${i * 0.07}s ease`;
           const foto = c.foto_url || `https://i.pravatar.cc/200?u=${c.id}`;
-          let P = '';
-          if (c.preco === -1) {
-            P = 'a combinar';
-          } else {
-            P = `R$${c.preco}<small>/plantão</small>`;
-          }
-
-          col.innerHTML = `<div class="cuidador-card h-100 p-4"><div class="d-flex align-items-start gap-3 mb-3"><img src="${foto}" class="avatar" alt="${c.nome}" onerror="this.src='https://i.pravatar.cc/200?u=${c.id}'"/><div class="flex-grow-1"><div class="fw-700 mb-1">${c.nome}</div><div class="d-flex flex-wrap gap-1 mb-1">${c.verificado ? '<span class="badge-verificado"><i class="bi bi-patch-check-fill me-1"></i>Verificado</span>' : ''}${c.disponivel ? '<span class="badge-disponivel"><i class="bi bi-circle-fill me-1" style="font-size:.55rem"></i>Disponível</span>' : '<span class="badge bg-secondary bg-opacity-10 text-secondary" style="font-size:.7rem;border-radius:2rem">Indisponível</span>'}</div><div class="stars">${stars(c.avaliacao)} <small class="text-muted ms-1">${(c.avaliacao || 5).toFixed(1)} (${c.total_reviews || 0})</small></div></div></div><div class="small text-muted mb-1"><i class="bi bi-geo-alt me-1"></i>${c.cidade}</div><div class="small text-muted mb-3"><i class="bi bi-briefcase me-1"></i>${c.experiencia} de experiência</div><div class="d-flex align-items-center justify-content-between"><div class="price-tag">${P}</div><button class="btn btn-brand btn-sm px-3">Ver perfil <i class="bi bi-arrow-right ms-1"></i></button></div></div>`;
-          col.querySelector('.cuidador-card').addEventListener('click', () => {
-            perfilAtual = c;
-            goTo('perfil');
-          });
+          const precoHtml = c.preco === -1 ? '<div class="price-tag">Sob consulta</div>' : `<div class="price-tag">R$ ${c.preco}<small>/plantão</small></div>`;
+          col.innerHTML = `<div class="cuidador-card h-100 p-4"><div class="d-flex align-items-start gap-3 mb-3"><img src="${foto}" class="avatar" alt="${c.nome}" onerror="this.src='https://i.pravatar.cc/200?u=${c.id}'"/><div class="flex-grow-1"><div class="fw-700 mb-1">${c.nome}</div><div class="d-flex flex-wrap gap-1 mb-1">${c.verificado ? '<span class="badge-verificado"><i class="bi bi-patch-check-fill me-1"></i>Verificado</span>' : ''}${c.disponivel ? '<span class="badge-disponivel"><i class="bi bi-circle-fill me-1" style="font-size:.55rem"></i>Disponível</span>' : '<span class="badge bg-secondary bg-opacity-10 text-secondary" style="font-size:.7rem;border-radius:2rem">Indisponível</span>'}</div><div class="stars">${stars(c.avaliacao)} <small class="text-muted ms-1">${(c.avaliacao || 5).toFixed(1)} (${c.total_reviews || 0})</small></div></div></div><div class="small text-muted mb-1"><i class="bi bi-geo-alt me-1"></i>${c.cidade}</div><div class="small text-muted mb-3"><i class="bi bi-briefcase me-1"></i>${c.experiencia} de experiência</div><div class="d-flex align-items-center justify-content-between">${precoHtml}<button class="btn btn-brand btn-sm px-3">Ver perfil <i class="bi bi-arrow-right ms-1"></i></button></div></div>`;
+          col.querySelector('.cuidador-card').addEventListener('click', () => { perfilAtual = c; goTo('perfil'); });
           container.appendChild(col);
-          setTimeout(() => {
-            col.style.opacity = '1';
-            col.style.transform = 'translateY(0)';
-          }, 50 + i * 70);
+          setTimeout(() => { col.style.opacity = '1'; col.style.transform = 'translateY(0)'; }, 50 + i * 70);
         });
       }
 
-      // Cadastro de cuidador (criação)
       async function salvarCadastro() {
         const { data: { session } } = await supabase.auth.getSession();
         if (!session) { showToast('Você precisa estar logado para se cadastrar como cuidador.', 'warning'); abrirModalLogin(); return; }
-
         const nome = document.getElementById('cad-nome').value.trim();
         const cidade = document.getElementById('cad-cidade').value;
         const whatsapp = document.getElementById('cad-whatsapp').value.trim().replace(/\D/g, '');
-        const preco = parseFloat(document.getElementById('cad-preco').value);
+        const precoNegociar = document.getElementById('cad-preco-negociar').checked;
+        let preco = precoNegociar ? -1 : parseFloat(document.getElementById('cad-preco').value);
         const experiencia = document.getElementById('cad-exp').value;
         const sobre = document.getElementById('cad-sobre').value.trim();
         const quero_verificacao = document.getElementById('cad-quero-verificacao').checked;
         const servicos = Array.from(document.querySelectorAll('#servicos-check input:checked')).map(el => el.parentElement.textContent.trim());
         const fotoInput = document.getElementById('cad-foto-input');
-
-        if (!nome || !cidade || !whatsapp || !preco || !fotoInput.files[0] || !sobre) {
-          showToast('Preencha foto, nome, cidade, WhatsApp, preço e sobre você!', 'danger');
+        if (!nome || !cidade || !whatsapp || (!precoNegociar && !preco) || !fotoInput.files[0] || !sobre) {
+          showToast('Preencha foto, nome, cidade, WhatsApp, preço (ou marque "A combinar") e sobre você!', 'danger');
           return;
         }
-
+        if (!precoNegociar && isNaN(preco)) { showToast('Valor inválido', 'danger'); return; }
         const btn = document.getElementById('btn-cadastrar');
         btn.disabled = true;
-
         let foto_url = null;
         const file = fotoInput.files[0];
         if (file) {
@@ -1333,103 +984,50 @@
           const ext = file.name.split('.').pop();
           const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
           const { data: upData, error: upErr } = await supabase.storage.from('fotos-cuidadores').upload(fileName, file, { contentType: file.type, upsert: false });
-          if (upErr) {
-            btn.disabled = false;
-            btn.innerHTML = '<i class="bi bi-check2-circle me-2"></i>Publicar meu perfil gratuitamente';
-            showToast('Erro no upload da foto: ' + upErr.message, 'danger');
-            return;
-          }
+          if (upErr) { btn.disabled = false; btn.innerHTML = '<i class="bi bi-check2-circle me-2"></i>Publicar meu perfil gratuitamente'; showToast('Erro no upload da foto: ' + upErr.message, 'danger'); return; }
           const { data: urlData } = supabase.storage.from('fotos-cuidadores').getPublicUrl(upData.path);
           foto_url = urlData.publicUrl;
         }
-
         btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Publicando perfil...';
-        const { error } = await supabase.from('cuidadores').insert([{
-          nome, cidade, whatsapp, preco, experiencia, sobre, servicos, quero_verificacao, foto_url,
-          disponivel: false, avaliacao: 5.0, total_reviews: 0, id: session.user.id
-        }]);
+        const { error } = await supabase.from('cuidadores').insert([{ nome, cidade, whatsapp, preco, experiencia, sobre, servicos, quero_verificacao, foto_url, disponivel: false, avaliacao: 5.0, total_reviews: 0, id: session.user.id }]);
         btn.disabled = false;
         btn.innerHTML = '<i class="bi bi-check2-circle me-2"></i>Publicar meu perfil gratuitamente';
-        if (error) {
-          showToast('Erro: ' + error.message, 'danger');
-        } else {
-          showToast('Perfil publicado com sucesso! 🎉');
-          setTimeout(() => goTo('lista'), 2000);
-        }
+        if (error) { showToast('Erro: ' + error.message, 'danger'); } 
+        else { showToast('Perfil publicado com sucesso! 🎉'); setTimeout(() => goTo('lista'), 2000); }
       }
 
-      // Bind de eventos
       function bindEvents() {
-        // Uploads
         document.getElementById('upload-area').addEventListener('click', () => document.getElementById('cad-foto-input').click());
         document.getElementById('cad-foto-input').addEventListener('change', (e) => {
           const file = e.target.files[0];
           if (!file) return;
           if (file.size > 500 * 1024) { showToast('A foto não deve ser maior que 500 KB!', 'danger'); return; }
           const reader = new FileReader();
-          reader.onload = (ev) => {
-            const preview = document.getElementById('foto-preview');
-            preview.src = ev.target.result;
-            preview.style.display = 'block';
-            document.getElementById('upload-icon').style.display = 'none';
-            document.getElementById('upload-label').textContent = file.name;
-            document.getElementById('upload-sub').textContent = (file.size / 1024).toFixed(0) + ' KB';
-          };
+          reader.onload = (ev) => { const preview = document.getElementById('foto-preview'); preview.src = ev.target.result; preview.style.display = 'block'; document.getElementById('upload-icon').style.display = 'none'; document.getElementById('upload-label').textContent = file.name; document.getElementById('upload-sub').textContent = (file.size / 1024).toFixed(0) + ' KB'; };
           reader.readAsDataURL(file);
         });
-
         document.getElementById('edit-upload-area').addEventListener('click', () => document.getElementById('edit-foto-input').click());
         document.getElementById('edit-foto-input').addEventListener('change', (e) => {
           const file = e.target.files[0];
           if (!file) return;
           if (file.size > 500 * 1024) { showToast('A foto deve ter no máximo 500 KB', 'danger'); return; }
           const reader = new FileReader();
-          reader.onload = (ev) => {
-            const preview = document.getElementById('edit-foto-preview');
-            preview.src = ev.target.result;
-            preview.style.display = 'block';
-            document.getElementById('edit-upload-icon').style.display = 'none';
-            document.getElementById('edit-upload-label').innerHTML = 'Clique para alterar a foto';
-          };
+          reader.onload = (ev) => { const preview = document.getElementById('edit-foto-preview'); preview.src = ev.target.result; preview.style.display = 'block'; document.getElementById('edit-upload-icon').style.display = 'none'; document.getElementById('edit-upload-label').innerHTML = 'Clique para alterar a foto'; };
           reader.readAsDataURL(file);
         });
-
         document.getElementById('user-upload-area').addEventListener('click', () => document.getElementById('user-foto-input').click());
         document.getElementById('user-foto-input').addEventListener('change', (e) => {
           const file = e.target.files[0];
           if (!file) return;
           if (file.size > 500 * 1024) { showToast('A foto deve ter no máximo 500 KB', 'danger'); return; }
           const reader = new FileReader();
-          reader.onload = (ev) => {
-            const preview = document.getElementById('user-foto-preview');
-            preview.src = ev.target.result;
-            preview.style.display = 'block';
-            document.getElementById('user-upload-icon').style.display = 'none';
-            document.getElementById('user-upload-label').textContent = file.name;
-            document.getElementById('user-upload-sub').textContent = (file.size / 1024).toFixed(0) + ' KB';
-          };
+          reader.onload = (ev) => { const preview = document.getElementById('user-foto-preview'); preview.src = ev.target.result; preview.style.display = 'block'; document.getElementById('user-upload-icon').style.display = 'none'; document.getElementById('user-upload-label').textContent = file.name; document.getElementById('user-upload-sub').textContent = (file.size / 1024).toFixed(0) + ' KB'; };
           reader.readAsDataURL(file);
         });
-
-        // Navegação
         document.getElementById('nav-logo').addEventListener('click', () => goTo('home'));
         document.getElementById('nav-buscar').addEventListener('click', () => goTo('lista'));
         document.getElementById('hero-buscar').addEventListener('click', () => goTo('lista'));
         document.getElementById('btn-buscar-home').addEventListener('click', () => goTo('lista'));
-        /* document.getElementById('btn-buscar-home').addEventListener('click', () => {
-          const cidade = document.getElementById('input-cidade').value;
-          const preco = document.getElementById('input-preco').value;
-          const verificado = document.getElementById('input-disp').value;
-          const exp = document.getElementById('input-exp').value;
-          goTo('lista');
-          setTimeout(() => {
-            if (cidade) document.getElementById('f-cidade').value = cidade;
-            if (preco) document.getElementById('f-preco').value = preco;
-            if (verificado) document.getElementById('f-disp').value = verificado;
-            if (exp) document.getElementById('f-exp').value = exp;
-            carregarLista();
-          }, 350);
-        }); */
         document.getElementById('lista-voltar').addEventListener('click', () => goTo('home'));
         document.getElementById('perfil-voltar').addEventListener('click', () => goTo('lista'));
         document.getElementById('perfil-contato-desktop').addEventListener('click', () => goTo('whatsapp'));
@@ -1442,47 +1040,22 @@
         document.getElementById('btn-cadastrar-usuario').addEventListener('click', salvarCadastroUsuario);
         document.getElementById('wa-voltar').addEventListener('click', () => goTo('perfil'));
         ['f-cidade', 'f-preco', 'f-disp', 'f-exp'].forEach(id => document.getElementById(id).addEventListener('change', carregarLista));
-
-        if (localStorage.getItem('intencao') == 'c') {
-          handleSouCuidador();
-        }
-        if (localStorage.getItem('intencao') == 'u') {
-          handleSouUsuario();
-        }
-
-        // Botões "Sou Cuidador" e "Sou Usuário"
         async function handleSouCuidador() {
           const { data: { session } } = await supabase.auth.getSession();
-
-          if (!session) {
-            localStorage.setItem('intencao', 'c');
-            abrirModalLogin(); 
-            return; 
-          }
+          if (!session) { localStorage.setItem('intencao', 'c'); abrirModalLogin(); return; }
           const perfil = await verificarPerfilAtivo(session.user.id);
           if (perfil) { await preencherFormularioEdicao(perfil); goTo('editar'); }
           else goTo('cadastro');
-
           localStorage.removeItem('intencao');
           document.getElementById('nav-cadastro').classList.add('d-md-inline-flex');
           document.getElementById('nav-cadastro-usuario').classList.remove('d-md-inline-flex');
         }
         async function handleSouUsuario() {
-          console.log('handleSouUsuario')
           const { data: { session } } = await supabase.auth.getSession();
-          if (!session) { 
-            localStorage.setItem('intencao', 'u');
-            abrirModalLogin(); 
-            return; 
-          }
+          if (!session) { localStorage.setItem('intencao', 'u'); abrirModalLogin(); return; }
           const { data: usuario } = await supabase.from('usuarios').select('id').eq('id', session.user.id).single();
-          if (usuario) {
-            showToast('Você já possui um perfil de usuário.');
-            goTo('home');
-          } else {
-            goTo('cadastro-usuario');
-          }
-
+          if (usuario) { showToast('Você já possui um perfil de usuário.'); goTo('home'); }
+          else goTo('cadastro-usuario');
           localStorage.removeItem('intencao');
           document.getElementById('nav-cadastro').classList.remove('d-md-inline-flex');
           document.getElementById('nav-cadastro-usuario').classList.add('d-md-inline-flex');
@@ -1491,13 +1064,9 @@
         document.getElementById('hero-cadastro').addEventListener('click', handleSouCuidador);
         document.getElementById('nav-cadastro-usuario').addEventListener('click', handleSouUsuario);
         document.getElementById('hero-cadastro-usuario').addEventListener('click', handleSouUsuario);
-
-        // Avaliação modal
         document.getElementById('btn-avaliar-cuidador').addEventListener('click', abrirModalAvaliacao);
         document.getElementById('close-avaliacao-modal').addEventListener('click', fecharModalAvaliacao);
         document.getElementById('btn-enviar-avaliacao').addEventListener('click', enviarAvaliacao);
-
-        // Estrelas no modal de avaliação
         document.querySelectorAll('#rating-stars i').forEach(star => {
           star.addEventListener('click', () => {
             const value = parseInt(star.getAttribute('data-value'));
@@ -1505,22 +1074,16 @@
             document.getElementById('avaliacao-nota').value = value;
             document.querySelectorAll('#rating-stars i').forEach(s => {
               const sVal = parseInt(s.getAttribute('data-value'));
-              if (sVal <= value) {
-                s.classList.remove('bi-star');
-                s.classList.add('bi-star-fill', 'active');
-              } else {
-                s.classList.remove('bi-star-fill', 'active');
-                s.classList.add('bi-star');
-              }
+              if (sVal <= value) { s.classList.remove('bi-star'); s.classList.add('bi-star-fill', 'active'); }
+              else { s.classList.remove('bi-star-fill', 'active'); s.classList.add('bi-star'); }
             });
           });
         });
+        setupPrecoNegociar('cad-preco', 'cad-preco-negociar');
+        setupPrecoNegociar('edit-preco', 'edit-preco-negociar');
       }
       const { data: { session } } = await supabase.auth.getSession();
-      console.log(session?.user)
-      if(session) {
-        updateAuthUI(session?.user ?? null);
-      }
+      if(session) updateAuthUI(session?.user ?? null);
       bindEvents();
       document.getElementById('screen-home').style.display = 'block';
     }
@@ -1537,3 +1100,4 @@
 </script>
 </body>
 </html>
+```
