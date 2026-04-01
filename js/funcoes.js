@@ -595,7 +595,6 @@
           let defaultOption = document.createElement('option');
           defaultOption.value = '';
           defaultOption.textContent = 'Qualquer cidade';
-        //   defaultOption.disabled = true;
           defaultOption.selected = true;
           selectElement.appendChild(defaultOption);
         
@@ -611,7 +610,6 @@
           let defaultOptionLista = document.createElement('option');
           defaultOptionLista.value = '';
           defaultOptionLista.textContent = 'Todas as cidades';
-        //   defaultOptionLista.disabled = true;
           defaultOptionLista.selected = true;
           selectElementLista.appendChild(defaultOptionLista);
         
