@@ -793,7 +793,7 @@
         const { error } = await supabase.auth.signInWithOAuth({
           provider: 'google',
           options: {
-            redirectTo: window.location.origin + window.location.pathname + '?i=' + localStorage.getItem('intencao'),
+            redirectTo: window.location.origin + window.location.pathname + '?intc=' + localStorage.getItem('intencao'),
             queryParams: { access_type: 'offline', prompt: 'consent' }
           }
         });
@@ -1453,12 +1453,21 @@
         document.getElementById('btn-cadastrar-usuario').addEventListener('click', salvarCadastroUsuario);
         document.getElementById('wa-voltar').addEventListener('click', () => goTo('perfil'));
         ['f-cidade', 'f-preco', 'f-disp', 'f-exp'].forEach(id => document.getElementById(id).addEventListener('change', carregarLista));
+        
+        let queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const intc = urlParams.get('intc');
 
-        if (localStorage.getItem('intencao') == 'c') {
-          handleSouCuidador();
-        }
-        if (localStorage.getItem('intencao') == 'u') {
-          handleSouUsuario();
+        if (intc != '' && intc != null) {
+          if (localStorage.getItem('intencao') == 'c') {
+            handleSouCuidador();
+          }
+          if (localStorage.getItem('intencao') == 'u') {
+            handleSouUsuario();
+          }
+          let queryString = new URL(window.location.href);
+          queryString.searchParams.delete('intc');
+          window.history.replaceState({}, '', queryString);          
         }
 
         // Botões "Sou Cuidador" e "Sou Usuário"
@@ -1474,7 +1483,7 @@
           if (perfil) { await preencherFormularioEdicao(perfil); goTo('editar'); }
           else goTo('cadastro');
 
-          localStorage.removeItem('intencao');
+          // localStorage.removeItem('intencao');
           document.getElementById('nav-cadastro').classList.add('d-md-inline-flex');
           document.getElementById('nav-cadastro-usuario').classList.remove('d-md-inline-flex');
         }
@@ -1494,7 +1503,7 @@
             goTo('cadastro-usuario');
           }
 
-          localStorage.removeItem('intencao');
+          // localStorage.removeItem('intencao');
           document.getElementById('nav-cadastro').classList.remove('d-md-inline-flex');
           document.getElementById('nav-cadastro-usuario').classList.add('d-md-inline-flex');
         }
@@ -1533,7 +1542,7 @@
       if(session != undefined) {
         updateAuthUI(session?.user ?? null);
       }
-      localStorage.removeItem('intencao');
+      // localStorage.removeItem('intencao');
       bindEvents();
       document.getElementById('screen-home').style.display = 'block';
     }
