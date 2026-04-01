@@ -123,46 +123,7 @@
             <h5 class="font-display mb-4" style="color:var(--dark)"><i class="bi bi-geo-alt-fill me-2" style="color:var(--brand)"></i>Busca Rápida</h5>
             <div class="mb-3">
               <label class="form-label">Cidade</label>
-              <select class="form-select" id="input-cidade">
-                <option value="">Selecione</option>
-                <option>DF - Asa Norte</option>
-                <option>DF - Asa Sul</option>
-                <option>DF - Água Quente</option>
-                <option>DF - Arapoanga</option>
-                <option>DF - Águas Claras</option>
-                <option>DF - Arniqueira</option>
-                <option>DF - Brazlândia</option>
-                <option>DF - Candangolândia</option>
-                <option>DF - Ceilândia</option>
-                <option>DF - Cruzeiro</option>
-                <option>DF - Fercal</option>
-                <option>DF - Gama</option>
-                <option>DF - Guará</option>
-                <option>DF - Itapoã</option>
-                <option>DF - Jardim Botânico</option>
-                <option>DF - Lago Norte</option>
-                <option>DF - Lago Sul</option>
-                <option>DF - Núcleo Bandeirante</option>
-                <option>DF - Paranoá</option>
-                <option>DF - Park Way</option>
-                <option>DF - Planaltina</option>
-                <option>DF - Plano Piloto</option>
-                <option>DF - Recanto das Emas</option>
-                <option>DF - Riacho Fundo</option>
-                <option>DF - Riacho Fundo II</option>
-                <option>DF - Samambaia</option>
-                <option>DF - Santa Maria</option>
-                <option>DF - São Sebastião</option>
-                <option>DF - SCIA/Estrutural</option>
-                <option>DF - SIA</option>
-                <option>DF - Sobradinho</option>
-                <option>DF - Sobradinho II</option>
-                <option>DF - Sol Nascente</option>
-                <option>DF - Sudoeste/Octogonal</option>
-                <option>DF - Taguatinga</option>
-                <option>DF - Varjão</option>
-                <option>DF - Vicente Pires</option>
-              </select>
+              <select class="form-select" id="input-cidade"></select>
             </div>
             <div class="row g-3 mb-3">
               <div class="col-6">
@@ -229,46 +190,7 @@
   <div class="filters-bar py-2">
     <div class="container d-flex flex-wrap gap-2 align-items-center">
       <span class="text-muted small me-2"><i class="bi bi-funnel me-1"></i>Filtros:</span>
-      <select id="f-cidade" class="form-select form-select-sm" style="width:auto">
-        <option value="">Todas as cidades</option>
-        <option>DF - Asa Norte</option>
-        <option>DF - Asa Sul</option>
-        <option>DF - Água Quente</option>
-        <option>DF - Arapoanga</option>
-        <option>DF - Águas Claras</option>
-        <option>DF - Arniqueira</option>
-        <option>DF - Brazlândia</option>
-        <option>DF - Candangolândia</option>
-        <option>DF - Ceilândia</option>
-        <option>DF - Cruzeiro</option>
-        <option>DF - Fercal</option>
-        <option>DF - Gama</option>
-        <option>DF - Guará</option>
-        <option>DF - Itapoã</option>
-        <option>DF - Jardim Botânico</option>
-        <option>DF - Lago Norte</option>
-        <option>DF - Lago Sul</option>
-        <option>DF - Núcleo Bandeirante</option>
-        <option>DF - Paranoá</option>
-        <option>DF - Park Way</option>
-        <option>DF - Planaltina</option>
-        <option>DF - Plano Piloto</option>
-        <option>DF - Recanto das Emas</option>
-        <option>DF - Riacho Fundo</option>
-        <option>DF - Riacho Fundo II</option>
-        <option>DF - Samambaia</option>
-        <option>DF - Santa Maria</option>
-        <option>DF - São Sebastião</option>
-        <option>DF - SCIA/Estrutural</option>
-        <option>DF - SIA</option>
-        <option>DF - Sobradinho</option>
-        <option>DF - Sobradinho II</option>
-        <option>DF - Sol Nascente</option>
-        <option>DF - Sudoeste/Octogonal</option>
-        <option>DF - Taguatinga</option>
-        <option>DF - Varjão</option>
-        <option>DF - Vicente Pires</option>
-      </select>
+      <select id="f-cidade" class="form-select form-select-sm" style="width:auto"></select>
       <select id="f-preco" class="form-select form-select-sm" style="width:auto"><option value="">Qualquer preço</option><option>Até R$ 80</option><option>Até R$ 100</option><option>Até R$ 150</option><option>Acima de R$ 150</option></select>
       <select id="f-disp" class="form-select form-select-sm" style="width:auto"><option value="">Verificado: todos</option><option value="Sim">Verificados</option><option value="Não">Não verificados</option></select>
       <select id="f-exp" class="form-select form-select-sm" style="width:auto"><option value="">Experiência</option><option>1+ ano</option><option>3+ anos</option><option>5+ anos</option></select>
@@ -375,6 +297,7 @@
           <option>DF - Taguatinga</option>
           <option>DF - Varjão</option>
           <option>DF - Vicente Pires</option>
+          <option>GO - Planaltina</option>
         </select></div>
         <div class="col-md-6"><label class="form-label fw-500">WhatsApp</label><input type="tel" id="cad-whatsapp" onkeyup="formatarCelular(this)" value="" oninput="this.value = this.value.replace(/[^0-9]/g, '');" class="form-control" placeholder="(61) 9 9999-9999"/></div>
         <div class="col-md-6"><label class="form-label fw-500">Valor por plantão (R$)</label><input type="number" id="cad-preco" class="form-control" placeholder="Ex: 120"/></div>
@@ -439,6 +362,7 @@
           <option>DF - Taguatinga</option>
           <option>DF - Varjão</option>
           <option>DF - Vicente Pires</option>
+          <option>GO - Planaltina</option>
         </select></div>
         <div class="col-md-6"><label class="form-label fw-500">WhatsApp</label><input type="tel" id="edit-whatsapp" oninput="this.value = this.value.replace(/[^0-9]/g, '');" class="form-control"/></div>
         <div class="col-md-6"><label class="form-label fw-500">Valor por plantão (R$)</label><input type="number" id="edit-preco" class="form-control"/></div>
