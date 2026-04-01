@@ -635,7 +635,34 @@
         const fv = document.getElementById('f-disp').value;
         const fe = document.getElementById('f-exp').value;
 
-        let query = supabase.from('cuidadores').select('*').order('avaliacao', { ascending: false }).eq('disponivel', true);
+        let sorteio = Math.floor(Math.random() * 7);
+        let campo = 'whatsapp';
+        if (sorteio == 1) 
+            campo = 'id';
+        if (sorteio == 2) 
+            campo = 'nome';
+        if (sorteio == 3) 
+            campo = 'whatsapp';
+        if (sorteio == 4) 
+            campo = 'foto_url';
+        if (sorteio == 5) 
+            campo = 'sobre';
+        if (sorteio == 6) 
+            campo = 'cidade';
+        if (sorteio == 7) 
+            campo = 'created_at';
+// console.log('campo', campo)
+        sorteio = Math.floor(Math.random() * 2);
+        let asc = true;
+        if (sorteio == 1) 
+            asc = false;
+// console.log('asc', asc)
+        let query = supabase
+        .from('cuidadores')
+        .select('*')
+        .eq('disponivel', true)
+        .order(campo, { ascending: asc, foreignTable: null });
+        
         // debugger;
         if (fc) query = query.ilike('cidade', `%${fc.split(',')[0].trim()}%`);
         if (fv === 'Sim') query = query.eq('verificado', true);
