@@ -710,7 +710,7 @@
         const btn = document.getElementById('btn-cadastrar');
         btn.disabled = true;
 
-        let foto_url = https://duoobpxovvpxfgvvghgk.supabase.co/storage/v1/object/public/fotos-cuidadores/avatar.png;
+        let foto_url = 'https://duoobpxovvpxfgvvghgk.supabase.co/storage/v1/object/public/fotos-cuidadores/avatar.png';
         const file = fotoInput.files[0];
         if (file) {
           btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Enviando foto...';
