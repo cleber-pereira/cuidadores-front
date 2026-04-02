@@ -299,7 +299,7 @@
         btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Cadastrando...';
 
         try {
-          let foto_url = 'https://duoobpxovvpxfgvvghgk.supabase.co/storage/v1/object/public/fotos-cuidadores/avatar.png';
+          let foto_url = 'https://duoobpxovvpxfgvvghgk.supabase.co/storage/v1/object/public/fotos-cuidadores/avatar-neutro.png';
           if (fotoInput.files && fotoInput.files[0]) {
             const file = fotoInput.files[0];
             if (file.size > 500 * 1024) {
