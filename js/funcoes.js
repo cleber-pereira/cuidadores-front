@@ -331,7 +331,7 @@
 
       // Renderização do perfil (cuidador)
       function renderPerfil(c) {
-        const foto = c.foto_url || `https://duoobpxovvpxfgvvghgk.supabase.co/storage/v1/object/public/fotos-cuidadores/avatar.png`;
+        const foto = c.foto_url || `https://duoobpxovvpxfgvvghgk.supabase.co/storage/v1/object/public/fotos-cuidadores/avatar-neutro.png`;
         document.getElementById('p-foto').src = foto;
         document.getElementById('p-nome').textContent = c.nome;
         document.getElementById('p-local').innerHTML = `<i class="bi bi-geo-alt me-1"></i>${c.cidade} · ${c.experiencia} de exp.`;
@@ -501,7 +501,7 @@
 
       // WhatsApp
       function renderWhatsapp(c) {
-        const foto = c.foto_url || `https://i.pravatar.cc/80?u=${c.id}`;
+        const foto = c.foto_url || `https://duoobpxovvpxfgvvghgk.supabase.co/storage/v1/object/public/fotos-cuidadores/avatar-neutro.png`;
         const nome1 = c.nome.split(' ')[0];
         const msg = encodeURIComponent(`Olá, ${nome1}! Vi seu perfil no CuidaDF e gostaria de saber mais sobre sua disponibilidade e demais detalhes. Podemos conversar?`);
         document.getElementById('wa-nome').textContent = `Fale com ${nome1}`;
@@ -688,7 +688,7 @@
           const col = document.createElement('div');
           col.className = 'col-md-6 col-lg-4';
           col.style.cssText = `opacity:0;transform:translateY(20px);transition:opacity .35s ${i * 0.07}s ease,transform .35s ${i * 0.07}s ease`;
-          const foto = c.foto_url || `https://duoobpxovvpxfgvvghgk.supabase.co/storage/v1/object/public/fotos-cuidadores/avatar.png`;
+          const foto = c.foto_url || `https://duoobpxovvpxfgvvghgk.supabase.co/storage/v1/object/public/fotos-cuidadores/avatar-neutro.png`;
           let P = '';
           if (c.preco === -1) {
             P = 'a combinar';
