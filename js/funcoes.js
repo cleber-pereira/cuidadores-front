@@ -67,7 +67,6 @@
           // Determinar papel (cuidador ou usuario)
           const { data: cuidador } = await supabase.from('cuidadores').select('id').eq('id', user.id).single();
           if (cuidador) {
-            console.log('cuidador')
             currentUserRole = 'cuidador';
             userRoleSpan.textContent = 'Cuidador';
             userRoleSpan.className = 'badge bg-success text-white';
@@ -925,7 +924,6 @@
       }
       
       const { data: { session } } = await supabase.auth.getSession();
-      console.log(session?.user)
       if(session != undefined) {
         updateAuthUI(session?.user ?? null);
       }
