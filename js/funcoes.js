@@ -345,8 +345,11 @@
         document.getElementById('p-verificado').style.display = c.verificado ? '' : 'none';
         document.getElementById('p-disponivel').style.display = c.disponivel ? '' : 'none';
         document.getElementById('p-preco-cta').innerHTML = c.preco === -1 ? 'Sob consulta' : `R$ ${c.preco}<span class="text-muted" style="font-size:.75rem;font-family:'DM Sans'">/plantão</span>`;
-        document.getElementById('p-preco-sidebar').innerHTML = c.preco === -1 ? 'Valor a combinar' : `R$ ${c.preco}<small style="font-family:'DM Sans';font-size:.8rem;color:var(--muted);font-weight:400">/plantão</small>`;
-        document.getElementById('p-preco-dia2').textContent = c.preco === -1 ? 'Valor a combinar' : `R$ ${(c.preco * 2).toFixed(0)}/dia integral`;
+        if (c.preco !== -1) {
+          document.getElementById('p-preco-sidebar').innerHTML = `R$ ${c.preco}<small style="font-family:'DM Sans';font-size:.8rem;color:var(--muted);font-weight:400">/plantão</small>`;
+          document.getElementById('p-preco-dia2').textContent = `R$ ${(c.preco * 2).toFixed(0)}/dia integral`;
+          
+        }
         const servicos = Array.isArray(c.servicos) ? c.servicos : [];
         document.getElementById('p-servicos').innerHTML = servicos.length ? servicos.map(s => `<span class="service-chip">${s}</span>`).join('') : '<span class="text-muted small">Não informado</span>';
         carregarAvaliacoes(c.id);
