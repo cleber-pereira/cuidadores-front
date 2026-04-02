@@ -473,7 +473,6 @@
         .eq('id', cuidadorId)
         .single();
 
-            debugger;
         if (somaData) {
             const novaSoma = 1 + somaData.total_reviews;
             const novaMedia = (somaData.avaliacao + avaliacaoNota) / novaSoma;
@@ -526,7 +525,6 @@
 
         const waLink = document.getElementById('wa-link');
         waLink.onclick = function () {
-        debugger;
           const whatsInput = document.getElementById('seu-whats');
           const nomeInput = document.getElementById('seu-nome');
           if (whatsInput.value.length < 15 || nomeInput.value.length < 1) {
@@ -625,45 +623,28 @@
         }
       }
       // Carregar lista de cuidadores
-      async function carregarLista() {
-
+      async function carregarLista() { 
         const container = document.getElementById('lista-cards');
         container.innerHTML = `<div class="col-12 text-center py-5"><div class="spinner-border text-success" role="status"></div><div class="text-muted mt-3 small">Buscando cuidadores...</div></div>`;
-
-        const fc = document.getElementById('f-cidade').value;
-        const fp = document.getElementById('f-preco').value;
-        const fv = document.getElementById('f-disp').value;
-        const fe = document.getElementById('f-exp').value;
-
-        let sorteio = Math.floor(Math.random() * 7);
-        let campo = 'whatsapp';
-        if (sorteio == 1) 
-            campo = 'id';
-        if (sorteio == 2) 
-            campo = 'nome';
-        if (sorteio == 3) 
-            campo = 'whatsapp';
-        if (sorteio == 4) 
-            campo = 'foto_url';
-        if (sorteio == 5) 
-            campo = 'sobre';
-        if (sorteio == 6) 
-            campo = 'cidade';
-        if (sorteio == 7) 
-            campo = 'created_at';
-// console.log('campo', campo)
-        sorteio = Math.floor(Math.random() * 2);
-        let asc = true;
-        if (sorteio == 1) 
-            asc = false;
-// console.log('asc', asc)
-        let query = supabase
-        .from('cuidadores')
-        .select('*')
-        .eq('disponivel', true)
-        .order(campo, { ascending: asc, foreignTable: null });
+        let fc = document.getElementById('f-cidade').value;
+        let fp = document.getElementById('f-preco').value;
+        let fv = document.getElementById('f-disp').value;
+        let fe = document.getElementById('f-exp').value;
         
-        // debugger;
+        if(current.id == 'screen-home'){
+            fc = document.getElementById('input-cidade').value;
+            fp = document.getElementById('input-preco').value;
+            fv = document.getElementById('input-disp').value;
+            fe = document.getElementById('input-exp').value;
+            
+            // atualizar selects de cima
+            document.getElementById('f-cidade').value = fc;
+            document.getElementById('f-preco').value = fp;
+            document.getElementById('f-disp').value = fv;
+        }
+
+        let query = supabase.from('cuidadores').select('*').order('avaliacao', { ascending: false }).eq('disponivel', true);
+
         if (fc) query = query.ilike('cidade', `%${fc.split(',')[0].trim()}%`);
         if (fv === 'Sim') query = query.eq('verificado', true);
         else if (fv === 'Não') query = query.eq('verificado', false);
