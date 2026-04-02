@@ -238,7 +238,6 @@
         const servicos = Array.from(document.querySelectorAll('#edit-servicos-check input:checked')).map(el => el.parentElement.textContent.trim());
         const fotoInput = document.getElementById('edit-foto-input');
 
-
         if (!nome || !cidade || !whatsapp || !preco || !sobre) {
           showToast('Preencha todos os campos obrigatórios!', 'danger');
           return;
@@ -300,7 +299,7 @@
         btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Cadastrando...';
 
         try {
-          let foto_url = null;
+          let foto_url = 'https://duoobpxovvpxfgvvghgk.supabase.co/storage/v1/object/public/fotos-cuidadores/avatar.png';
           if (fotoInput.files && fotoInput.files[0]) {
             const file = fotoInput.files[0];
             if (file.size > 500 * 1024) {
@@ -332,7 +331,7 @@
 
       // Renderização do perfil (cuidador)
       function renderPerfil(c) {
-        const foto = c.foto_url || `https://i.pravatar.cc/240?u=${c.id}`;
+        const foto = c.foto_url || `https://duoobpxovvpxfgvvghgk.supabase.co/storage/v1/object/public/fotos-cuidadores/avatar.png`;
         document.getElementById('p-foto').src = foto;
         document.getElementById('p-nome').textContent = c.nome;
         document.getElementById('p-local').innerHTML = `<i class="bi bi-geo-alt me-1"></i>${c.cidade} · ${c.experiencia} de exp.`;
@@ -667,7 +666,7 @@
           const col = document.createElement('div');
           col.className = 'col-md-6 col-lg-4';
           col.style.cssText = `opacity:0;transform:translateY(20px);transition:opacity .35s ${i * 0.07}s ease,transform .35s ${i * 0.07}s ease`;
-          const foto = c.foto_url || `https://i.pravatar.cc/200?u=${c.id}`;
+          const foto = c.foto_url || `https://duoobpxovvpxfgvvghgk.supabase.co/storage/v1/object/public/fotos-cuidadores/avatar.png`;
           let P = '';
           if (c.preco === -1) {
             P = 'a combinar';
@@ -703,15 +702,15 @@
         const servicos = Array.from(document.querySelectorAll('#servicos-check input:checked')).map(el => el.parentElement.textContent.trim());
         const fotoInput = document.getElementById('cad-foto-input');
 
-        if (!nome || !cidade || !whatsapp || !preco || !fotoInput.files[0] || !sobre) {
-          showToast('Preencha foto, nome, cidade, WhatsApp, preço e sobre você!', 'danger');
+        if (!nome || !cidade || !whatsapp || !preco /* || !fotoInput.files[0] */ || !sobre) {
+          showToast('Preencha nome, cidade, WhatsApp, preço e sobre você!', 'danger');
           return;
         }
 
         const btn = document.getElementById('btn-cadastrar');
         btn.disabled = true;
 
-        let foto_url = null;
+        let foto_url = https://duoobpxovvpxfgvvghgk.supabase.co/storage/v1/object/public/fotos-cuidadores/avatar.png;
         const file = fotoInput.files[0];
         if (file) {
           btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Enviando foto...';
