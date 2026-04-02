@@ -1,7 +1,6 @@
 (function() {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); 
     else { 
-      console.log('init')
       init();
     }
 
@@ -75,7 +74,6 @@
           } else {
             const { data: usuario } = await supabase.from('usuarios').select('id').eq('id', user.id).single();
             if (usuario) {
-              console.log('usuario')
               currentUserRole = 'usuario';
               userRoleSpan.textContent = 'Usuário';
               userRoleSpan.className = 'badge bg-info text-dark';
@@ -125,7 +123,6 @@
       }
 
       async function loginWithGoogle() {
-        console.log('loginWithGoogle')
         const { error } = await supabase.auth.signInWithOAuth({
           provider: 'google',
           options: {
@@ -180,14 +177,12 @@
 
       // Verificação de perfil (cuidador)
       async function verificarPerfilAtivo(userId) {
-        console.log('verificarPerfilAtivo')
         const { data, error } = await supabase.from('cuidadores').select('*').eq('id', userId).single();
         if (error && error.code !== 'PGRST116') { console.error('Erro ao verificar perfil:', error); return null; }
         return data;
       }
 
       async function redirecionarAposLogin(user) {
-        console.log('redirecionarAposLogin')
         if (!user) return;
         const perfil = await verificarPerfilAtivo(user.id);
         if (perfil) {
@@ -197,7 +192,6 @@
           // Verifica se é usuário comum
           const { data: usuario } = await supabase.from('usuarios').select('id','nome').eq('id', user.id).single();
           if (user) {
-            console.log(usuario)
             // showToast('Bem-vindo de volta, ' + usuario.nome + '!');
             goTo('home');
           }
@@ -508,7 +502,6 @@
 
       // WhatsApp
       function renderWhatsapp(c) {
-        console.log(c)
         const foto = c.foto_url || `https://i.pravatar.cc/80?u=${c.id}`;
         const nome1 = c.nome.split(' ')[0];
         const msg = encodeURIComponent(`Olá, ${nome1}! Vi seu perfil no CuidaDF e gostaria de saber mais sobre sua disponibilidade e demais detalhes. Podemos conversar?`);
@@ -553,12 +546,6 @@
 
       // Navegação
       function goTo(id) {
-        supabase.auth.onAuthStateChange((event, session) => {
-          if (session) {
-            // console.log('goTo');
-          }
-        });
-        // console.log(error);
         const current = document.querySelector('.screen.active');
         const next = document.getElementById('screen-' + id);
         if (!next || next === current) return;
@@ -623,6 +610,8 @@
       }
       // Carregar lista de cuidadores
       async function carregarLista() { 
+        
+        const current = document.querySelector('.screen.active');
         const container = document.getElementById('lista-cards');
         container.innerHTML = `<div class="col-12 text-center py-5"><div class="spinner-border text-success" role="status"></div><div class="text-muted mt-3 small">Buscando cuidadores...</div></div>`;
         let fc = document.getElementById('f-cidade').value;
@@ -873,7 +862,6 @@
           document.getElementById('nav-cadastro-usuario').classList.remove('d-md-inline-flex');
         }
         async function handleSouUsuario() {
-          console.log('handleSouUsuario')
           const { data: { session } } = await supabase.auth.getSession();
           if (!session) { 
             localStorage.setItem('intencao', 'u');
