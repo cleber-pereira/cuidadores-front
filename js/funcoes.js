@@ -708,7 +708,7 @@
         }
 
         const btn = document.getElementById('btn-cadastrar');
-        btn.disabled = true;
+        btn.disabled = true; 
 
         let foto_url = 'https://duoobpxovvpxfgvvghgk.supabase.co/storage/v1/object/public/fotos-cuidadores/avatar.png';
         const file = fotoInput.files[0];
