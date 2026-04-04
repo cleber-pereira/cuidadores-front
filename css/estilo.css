@@ -162,3 +162,58 @@
       width: 100%;
     }
   }
+  #modal-termos{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.45);
+    display:flex;
+    justify-content:center;
+    align-items:flex-end;
+    z-index:999;
+    opacity:0;
+    pointer-events:none;
+    transition:.3s;
+  }
+  
+  #modal-termos.active{
+    opacity:1;
+    pointer-events:auto;
+  }
+  
+  .termos-box{
+    background:#fff;
+    width:100%;
+    max-width:600px;
+    height:80vh;
+    border-radius:18px 18px 0 0;
+    display:flex;
+    flex-direction:column;
+    transform:translateY(100%);
+    transition:.35s;
+  }
+  
+  #modal-termos.active .termos-box{
+    transform:translateY(0);
+  }
+  
+  .termos-header{
+    padding:16px 20px;
+    border-bottom:1px solid #eee;
+    display:flex;
+    justify-content:space-between;
+    font-weight:600;
+  }
+  
+  .termos-header button{
+    border:none;
+    background:none;
+    font-size:20px;
+    cursor:pointer;
+  }
+  
+  .termos-body{
+    padding:20px;
+    overflow-y:auto;
+    font-size:14px;
+    line-height:1.6;
+  }

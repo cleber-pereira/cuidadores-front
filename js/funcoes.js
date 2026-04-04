@@ -502,13 +502,14 @@
         btn.innerHTML = 'Enviar Avaliação';
         }
       let contMsg = 0;
+      const tamanhoMsg = 300;
       // WhatsApp
       async function renderWhatsapp(c) {
         const foto = c.foto_url || `https://duoobpxovvpxfgvvghgk.supabase.co/storage/v1/object/public/fotos-cuidadores/avatar-neutro.png`;
         const nome1 = c.nome.split(' ')[0];
         const textoMsg = `Olá, ${nome1}! Vi seu perfil no CuidaDF e `
         
-        contMsg = 100 - textoMsg.length;
+        contMsg = tamanhoMsg - textoMsg.length;
         document.getElementById('contador').innerHTML = contMsg;
 
         document.getElementById('wa-nome').textContent = `Fale com ${nome1}`;
@@ -553,12 +554,12 @@
               waLink.classList.add('opacity-50');
               waLink.innerHTML = 'Mensagem enviada!';
             });
-        const { error } = await supabase.from('mensagens').insert([{
-          cuidador: cuidadorId,
-          nome: nomeInput.value,
-          whatsapp: whatsInput.value,
-          mensagem: waMsg.value
-        }]);
+            const { error } = await supabase.from('mensagens').insert([{
+              cuidador: cuidadorId,
+              nome: nomeInput.value,
+              whatsapp: whatsInput.value,
+              mensagem: waMsg.value
+            }]);
         };
           
       }
@@ -977,4 +978,23 @@
     const max = textarea.getAttribute('maxlength');
     const atual = textarea.value.length;
     contador.textContent = max - atual;
+  }
+
+  const abrirTermos = document.getElementById('abrir-termos');
+  const fecharTermos = document.getElementById('fechar-termos');
+  const modal = document.getElementById('modal-termos');
+
+  abrirTermos.onclick = (e)=>{
+    e.preventDefault();
+    modal.classList.add('active');
+  }
+
+  fecharTermos.onclick = ()=>{
+    modal.classList.remove('active');
+  }
+
+  modal.onclick = (e)=>{
+    if(e.target === modal){
+      modal.classList.remove('active');
+    }
   }
