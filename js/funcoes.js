@@ -501,12 +501,16 @@
         btn.disabled = false;
         btn.innerHTML = 'Enviar Avaliação';
         }
-
+      let contMsg = 0;
       // WhatsApp
-      function renderWhatsapp(c) {
+      async function renderWhatsapp(c) {
         const foto = c.foto_url || `https://duoobpxovvpxfgvvghgk.supabase.co/storage/v1/object/public/fotos-cuidadores/avatar-neutro.png`;
         const nome1 = c.nome.split(' ')[0];
-        const msg = encodeURIComponent(`Olá, ${nome1}! Vi seu perfil no CuidaDF e gostaria de saber mais sobre sua disponibilidade e demais detalhes. Podemos conversar?`);
+        const textoMsg = `Olá, ${nome1}! Vi seu perfil no CuidaDF e `
+        
+        contMsg = 100 - textoMsg.length;
+        document.getElementById('contador').innerHTML = contMsg;
+
         document.getElementById('wa-nome').textContent = `Fale com ${nome1}`;
         document.getElementById('wa-foto').src = foto;
         if (c.preco === -1) {
@@ -515,14 +519,18 @@
           document.getElementById('wa-info').innerHTML = `<strong>${c.nome}</strong> · R$${c.preco}/plantão`;
         }
         document.getElementById('wa-avaliacao').innerHTML = `<i class="bi bi-star-fill text-warning me-1"></i>${(c.avaliacao || 5).toFixed(1)}`;
-        document.getElementById('wa-msg').textContent = `Olá, ${nome1}! Vi seu perfil no CuidaDF e gostaria de saber mais sobre sua disponibilida e demais detalhes.`;
+        document.getElementById('wa-msg').textContent = `Olá, ${nome1}! Vi seu perfil no CuidaDF e `;
+        const waMsg = document.getElementById('wa-msg');
+        waMsg.focus();
+        waMsg.setSelectionRange(waMsg.value.length, waMsg.value.length);
 
         const waLink = document.getElementById('wa-link');
-        waLink.onclick = function () {
+        waLink.onclick = async function () {
+          const whatsMsg = document.getElementById('wa-msg');
           const whatsInput = document.getElementById('seu-whats');
           const nomeInput = document.getElementById('seu-nome');
           if (whatsInput.value.length < 15 || nomeInput.value.length < 1) {
-            showToast('Você precisa informar seu nome e um WhatsApp válido para contato.', 'danger');
+            showToast('Você precisa digitar uma mensagem e informar seu nome e um WhatsApp válido para contato.', 'danger');
             return;
           }
           waLink.disabled = true;
@@ -530,8 +538,10 @@
           waLink.classList.add('opacity-50');
           const originalText = waLink.innerHTML;
           waLink.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Enviando...';
-
+          const msg = encodeURIComponent(waMsg.value);
           const msgCompleta = `*CuidaDF:* %0A ${nomeInput.value} enviou uma mensagem para ${c.nome} 55${c.whatsapp}: %0A ${msg} %0A Podemos conversar? %0A *Meu whatsapp:* ${whatsInput.value}`;
+
+          const cuidadorId = c.id;
 
           const url = `https://api.callmebot.com/whatsapp.php?source=php&phone=556193872684&apikey=977206&text=${msgCompleta}`;
           fetch(url)
@@ -543,7 +553,14 @@
               waLink.classList.add('opacity-50');
               waLink.innerHTML = 'Mensagem enviada!';
             });
+        const { error } = await supabase.from('mensagens').insert([{
+          cuidador: cuidadorId,
+          nome: nomeInput.value,
+          whatsapp: whatsInput.value,
+          mensagem: waMsg.value
+        }]);
         };
+          
       }
 
       // Navegação
@@ -952,4 +969,12 @@
     else if (value.length > 2) value = value.replace(/^(\d{2})(\d{0,5})$/, '($1) $2');
     else if (value.length > 0) value = value.replace(/^(\d{0,2})$/, '($1');
     input.value = value;
+  }
+  
+  function contarCaracteres() {
+    const textarea = document.getElementById('wa-msg');
+    const contador = document.getElementById('contador');
+    const max = textarea.getAttribute('maxlength');
+    const atual = textarea.value.length;
+    contador.textContent = max - atual;
   }

@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CuidaDF | Encontre Cuidadores de Idosos no DF e Entorno</title>
-  <meta name="description" content="Encontre cuidadores de idosos e acompanhantes no Distrito Federal e entorno. Plataforma CuidaDF conecta famílias a profissionais qualificados de forma rápida e segura.">
-  <meta name="keywords" content="cuidador de idosos DF, cuidador em Brasília, acompanhante de idosos DF, cuidador domiciliar Brasília, cuidador Distrito Federal">
+  <title>CuidaDF | Encontre Cuidadores de Idosos, pessoas com mobilidade reduzida, pacientes em recuperação e quem precisa de acompanhamento no dia a dia no DF e Entorno</title>
+  <meta name="description"
+    content="Encontre cuidadores de idosos e acompanhantes no Distrito Federal e entorno. Plataforma CuidaDF conecta famílias a profissionais qualificados de forma rápida e segura.">
+  <meta name="keywords"
+    content="cuidador de idosos DF, cuidador em Brasília, acompanhante de idosos, pessoas com mobilidade reduzida, pacientes em recuperação e quem precisa de acompanhamento no dia a dia DF, cuidador domiciliar Brasília, cuidador Distrito Federal">
   <meta name="author" content="CuidaDF">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://www.cuidadf.com.br">
@@ -13,7 +16,8 @@
 
   <!-- Open Graph (Facebook / WhatsApp) -->
   <meta property="og:title" content="CuidaDF | Encontre Cuidadores de Idosos no DF">
-  <meta property="og:description" content="Conectamos famílias a cuidadores profissionais no Distrito Federal e entorno. Encontre o cuidador ideal com rapidez e segurança.">
+  <meta property="og:description"
+    content="Conectamos famílias a cuidadores profissionais no Distrito Federal e entorno. Encontre o cuidador ideal com rapidez e segurança.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.cuidadf.com.br">
   <meta property="og:image" content="https://www.cuidadf.com.br/img/og-image.jpg">
@@ -21,7 +25,8 @@
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="CuidaDF | Cuidadores de Idosos no DF">
-  <meta name="twitter:description" content="Plataforma para encontrar cuidadores de idosos no Distrito Federal e região.">
+  <meta name="twitter:description"
+    content="Plataforma para encontrar cuidadores de idosos no Distrito Federal e região.">
   <meta name="twitter:image" content="https://www.cuidadf.com.br/img/og-image.jpg">
 
   <!-- Preconnect para performance -->
@@ -29,7 +34,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700;900&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet">
 
   <!-- CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -38,439 +45,645 @@
 </head>
 
 <body>
-<!-- NAVBAR -->
-<nav class="navbar navbar-light bg-white sticky-top shadow-sm py-2" style="z-index:200">
-  <div class="container">
-    <a class="navbar-brand" href="javascript:void(0)" id="nav-logo"><span>Cuida<em>DF</em></span></a>
-    <div class="d-flex gap-2 align-items-center">
-      <button class="btn btn-sm btn-outline-brand d-none d-md-inline-flex" id="nav-cadastro">
-        <i class="bi bi-person-plus me-1"></i>Sou Cuidador
-      </button>
-      <button class="btn btn-sm btn-outline-brand d-none d-md-inline-flex" id="nav-cadastro-usuario">
-        <i class="bi bi-person me-1"></i>Sou Usuário
-      </button>
-      <div id="auth-area"></div>
-      <button class="btn btn-sm btn-brand" id="nav-buscar">
-        <i class="bi bi-search me-1"></i>Buscar
-      </button>
-      <!-- <button id="login-button" class="btn btn-sm btn-outline-brand d-none d-md-inline-flex">
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-light bg-white sticky-top shadow-sm py-2" style="z-index:200">
+    <div class="container">
+      <a class="navbar-brand" href="javascript:void(0)" id="nav-logo"><span>Cuida<em>DF</em></span></a>
+      <div class="d-flex gap-2 align-items-center">
+        <button class="btn btn-sm btn-outline-brand d-none d-md-inline-flex" id="nav-cadastro">
+          <i class="bi bi-person-plus me-1"></i>Sou Cuidador
+        </button>
+        <button class="btn btn-sm btn-outline-brand d-none d-md-inline-flex" id="nav-cadastro-usuario">
+          <i class="bi bi-person me-1"></i>Sou Usuário
+        </button>
+        <div id="auth-area"></div>
+        <button class="btn btn-sm btn-brand" id="nav-buscar">
+          <i class="bi bi-search me-1"></i>Buscar
+        </button>
+        <!-- <button id="login-button" class="btn btn-sm btn-outline-brand d-none d-md-inline-flex">
         <i class="bi bi-box-arrow-in-right me-1"></i>Entrar
       </button> -->
-      <div id="user-info" style="display:none;" class="d-flex align-items-center gap-2">
-        <span id="user-role" class="badge bg-light text-dark"></span>
-        <button id="logout-button" class="btn btn-sm btn-outline-danger">Sair</button>
+        <div id="user-info" style="display:none;" class="d-flex align-items-center gap-2">
+          <span id="user-role" class="badge bg-light text-dark"></span>
+          <button id="logout-button" class="btn btn-sm btn-outline-danger">Sair</button>
+        </div>
       </div>
     </div>
-  </div>
-</nav>
+  </nav>
 
-<!-- MODAL LOGIN -->
-<div id="loginModal" class="login-modal">
-  <div class="modal-content">
-    <!-- <h4 class="mb-3">Acesse sua conta</h4>
+  <!-- MODAL LOGIN -->
+  <div id="loginModal" class="login-modal">
+    <div class="modal-content">
+      <!-- <h4 class="mb-3">Acesse sua conta</h4>
     <input type="email" id="login-email" class="form-control mb-2" placeholder="E-mail">
     <input type="password" id="login-password" class="form-control mb-2" placeholder="Senha">
     <button id="btn-login" class="btn btn-brand w-100 mb-2">Entrar</button>
     <button id="btn-signup" class="btn btn-outline-brand w-100 mb-3">Criar conta</button>
     <div class="text-center text-muted mb-2">ou</div> -->
-    <button id="google-login" class="btn google-btn w-100 d-flex align-items-center justify-content-center gap-2">
-      <i class="bi bi-google fs-5"></i> Entrar com Google
-    </button>
-    <button id="close-modal" class="btn btn-link mt-3 w-100">Fechar</button>
-  </div>
-</div>
-
-<!-- MODAL AVALIAÇÃO -->
-<div id="avaliacaoModal" class="login-modal">
-  <div class="modal-content">
-    <h4 class="mb-3">Avaliar Cuidador</h4>
-    <div class="text-center mb-3">
-      <div class="rating-input" id="rating-stars">
-        <i class="bi bi-star" data-value="5"></i>
-        <i class="bi bi-star" data-value="4"></i>
-        <i class="bi bi-star" data-value="3"></i>
-        <i class="bi bi-star" data-value="2"></i>
-        <i class="bi bi-star" data-value="1"></i>
-      </div>
-      <input type="hidden" id="avaliacao-nota" value="0">
+      <button id="google-login" class="btn google-btn w-100 d-flex align-items-center justify-content-center gap-2">
+        <i class="bi bi-google fs-5"></i> Entrar com Google
+      </button>
+      <button id="close-modal" class="btn btn-link mt-3 w-100">Fechar</button>
     </div>
-    <textarea id="avaliacao-comentario" class="form-control mb-3" rows="3" placeholder="Escreva sua experiência..."></textarea>
-    <button id="btn-enviar-avaliacao" class="btn btn-brand w-100 mb-2">Enviar Avaliação</button>
-    <button id="close-avaliacao-modal" class="btn btn-outline-brand w-100">Cancelar</button>
   </div>
-</div>
 
-<!-- HOME -->
-<div id="screen-home" class="screen active">
-  <div class="hero-wrap">
-    <div class="container position-relative" style="z-index:2">
-      <div class="row align-items-center gy-5">
-        <div class="col-lg-6">
-          <div class="d-flex flex-wrap gap-2 mb-4">
-            <span class="badge-trust"><i class="bi bi-shield-check me-1"></i>Perfis verificados</span>
-            <span class="badge-trust"><i class="bi bi-star-fill me-1"></i>+2.400 avaliações</span>
-          </div>
-          <h1 class="hero-title mb-3">Cuidado de<br>verdade para<br>quem você <em>ama</em></h1>
-          <p class="hero-sub mb-4 pe-lg-4">Encontre cuidadores experientes, verificados e disponíveis no DF e Entorno. Rápido, simples e seguro.</p>
-          <div class="d-flex flex-wrap gap-3">
-            <button class="btn btn-accent btn-lg px-4" id="hero-buscar"><i class="bi bi-search me-2"></i>Encontrar Cuidador</button>
-            <button class="btn btn-outline-light btn-lg px-4" id="hero-cadastro">Sou Cuidador</button>
-            <button class="btn btn-outline-light btn-lg px-4" id="hero-cadastro-usuario">Sou Usuário</button>
-          </div>
+  <!-- MODAL AVALIAÇÃO -->
+  <div id="avaliacaoModal" class="login-modal">
+    <div class="modal-content">
+      <h4 class="mb-3">Avaliar Cuidador</h4>
+      <div class="text-center mb-3">
+        <div class="rating-input" id="rating-stars">
+          <i class="bi bi-star" data-value="5"></i>
+          <i class="bi bi-star" data-value="4"></i>
+          <i class="bi bi-star" data-value="3"></i>
+          <i class="bi bi-star" data-value="2"></i>
+          <i class="bi bi-star" data-value="1"></i>
         </div>
-        <div class="col-lg-6">
-          <div class="search-box">
-            <h5 class="font-display mb-4" style="color:var(--dark)"><i class="bi bi-geo-alt-fill me-2" style="color:var(--brand)"></i>Busca Rápida</h5>
-            <div class="mb-3">
-              <label class="form-label">Cidade</label>
-              <select class="form-select" id="input-cidade"></select>
+        <input type="hidden" id="avaliacao-nota" value="0">
+      </div>
+      <textarea id="avaliacao-comentario" class="form-control mb-3" rows="3"
+        placeholder="Escreva sua experiência..."></textarea>
+      <button id="btn-enviar-avaliacao" class="btn btn-brand w-100 mb-2">Enviar Avaliação</button>
+      <button id="close-avaliacao-modal" class="btn btn-outline-brand w-100">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <div id="screen-home" class="screen active">
+    <div class="hero-wrap">
+      <div class="container position-relative" style="z-index:2">
+        <div class="row align-items-center gy-5">
+          <div class="col-lg-6">
+            <div class="d-flex flex-wrap gap-2 mb-4">
+              <span class="badge-trust"><i class="bi bi-shield-check me-1"></i>Perfis verificados</span>
+              <span class="badge-trust"><i class="bi bi-star-fill me-1"></i>+2.400 avaliações</span>
             </div>
-            <div class="row g-3 mb-3">
-              <div class="col-6">
-                <label class="form-label">Preço máx./plantão</label>
-                <select class="form-select" id="input-preco">
+            <h1 class="hero-title mb-3">Cuidado de<br>verdade para<br>quem você <em>ama</em></h1>
+            <p class="hero-sub mb-4 pe-lg-4">Encontre cuidadores experientes, verificados e disponíveis no DF e Entorno.
+              Rápido, simples e seguro.</p>
+            <div class="d-flex flex-wrap gap-3">
+              <button class="btn btn-accent btn-lg px-4" id="hero-buscar"><i class="bi bi-search me-2"></i>Encontrar
+                Cuidador</button>
+              <button class="btn btn-outline-light btn-lg px-4" id="hero-cadastro">Sou Cuidador</button>
+              <button class="btn btn-outline-light btn-lg px-4" id="hero-cadastro-usuario">Sou Usuário</button>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="search-box">
+              <h5 class="font-display mb-4" style="color:var(--dark)"><i class="bi bi-geo-alt-fill me-2"
+                  style="color:var(--brand)"></i>Busca Rápida</h5>
+              <div class="mb-3">
+                <label class="form-label">Cidade</label>
+                <select class="form-select" id="input-cidade"></select>
+              </div>
+              <div class="row g-3 mb-3">
+                <div class="col-6">
+                  <label class="form-label">Preço máx./plantão</label>
+                  <select class="form-select" id="input-preco">
+                    <option value="">Qualquer</option>
+                    <option>Até R$ 80</option>
+                    <option>Até R$ 100</option>
+                    <option>Até R$ 150</option>
+                    <option>Acima de R$ 150</option>
+                  </select>
+                </div>
+                <div class="col-6">
+                  <label class="form-label">Verificado</label>
+                  <select class="form-select" id="input-disp">
+                    <option value="">Qualquer</option>
+                    <option value="Sim">Sim</option>
+                    <option value="Não">Não</option>
+                  </select>
+                </div>
+              </div>
+              <div class="mb-4">
+                <label class="form-label">Experiência mínima</label>
+                <select class="form-select" id="input-exp">
                   <option value="">Qualquer</option>
-                  <option>Até R$ 80</option><option>Até R$ 100</option><option>Até R$ 150</option><option>Acima de R$ 150</option>
+                  <option>1+ ano</option>
+                  <option>3+ anos</option>
+                  <option>5+ anos</option>
                 </select>
               </div>
-              <div class="col-6">
-                <label class="form-label">Verificado</label>
-                <select class="form-select" id="input-disp">
-                  <option value="">Qualquer</option>
-                  <option value="Sim">Sim</option>
-                  <option value="Não">Não</option>
-                </select>
-              </div>
+              <button class="btn btn-brand w-100 py-3 fs-5" id="btn-buscar-home">
+                <i class="bi bi-search me-2"></i>Ver Cuidadores Disponíveis
+              </button>
             </div>
-            <div class="mb-4">
-              <label class="form-label">Experiência mínima</label>
-              <select class="form-select" id="input-exp">
-                <option value="">Qualquer</option>
-                <option>1+ ano</option><option>3+ anos</option><option>5+ anos</option>
-              </select>
-            </div>
-            <button class="btn btn-brand w-100 py-3 fs-5" id="btn-buscar-home">
-              <i class="bi bi-search me-2"></i>Ver Cuidadores Disponíveis
-            </button>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="container py-5">
-    <div class="text-center mb-5">
-      <span class="section-label">Como funciona</span>
-      <h2 class="mt-2">Em 3 passos simples</h2>
-    </div>
-    <div class="row g-4 text-center">
-      <div class="col-md-4">
-        <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:64px;height:64px;background:var(--brand-light)">
-          <i class="bi bi-search fs-4" style="color:var(--brand)"></i>
-        </div>
-        <h5>Busque</h5><p class="text-muted small">Filtre por cidade, preço e verificação</p>
+    <div class="container py-5">
+      <div class="text-center mb-5">
+        <span class="section-label">Como funciona</span>
+        <h2 class="mt-2">Em 3 passos simples</h2>
       </div>
-      <div class="col-md-4">
-        <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:64px;height:64px;background:var(--brand-light)">
-          <i class="bi bi-person-check fs-4" style="color:var(--brand)"></i>
+      <div class="row g-4 text-center">
+        <div class="col-md-4">
+          <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+            style="width:64px;height:64px;background:var(--brand-light)">
+            <i class="bi bi-search fs-4" style="color:var(--brand)"></i>
+          </div>
+          <h5>Busque</h5>
+          <p class="text-muted small">Filtre por cidade, preço e verificação</p>
         </div>
-        <h5>Escolha</h5><p class="text-muted small">Veja perfis, avaliações e experiências</p>
-      </div>
-      <div class="col-md-4">
-        <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:64px;height:64px;background:var(--brand-light)">
-          <i class="bi bi-chat-dots fs-4" style="color:var(--brand)"></i>
+        <div class="col-md-4">
+          <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+            style="width:64px;height:64px;background:var(--brand-light)">
+            <i class="bi bi-person-check fs-4" style="color:var(--brand)"></i>
+          </div>
+          <h5>Escolha</h5>
+          <p class="text-muted small">Veja perfis, avaliações e experiências</p>
         </div>
-        <h5>Contate</h5><p class="text-muted small">Entre em contato direto via WhatsApp</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- LISTA -->
-<div id="screen-lista" class="screen">
-  <div class="filters-bar py-2">
-    <div class="container d-flex flex-wrap gap-2 align-items-center">
-      <span class="text-muted small me-2"><i class="bi bi-funnel me-1"></i>Filtros:</span>
-      <select id="f-cidade" class="form-select form-select-sm" style="width:auto"></select>
-      <select id="f-preco" class="form-select form-select-sm" style="width:auto"><option value="">Qualquer preço</option><option>Até R$ 80</option><option>Até R$ 100</option><option>Até R$ 150</option><option>Acima de R$ 150</option></select>
-      <select id="f-disp" class="form-select form-select-sm" style="width:auto"><option value="">Verificado: todos</option><option value="Sim">Verificados</option><option value="Não">Não verificados</option></select>
-      <select id="f-exp" class="form-select form-select-sm" style="width:auto"><option value="">Experiência</option><option>1+ ano</option><option>3+ anos</option><option>5+ anos</option></select>
-      <span id="lista-contador" class="ms-auto text-muted small">—</span>
-    </div>
-  </div>
-  <div class="container py-4">
-    <button class="btn btn-sm btn-outline-brand mb-3" id="lista-voltar"><i class="bi bi-arrow-left me-1"></i>Voltar</button>
-    <h4 class="font-display mb-4">Cuidadores em <span id="lista-cidade-titulo" style="color:var(--brand)">sua região</span></h4>
-    <!-- <p class="text-muted small mb-4">Ordenado por: melhor avaliação</p> -->
-    <div class="row g-4" id="lista-cards"></div>
-  </div>
-</div>
-
-<!-- PERFIL -->
-<div id="screen-perfil" class="screen">
-  <div class="profile-hero py-5">
-    <div class="container">
-      <button class="btn btn-sm btn-outline-light mb-4" id="perfil-voltar"><i class="bi bi-arrow-left me-1"></i>Voltar</button>
-      <div class="row align-items-center gy-4">
-        <div class="col-auto"><img id="p-foto" src="https://i.pravatar.cc/240" class="profile-avatar" alt="Avatar"/></div>
-        <div class="col">
-          <div class="d-flex flex-wrap gap-2 mb-2"><span id="p-verificado" class="badge-verificado"><i class="bi bi-patch-check-fill me-1"></i>Perfil Verificado</span><span id="p-disponivel" class="badge-disponivel"><i class="bi bi-circle-fill me-1" style="font-size:.6rem"></i>Disponível agora</span></div>
-          <h1 id="p-nome" class="profile-name mb-1">—</h1>
-          <p id="p-local" class="profile-sub mb-2"></p>
-          <div class="d-flex align-items-center gap-3"><div id="p-avaliacao" class="stars"></div><span id="p-reviews" class="text-white-50 small"></span></div>
-        </div>
-        <div class="col-md-auto text-center"><div id="p-preco" class="profile-price"></div><div id="p-preco-dia" class="text-white-50 small"></div></div>
-      </div>
-    </div>
-  </div>
-  <div class="container py-4" style="padding-bottom:100px!important">
-    <div class="row g-4">
-      <div class="col-lg-8">
-        <div class="mb-4"><span class="section-label">Sobre mim</span><p id="p-sobre" class="mt-2" style="text-align: justify; white-space: pre-line;"></p></div>
-        <div class="divider mb-4"></div>
-        <div class="mb-4"><span class="section-label">Serviços oferecidos</span><div id="p-servicos" class="mt-3 d-flex flex-wrap gap-2"></div></div>
-        <div class="divider mb-4"></div>
-        <div class="mb-5"><span class="section-label">Avaliações dos clientes</span><div id="p-avaliacoes" class="mt-3 d-flex flex-column gap-3"></div></div>
-        <div class="text-center mb-4">
-          <button id="btn-avaliar-cuidador" class="btn-avaliar"><i class="bi bi-star me-2"></i>Avaliar Este Cuidador</button>
-        </div>
-      </div>
-      <div class="col-lg-4 d-none d-lg-block">
-        <div class="card border-0 shadow-sm rounded-4 p-4 position-sticky" style="top:80px">
-          <div class="text-center mb-3"><div id="p-preco-sidebar" class="profile-price" style="font-size:2rem"></div><div id="p-preco-dia2" class="text-muted small"></div></div>
-          <button class="btn btn-whatsapp w-100 mb-3 py-3" id="perfil-contato-desktop"><i class="bi bi-whatsapp me-2 fs-5"></i>Entrar em Contato</button>
-          <hr class="my-3"/>
-          <ul class="list-unstyled small text-muted mb-0"><li class="mb-2"><i class="bi bi-clock me-2 text-success"></i>Responde em menos de 1h</li><li class="mb-2"><i class="bi bi-patch-check-fill me-2 text-success"></i>Identidade verificada</li><li><i class="bi bi-shield-check me-2 text-success"></i>Perfil seguro CuidaDF</li></ul>
+        <div class="col-md-4">
+          <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+            style="width:64px;height:64px;background:var(--brand-light)">
+            <i class="bi bi-chat-dots fs-4" style="color:var(--brand)"></i>
+          </div>
+          <h5>Contate</h5>
+          <p class="text-muted small">Entre em contato direto via WhatsApp</p>
         </div>
       </div>
     </div>
   </div>
-  <div class="sticky-cta d-lg-none"><div class="d-flex align-items-center gap-3"><div id="p-preco-cta" class="fw-700" style="color:var(--brand);font-family:'Fraunces',serif;font-size:1.4rem"></div><button class="btn btn-whatsapp flex-grow-1 py-2" id="perfil-contato-mobile"><i class="bi bi-whatsapp me-2"></i>Entrar em Contato</button></div></div>
-</div>
 
-<!-- CADASTRO CUIDADOR -->
-<div id="screen-cadastro" class="screen">
-  <div class="container py-5">
-    <div class="cadastro-wrap">
-      <button class="btn btn-sm btn-outline-brand mb-4" id="cadastro-voltar"><i class="bi bi-arrow-left me-1"></i>Voltar</button><br>
-      <span class="step-pill">Cadastro Gratuito</span>
-      <h2 class="font-display mt-2 mb-1">Ofereça seus serviços</h2>
-      <p class="text-muted mb-5">Cadastre seu perfil em menos de 3 minutos.</p>
-      <div class="mb-4"><label class="form-label fw-600">Sua foto</label><input type="file" id="cad-foto-input" accept="image/*" style="display:none"/><div class="upload-area" id="upload-area"><img id="foto-preview" src="" alt="" style="display:none;width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--brand-light);margin-bottom:.75rem"/><i class="bi bi-camera fs-2 mb-2" id="upload-icon" style="color:var(--brand)"></i><div class="fw-500" id="upload-label">Clique para enviar sua foto</div><div class="text-muted small mt-1" id="upload-sub">JPG ou PNG · máx. 500 KB</div></div></div>
-      <div class="row g-3 mb-3">
-        <div class="col-12"><label class="form-label fw-500">Nome completo</label><input type="text" id="cad-nome" class="form-control" placeholder="Seu nome e sobrenome"/></div>
-        <div class="col-md-6"><label class="form-label fw-500">Cidade</label><select id="cad-cidade" class="form-select">
-          <option value="">Selecione</option>
-          <option disabled class="step-pill">DISTRITO FEDERAL</option>
-          <option>DF - Asa Norte</option>
-          <option>DF - Asa Sul</option>
-          <option>DF - Água Quente</option>
-          <option>DF - Arapoanga</option>
-          <option>DF - Águas Claras</option>
-          <option>DF - Arniqueira</option>
-          <option>DF - Brazlândia</option>
-          <option>DF - Candangolândia</option>
-          <option>DF - Ceilândia</option>
-          <option>DF - Cruzeiro</option>
-          <option>DF - Fercal</option>
-          <option>DF - Gama</option>
-          <option>DF - Guará</option>
-          <option>DF - Itapoã</option>
-          <option>DF - Jardim Botânico</option>
-          <option>DF - Lago Norte</option>
-          <option>DF - Lago Sul</option>
-          <option>DF - Núcleo Bandeirante</option>
-          <option>DF - Paranoá</option>
-          <option>DF - Park Way</option>
-          <option>DF - Planaltina</option>
-          <option>DF - Plano Piloto</option>
-          <option>DF - Recanto das Emas</option>
-          <option>DF - Riacho Fundo</option>
-          <option>DF - Riacho Fundo II</option>
-          <option>DF - Samambaia</option>
-          <option>DF - Santa Maria</option>
-          <option>DF - São Sebastião</option>
-          <option>DF - SCIA/Estrutural</option>
-          <option>DF - SIA</option>
-          <option>DF - Sobradinho</option>
-          <option>DF - Sobradinho II</option>
-          <option>DF - Sol Nascente</option>
-          <option>DF - Sudoeste/Octogonal</option>
-          <option>DF - Taguatinga</option>
-          <option>DF - Varjão</option>
-          <option>DF - Vicente Pires</option>
-          <option disabled class="step-pill">GOIÁS</option>
-          <option>GO - Águas Lindas</option>
-          <option>GO - Cidade Ocidental</option>
-          <option>GO - Cristalina</option>
-          <option>GO - Formosa</option>
-          <option>GO - Luziânia</option>
-          <option>GO - Novo Gama</option>
-          <option>GO - Planaltina</option>
-          <option>GO - Santo Antônio do Descoberto</option>
-          <option>GO - Valparaíso</option>
-        </select></div>
-        <div class="col-md-6"><label class="form-label fw-500">WhatsApp</label><input type="tel" id="cad-whatsapp" onkeyup="formatarCelular(this)" value="" oninput="this.value = this.value.replace(/[^0-9]/g, '');" class="form-control" placeholder="(61) 9 9999-9999"/></div>
-        <div class="col-md-6"><label class="form-label fw-500">Valor por plantão (R$)</label><input type="number" id="cad-preco" class="form-control" placeholder="Ex: 120"/></div>
-        <div class="col-md-6"><label class="form-label fw-500">Experiência</label><select id="cad-exp" class="form-select"><option>Menos de 1 ano</option><option>1 a 2 anos</option><option>3 a 5 anos</option><option>Mais de 5 anos</option></select></div>
-        <div class="col-12"><label class="form-label fw-500">Serviços oferecidos</label><div class="d-flex flex-wrap gap-2 mt-1" id="servicos-check"><label class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox" class="form-check-input m-0"> Acomp. de idosos</label><label class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox" class="form-check-input m-0"> Cuidados domiciliares</label><label class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox" class="form-check-input m-0"> Pernoite</label><label class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox" class="form-check-input m-0"> Pós-operatório</label><label class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox" class="form-check-input m-0"> Mobilidade reduzida</label><label class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox" class="form-check-input m-0"> Acomp. em consultas</label></div></div>
-        <div class="col-12"><label class="form-label fw-500">Sobre você</label><textarea id="cad-sobre" class="form-control" rows="4" placeholder="Conte sua experiência e diferenciais..."></textarea></div>
+  <!-- LISTA -->
+  <div id="screen-lista" class="screen">
+    <div class="filters-bar py-2">
+      <div class="container d-flex flex-wrap gap-2 align-items-center">
+        <span class="text-muted small me-2"><i class="bi bi-funnel me-1"></i>Filtros:</span>
+        <select id="f-cidade" class="form-select form-select-sm" style="width:auto"></select>
+        <select id="f-preco" class="form-select form-select-sm" style="width:auto">
+          <option value="">Qualquer preço</option>
+          <option>Até R$ 80</option>
+          <option>Até R$ 100</option>
+          <option>Até R$ 150</option>
+          <option>Acima de R$ 150</option>
+        </select>
+        <select id="f-disp" class="form-select form-select-sm" style="width:auto">
+          <option value="">Verificado: todos</option>
+          <option value="Sim">Verificados</option>
+          <option value="Não">Não verificados</option>
+        </select>
+        <select id="f-exp" class="form-select form-select-sm" style="width:auto">
+          <option value="">Experiência</option>
+          <option>1+ ano</option>
+          <option>3+ anos</option>
+          <option>5+ anos</option>
+        </select>
+        <span id="lista-contador" class="ms-auto text-muted small">—</span>
       </div>
-      <div class="upsell-box p-4 mb-4"><div class="d-flex align-items-start gap-3"><span style="font-size:1.8rem">🏅</span><div><div class="fw-700 mb-1">Perfil Verificado <span class="badge text-bg-warning ms-1">Em breve</span></div><p class="small text-muted mb-2">Perfis verificados recebem <strong>3x mais contatos</strong>.</p><div class="form-check"><input class="form-check-input" type="checkbox" id="cad-quero-verificacao"/><label class="form-check-label small fw-500" for="cad-quero-verificacao">Quero me verificar quando disponível</label></div></div></div></div>
-      <button id="btn-cadastrar" class="btn btn-brand btn-lg w-100 py-3"><i class="bi bi-check2-circle me-2"></i>Publicar meu perfil gratuitamente</button>
-      <p class="text-center text-muted small mt-3">Ao cadastrar, você concorda com os <a href="javascript:void(0)" style="color:var(--brand)">Termos de Uso</a></p>
+    </div>
+    <div class="container py-4">
+      <button class="btn btn-sm btn-outline-brand mb-3" id="lista-voltar"><i
+          class="bi bi-arrow-left me-1"></i>Voltar</button>
+      <h4 class="font-display mb-4">Cuidadores em <span id="lista-cidade-titulo" style="color:var(--brand)">sua
+          região</span></h4>
+      <!-- <p class="text-muted small mb-4">Ordenado por: melhor avaliação</p> -->
+      <div class="row g-4" id="lista-cards"></div>
     </div>
   </div>
-</div>
 
-<!-- EDIÇÃO DE PERFIL CUIDADOR -->
-<div id="screen-editar" class="screen">
-  <div class="container py-5">
-    <div class="editar-wrap">
-      <button class="btn btn-sm btn-outline-brand mb-4" id="editar-voltar"><i class="bi bi-arrow-left me-1"></i>Voltar</button><br>
-      <span class="step-pill">Editar Perfil</span>
-      <h2 class="font-display mt-2 mb-1">Atualize seus dados</h2>
-      <p class="text-muted mb-5">Mantenha suas informações sempre atualizadas.</p>
-      <div class="mb-4"><label class="form-label fw-600">Sua foto</label><input type="file" id="edit-foto-input" accept="image/*" style="display:none"/><div class="upload-area" id="edit-upload-area"><img id="edit-foto-preview" src="" alt="" style="display:none;width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--brand-light);margin-bottom:.75rem"/><i class="bi bi-camera fs-2 mb-2" id="edit-upload-icon" style="color:var(--brand)"></i><div class="fw-500" id="edit-upload-label">Clique para alterar a foto</div><div class="text-muted small mt-1" id="edit-upload-sub">JPG ou PNG · máx. 500 KB</div></div></div>
-      <div class="row g-3 mb-3">
-        <div class="col-12"><label class="form-label fw-500">Nome completo</label><input type="text" id="edit-nome" class="form-control" readonly/></div>
-        <div class="col-md-6"><label class="form-label fw-500">Cidade</label><select id="edit-cidade" class="form-select">
-          <option value="">Selecione</option>
-          <option disabled class="step-pill">DISTRITO FEDERAL</option>
-          <option>DF - Asa Norte</option>
-          <option>DF - Asa Sul</option>
-          <option>DF - Água Quente</option>
-          <option>DF - Arapoanga</option>
-          <option>DF - Águas Claras</option>
-          <option>DF - Arniqueira</option>
-          <option>DF - Brazlândia</option>
-          <option>DF - Candangolândia</option>
-          <option>DF - Ceilândia</option>
-          <option>DF - Cruzeiro</option>
-          <option>DF - Fercal</option>
-          <option>DF - Gama</option>
-          <option>DF - Guará</option>
-          <option>DF - Itapoã</option>
-          <option>DF - Jardim Botânico</option>
-          <option>DF - Lago Norte</option>
-          <option>DF - Lago Sul</option>
-          <option>DF - Núcleo Bandeirante</option>
-          <option>DF - Paranoá</option>
-          <option>DF - Park Way</option>
-          <option>DF - Planaltina</option>
-          <option>DF - Plano Piloto</option>
-          <option>DF - Recanto das Emas</option>
-          <option>DF - Riacho Fundo</option>
-          <option>DF - Riacho Fundo II</option>
-          <option>DF - Samambaia</option>
-          <option>DF - Santa Maria</option>
-          <option>DF - São Sebastião</option>
-          <option>DF - SCIA/Estrutural</option>
-          <option>DF - SIA</option>
-          <option>DF - Sobradinho</option>
-          <option>DF - Sobradinho II</option>
-          <option>DF - Sol Nascente</option>
-          <option>DF - Sudoeste/Octogonal</option>
-          <option>DF - Taguatinga</option>
-          <option>DF - Varjão</option>
-          <option>DF - Vicente Pires</option>
-          <option disabled class="step-pill">GOIÁS</option>
-          <option>GO - Águas Lindas</option>
-          <option>GO - Cidade Ocidental</option>
-          <option>GO - Cristalina</option>
-          <option>GO - Formosa</option>
-          <option>GO - Luziânia</option>
-          <option>GO - Novo Gama</option>
-          <option>GO - Planaltina</option>
-          <option>GO - Santo Antônio do Descoberto</option>
-          <option>GO - Valparaíso</option>
-        </select></div>
-        <div class="col-md-6"><label class="form-label fw-500">WhatsApp</label><input type="tel" id="edit-whatsapp" oninput="this.value = this.value.replace(/[^0-9]/g, '');" class="form-control"/></div>
-        <div class="col-md-6"><label class="form-label fw-500">Valor por plantão (R$)</label><input type="number" id="edit-preco" class="form-control"/></div>
-        <div class="col-md-6"><label class="form-label fw-500">Experiência</label><select id="edit-exp" class="form-select"><option>Menos de 1 ano</option><option>1 a 2 anos</option><option>3 a 5 anos</option><option>Mais de 5 anos</option></select></div>
-        <div class="col-12"><label class="form-label fw-500">Serviços oferecidos</label><div class="d-flex flex-wrap gap-2 mt-1" id="edit-servicos-check"><label class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox" class="form-check-input m-0"> Acomp. de idosos</label><label class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox" class="form-check-input m-0"> Cuidados domiciliares</label><label class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox" class="form-check-input m-0"> Pernoite</label><label class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox" class="form-check-input m-0"> Pós-operatório</label><label class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox" class="form-check-input m-0"> Mobilidade reduzida</label><label class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox" class="form-check-input m-0"> Acomp. em consultas</label></div></div>
-        <div class="col-12"><label class="form-label fw-500">Sobre você</label><textarea id="edit-sobre" class="form-control" rows="4"></textarea></div>
+  <!-- PERFIL -->
+  <div id="screen-perfil" class="screen">
+    <div class="profile-hero py-5">
+      <div class="container">
+        <button class="btn btn-sm btn-outline-light mb-4" id="perfil-voltar"><i
+            class="bi bi-arrow-left me-1"></i>Voltar</button>
+        <div class="row align-items-center gy-4">
+          <div class="col-auto"><img id="p-foto" src="https://i.pravatar.cc/240" class="profile-avatar" alt="Avatar" />
+          </div>
+          <div class="col">
+            <div class="d-flex flex-wrap gap-2 mb-2"><span id="p-verificado" class="badge-verificado"><i
+                  class="bi bi-patch-check-fill me-1"></i>Perfil Verificado</span><span id="p-disponivel"
+                class="badge-disponivel"><i class="bi bi-circle-fill me-1" style="font-size:.6rem"></i>Disponível
+                agora</span></div>
+            <h1 id="p-nome" class="profile-name mb-1">—</h1>
+            <p id="p-local" class="profile-sub mb-2"></p>
+            <div class="d-flex align-items-center gap-3">
+              <div id="p-avaliacao" class="stars"></div><span id="p-reviews" class="text-white-50 small"></span>
+            </div>
+          </div>
+          <div class="col-md-auto text-center">
+            <div id="p-preco" class="profile-price"></div>
+            <div id="p-preco-dia" class="text-white-50 small"></div>
+          </div>
+        </div>
       </div>
-      <div class="upsell-box p-4 mb-4"><div class="d-flex align-items-start gap-3"><span style="font-size:1.8rem">🏅</span><div><div class="fw-700 mb-1">Perfil Verificado <span class="badge text-bg-warning ms-1">Em breve</span></div><p class="small text-muted mb-2">Perfis verificados recebem <strong>3x mais contatos</strong>.</p><div class="form-check"><input class="form-check-input" type="checkbox" id="edit-quero-verificacao"/><label class="form-check-label small fw-500" for="edit-quero-verificacao">Quero me verificar quando disponível</label></div></div></div></div>
-      <button id="btn-atualizar" class="btn btn-brand btn-lg w-100 py-3"><i class="bi bi-save me-2"></i>Atualizar Perfil</button>
+    </div>
+    <div class="container py-4" style="padding-bottom:100px!important">
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <div class="mb-4"><span class="section-label">Sobre mim</span>
+            <p id="p-sobre" class="mt-2" style="text-align: justify; white-space: pre-line;"></p>
+          </div>
+          <div class="divider mb-4"></div>
+          <div class="mb-4"><span class="section-label">Serviços oferecidos</span>
+            <div id="p-servicos" class="mt-3 d-flex flex-wrap gap-2"></div>
+          </div>
+          <div class="divider mb-4"></div>
+          <div class="mb-5"><span class="section-label">Avaliações dos clientes</span>
+            <div id="p-avaliacoes" class="mt-3 d-flex flex-column gap-3"></div>
+          </div>
+          <div class="text-center mb-4">
+            <button id="btn-avaliar-cuidador" class="btn-avaliar"><i class="bi bi-star me-2"></i>Avaliar Este
+              Cuidador</button>
+          </div>
+        </div>
+        <div class="col-lg-4 d-none d-lg-block">
+          <div class="card border-0 shadow-sm rounded-4 p-4 position-sticky" style="top:80px">
+            <div class="text-center mb-3">
+              <div id="p-preco-sidebar" class="profile-price" style="font-size:2rem"></div>
+              <div id="p-preco-dia2" class="text-muted small"></div>
+            </div>
+            <button class="btn btn-whatsapp w-100 mb-3 py-3" id="perfil-contato-desktop"><i
+                class="bi bi-whatsapp me-2 fs-5"></i>Entrar em Contato</button>
+            <hr class="my-3" />
+            <ul class="list-unstyled small text-muted mb-0">
+              <li class="mb-2"><i class="bi bi-clock me-2 text-success"></i>Responde em menos de 1h</li>
+              <li class="mb-2"><i class="bi bi-patch-check-fill me-2 text-success"></i>Identidade verificada</li>
+              <li><i class="bi bi-shield-check me-2 text-success"></i>Perfil seguro CuidaDF</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sticky-cta d-lg-none">
+      <div class="d-flex align-items-center gap-3">
+        <div id="p-preco-cta" class="fw-700" style="color:var(--brand);font-family:'Fraunces',serif;font-size:1.4rem">
+        </div><button class="btn btn-whatsapp flex-grow-1 py-2" id="perfil-contato-mobile"><i
+            class="bi bi-whatsapp me-2"></i>Entrar em Contato</button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- CADASTRO USUÁRIO -->
-<div id="screen-cadastro-usuario" class="screen">
-  <div class="container py-5">
-    <div class="cadastro-wrap">
-      <button class="btn btn-sm btn-outline-brand mb-4" id="cadastro-usuario-voltar"><i class="bi bi-arrow-left me-1"></i>Voltar</button><br>
-      <span class="step-pill">Cadastro de Usuário</span>
-      <h2 class="font-display mt-2 mb-1">Avalie cuidadores</h2>
-      <p class="text-muted mb-5">Crie sua conta para avaliar e acompanhar profissionais.</p>
-      <div class="mb-4"><label class="form-label fw-600">Sua foto</label><input type="file" id="user-foto-input" accept="image/*" style="display:none"/><div class="upload-area" id="user-upload-area"><img id="user-foto-preview" src="" alt="" style="display:none;width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--brand-light);margin-bottom:.75rem"/><i class="bi bi-camera fs-2 mb-2" id="user-upload-icon" style="color:var(--brand)"></i><div class="fw-500" id="user-upload-label">Clique para enviar sua foto</div><div class="text-muted small mt-1" id="user-upload-sub">JPG ou PNG · máx. 500 KB</div></div></div>
-      <div class="row g-3 mb-3">
-        <div class="col-12"><label class="form-label fw-500">Nome completo</label><input type="text" id="user-nome" class="form-control" placeholder="Seu nome e sobrenome"/></div>
-        <div class="col-md-6"><label class="form-label fw-500">Cidade</label><select id="user-cidade" class="form-select">
-          <option value="">Selecione</option>
-          <option>DF - Asa Norte</option>
-          <option>DF - Asa Sul</option>
-          <option>DF - Água Quente</option>
-          <option>DF - Arapoanga</option>
-          <option>DF - Águas Claras</option>
-          <option>DF - Arniqueira</option>
-          <option>DF - Brazlândia</option>
-          <option>DF - Candangolândia</option>
-          <option>DF - Ceilândia</option>
-          <option>DF - Cruzeiro</option>
-          <option>DF - Fercal</option>
-          <option>DF - Gama</option>
-          <option>DF - Guará</option>
-          <option>DF - Itapoã</option>
-          <option>DF - Jardim Botânico</option>
-          <option>DF - Lago Norte</option>
-          <option>DF - Lago Sul</option>
-          <option>DF - Núcleo Bandeirante</option>
-          <option>DF - Paranoá</option>
-          <option>DF - Park Way</option>
-          <option>DF - Planaltina</option>
-          <option>DF - Plano Piloto</option>
-          <option>DF - Recanto das Emas</option>
-          <option>DF - Riacho Fundo</option>
-          <option>DF - Riacho Fundo II</option>
-          <option>DF - Samambaia</option>
-          <option>DF - Santa Maria</option>
-          <option>DF - São Sebastião</option>
-          <option>DF - SCIA/Estrutural</option>
-          <option>DF - SIA</option>
-          <option>DF - Sobradinho</option>
-          <option>DF - Sobradinho II</option>
-          <option>DF - Sol Nascente</option>
-          <option>DF - Sudoeste/Octogonal</option>
-          <option>DF - Taguatinga</option>
-          <option>DF - Varjão</option>
-          <option>DF - Vicente Pires</option>
-          <option>GO - Planaltina</option>
-        </select></div>
-        <div class="col-md-6"><label class="form-label fw-500">WhatsApp</label><input type="tel" id="user-whatsapp" onkeyup="formatarCelular(this)" value="" oninput="this.value = this.value.replace(/[^0-9]/g, '');" class="form-control" placeholder="(61) 9 9999-9999"/></div>
+  <!-- CADASTRO CUIDADOR -->
+  <div id="screen-cadastro" class="screen">
+    <div class="container py-5">
+      <div class="cadastro-wrap">
+        <button class="btn btn-sm btn-outline-brand mb-4" id="cadastro-voltar"><i
+            class="bi bi-arrow-left me-1"></i>Voltar</button><br>
+        <span class="step-pill">Cadastro Gratuito</span>
+        <h2 class="font-display mt-2 mb-1">Ofereça seus serviços</h2>
+        <p class="text-muted mb-5">Cadastre seu perfil em menos de 3 minutos.</p>
+        <div class="mb-4"><label class="form-label fw-600">Sua foto</label><input type="file" id="cad-foto-input"
+            accept="image/*" style="display:none" />
+          <div class="upload-area" id="upload-area"><img id="foto-preview" src="" alt=""
+              style="display:none;width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--brand-light);margin-bottom:.75rem" /><i
+              class="bi bi-camera fs-2 mb-2" id="upload-icon" style="color:var(--brand)"></i>
+            <div class="fw-500" id="upload-label">Clique para enviar sua foto</div>
+            <div class="text-muted small mt-1" id="upload-sub">JPG ou PNG · máx. 500 KB</div>
+          </div>
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-12"><label class="form-label fw-500">Nome completo</label><input type="text" id="cad-nome"
+              class="form-control" placeholder="Seu nome e sobrenome" /></div>
+          <div class="col-md-6"><label class="form-label fw-500">Cidade</label><select id="cad-cidade"
+              class="form-select">
+              <option value="">Selecione</option>
+              <option disabled class="step-pill">DISTRITO FEDERAL</option>
+              <option>DF - Asa Norte</option>
+              <option>DF - Asa Sul</option>
+              <option>DF - Água Quente</option>
+              <option>DF - Arapoanga</option>
+              <option>DF - Águas Claras</option>
+              <option>DF - Arniqueira</option>
+              <option>DF - Brazlândia</option>
+              <option>DF - Candangolândia</option>
+              <option>DF - Ceilândia</option>
+              <option>DF - Cruzeiro</option>
+              <option>DF - Fercal</option>
+              <option>DF - Gama</option>
+              <option>DF - Guará</option>
+              <option>DF - Itapoã</option>
+              <option>DF - Jardim Botânico</option>
+              <option>DF - Lago Norte</option>
+              <option>DF - Lago Sul</option>
+              <option>DF - Núcleo Bandeirante</option>
+              <option>DF - Paranoá</option>
+              <option>DF - Park Way</option>
+              <option>DF - Planaltina</option>
+              <option>DF - Plano Piloto</option>
+              <option>DF - Recanto das Emas</option>
+              <option>DF - Riacho Fundo</option>
+              <option>DF - Riacho Fundo II</option>
+              <option>DF - Samambaia</option>
+              <option>DF - Santa Maria</option>
+              <option>DF - São Sebastião</option>
+              <option>DF - SCIA/Estrutural</option>
+              <option>DF - SIA</option>
+              <option>DF - Sobradinho</option>
+              <option>DF - Sobradinho II</option>
+              <option>DF - Sol Nascente</option>
+              <option>DF - Sudoeste/Octogonal</option>
+              <option>DF - Taguatinga</option>
+              <option>DF - Varjão</option>
+              <option>DF - Vicente Pires</option>
+              <option disabled class="step-pill">GOIÁS</option>
+              <option>GO - Águas Lindas</option>
+              <option>GO - Cidade Ocidental</option>
+              <option>GO - Cristalina</option>
+              <option>GO - Formosa</option>
+              <option>GO - Luziânia</option>
+              <option>GO - Novo Gama</option>
+              <option>GO - Planaltina</option>
+              <option>GO - Santo Antônio do Descoberto</option>
+              <option>GO - Valparaíso</option>
+            </select></div>
+          <div class="col-md-6"><label class="form-label fw-500">WhatsApp</label><input type="tel" id="cad-whatsapp"
+              onkeyup="formatarCelular(this)" value="" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+              class="form-control" placeholder="(61) 9 9999-9999" /></div>
+          <div class="col-md-6"><label class="form-label fw-500">Valor por plantão (R$)</label><input type="number"
+              id="cad-preco" class="form-control" placeholder="Ex: 120" /></div>
+          <div class="col-md-6"><label class="form-label fw-500">Experiência</label><select id="cad-exp"
+              class="form-select">
+              <option>Menos de 1 ano</option>
+              <option>1 a 2 anos</option>
+              <option>3 a 5 anos</option>
+              <option>Mais de 5 anos</option>
+            </select></div>
+          <div class="col-12"><label class="form-label fw-500">Serviços oferecidos</label>
+            <div class="d-flex flex-wrap gap-2 mt-1" id="servicos-check"><label
+                class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox"
+                  class="form-check-input m-0"> Acomp. de idosos</label><label
+                class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox"
+                  class="form-check-input m-0"> Cuidados domiciliares</label><label
+                class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox"
+                  class="form-check-input m-0"> Pernoite</label><label
+                class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox"
+                  class="form-check-input m-0"> Pós-operatório</label><label
+                class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox"
+                  class="form-check-input m-0"> Mobilidade reduzida</label><label
+                class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox"
+                  class="form-check-input m-0"> Acomp. em consultas</label></div>
+          </div>
+          <div class="col-12"><label class="form-label fw-500">Sobre você</label><textarea id="cad-sobre"
+              class="form-control" rows="4" placeholder="Conte sua experiência e diferenciais..."></textarea></div>
+        </div>
+        <div class="upsell-box p-4 mb-4">
+          <div class="d-flex align-items-start gap-3"><span style="font-size:1.8rem">🏅</span>
+            <div>
+              <div class="fw-700 mb-1">Perfil Verificado <span class="badge text-bg-warning ms-1">Em breve</span></div>
+              <p class="small text-muted mb-2">Perfis verificados recebem <strong>3x mais contatos</strong>.</p>
+              <div class="form-check"><input class="form-check-input" type="checkbox"
+                  id="cad-quero-verificacao" /><label class="form-check-label small fw-500"
+                  for="cad-quero-verificacao">Quero me verificar quando disponível</label></div>
+            </div>
+          </div>
+        </div>
+        <button id="btn-cadastrar" class="btn btn-brand btn-lg w-100 py-3"><i
+            class="bi bi-check2-circle me-2"></i>Publicar meu perfil gratuitamente</button>
+        <p class="text-center text-muted small mt-3">Ao cadastrar, você concorda com os <a href="javascript:void(0)"
+            style="color:var(--brand)">Termos de Uso</a></p>
       </div>
-      <button id="btn-cadastrar-usuario" class="btn btn-brand btn-lg w-100 py-3"><i class="bi bi-check2-circle me-2"></i>Criar minha conta</button>
-      <p class="text-center text-muted small mt-3">Ao cadastrar, você concorda com os <a href="javascript:void(0)" style="color:var(--brand)">Termos de Uso</a></p>
     </div>
   </div>
-</div>
 
-<!-- WHATSAPP -->
-<div id="screen-whatsapp" class="screen">
-  <div class="wa-screen"><div class="wa-bubble"><div class="wa-icon mb-3"><i class="bi bi-whatsapp"></i></div><h3 id="wa-nome" class="font-display mb-2">—</h3><p class="text-muted mb-1"><img id="wa-foto" src="" style="width:40px;height:40px;border-radius:50%;object-fit:cover;margin-right:.5rem" alt=""/><span id="wa-info"></span></p><div class="d-flex justify-content-center gap-3 my-3 small text-muted"><span id="wa-avaliacao"></span><span><i class="bi bi-clock me-1 text-success"></i>Responde rápido</span></div><hr class="my-3"/><p class="text-muted small mb-3">Uma mensagem já foi preparada para você:</p><div id="wa-msg" class="rounded-3 p-3 text-start mb-4" style="background:#f0fdf4;border:1px solid #bbf7d0;font-size:.9rem"></div><p class="text-muted small mb-3">Seu nome *</p><input type="text" id="seu-nome" class="form-control" placeholder="Maria" maxlength="30" value="" style="background:#f0fdf4;border:1px solid #bbf7d0;font-size:.9rem; margin-bottom: 18px;"/><p class="text-muted small mb-3">Seu WhatsApp *</p><input type="text" id="seu-whats" class="form-control" placeholder="Ex.: (61) 9 9999-9999" onkeyup="formatarCelular(this)" value="" oninput="this.value = this.value.replace(/[^0-9]/g, '');" style="background:#f0fdf4;border:1px solid #bbf7d0;font-size:.9rem; margin-bottom: 18px;"/><a id="wa-link" href="javascript:void(0)" class="btn btn-whatsapp w-100 mb-3 pb-3 py-3"><i class="bi bi-whatsapp me-2 fs-5"></i>Enviar Mensagem</a><button class="btn btn-outline-brand w-100" id="wa-voltar"><i class="bi bi-arrow-left me-1"></i>Voltar ao perfil</button></div></div>
-</div>
+  <!-- EDIÇÃO DE PERFIL CUIDADOR -->
+  <div id="screen-editar" class="screen">
+    <div class="container py-5">
+      <div class="editar-wrap">
+        <button class="btn btn-sm btn-outline-brand mb-4" id="editar-voltar"><i
+            class="bi bi-arrow-left me-1"></i>Voltar</button><br>
+        <span class="step-pill">Editar Perfil</span>
+        <h2 class="font-display mt-2 mb-1">Atualize seus dados</h2>
+        <p class="text-muted mb-5">Mantenha suas informações sempre atualizadas.</p>
+        <div class="mb-4"><label class="form-label fw-600">Sua foto</label><input type="file" id="edit-foto-input"
+            accept="image/*" style="display:none" />
+          <div class="upload-area" id="edit-upload-area"><img id="edit-foto-preview" src="" alt=""
+              style="display:none;width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--brand-light);margin-bottom:.75rem" /><i
+              class="bi bi-camera fs-2 mb-2" id="edit-upload-icon" style="color:var(--brand)"></i>
+            <div class="fw-500" id="edit-upload-label">Clique para alterar a foto</div>
+            <div class="text-muted small mt-1" id="edit-upload-sub">JPG ou PNG · máx. 500 KB</div>
+          </div>
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-12"><label class="form-label fw-500">Nome completo</label><input type="text" id="edit-nome"
+              class="form-control" readonly /></div>
+          <div class="col-md-6"><label class="form-label fw-500">Cidade</label><select id="edit-cidade"
+              class="form-select">
+              <option value="">Selecione</option>
+              <option disabled class="step-pill">DISTRITO FEDERAL</option>
+              <option>DF - Asa Norte</option>
+              <option>DF - Asa Sul</option>
+              <option>DF - Água Quente</option>
+              <option>DF - Arapoanga</option>
+              <option>DF - Águas Claras</option>
+              <option>DF - Arniqueira</option>
+              <option>DF - Brazlândia</option>
+              <option>DF - Candangolândia</option>
+              <option>DF - Ceilândia</option>
+              <option>DF - Cruzeiro</option>
+              <option>DF - Fercal</option>
+              <option>DF - Gama</option>
+              <option>DF - Guará</option>
+              <option>DF - Itapoã</option>
+              <option>DF - Jardim Botânico</option>
+              <option>DF - Lago Norte</option>
+              <option>DF - Lago Sul</option>
+              <option>DF - Núcleo Bandeirante</option>
+              <option>DF - Paranoá</option>
+              <option>DF - Park Way</option>
+              <option>DF - Planaltina</option>
+              <option>DF - Plano Piloto</option>
+              <option>DF - Recanto das Emas</option>
+              <option>DF - Riacho Fundo</option>
+              <option>DF - Riacho Fundo II</option>
+              <option>DF - Samambaia</option>
+              <option>DF - Santa Maria</option>
+              <option>DF - São Sebastião</option>
+              <option>DF - SCIA/Estrutural</option>
+              <option>DF - SIA</option>
+              <option>DF - Sobradinho</option>
+              <option>DF - Sobradinho II</option>
+              <option>DF - Sol Nascente</option>
+              <option>DF - Sudoeste/Octogonal</option>
+              <option>DF - Taguatinga</option>
+              <option>DF - Varjão</option>
+              <option>DF - Vicente Pires</option>
+              <option disabled class="step-pill">GOIÁS</option>
+              <option>GO - Águas Lindas</option>
+              <option>GO - Cidade Ocidental</option>
+              <option>GO - Cristalina</option>
+              <option>GO - Formosa</option>
+              <option>GO - Luziânia</option>
+              <option>GO - Novo Gama</option>
+              <option>GO - Planaltina</option>
+              <option>GO - Santo Antônio do Descoberto</option>
+              <option>GO - Valparaíso</option>
+            </select></div>
+          <div class="col-md-6"><label class="form-label fw-500">WhatsApp</label><input type="tel" id="edit-whatsapp"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '');" class="form-control" /></div>
+          <div class="col-md-6"><label class="form-label fw-500">Valor por plantão (R$)</label><input type="number"
+              id="edit-preco" class="form-control" /></div>
+          <div class="col-md-6"><label class="form-label fw-500">Experiência</label><select id="edit-exp"
+              class="form-select">
+              <option>Menos de 1 ano</option>
+              <option>1 a 2 anos</option>
+              <option>3 a 5 anos</option>
+              <option>Mais de 5 anos</option>
+            </select></div>
+          <div class="col-12"><label class="form-label fw-500">Serviços oferecidos</label>
+            <div class="d-flex flex-wrap gap-2 mt-1" id="edit-servicos-check"><label
+                class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox"
+                  class="form-check-input m-0"> Acomp. de idosos</label><label
+                class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox"
+                  class="form-check-input m-0"> Cuidados domiciliares</label><label
+                class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox"
+                  class="form-check-input m-0"> Pernoite</label><label
+                class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox"
+                  class="form-check-input m-0"> Pós-operatório</label><label
+                class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox"
+                  class="form-check-input m-0"> Mobilidade reduzida</label><label
+                class="d-flex align-items-center gap-2 service-chip" style="cursor:pointer"><input type="checkbox"
+                  class="form-check-input m-0"> Acomp. em consultas</label></div>
+          </div>
+          <div class="col-12"><label class="form-label fw-500">Sobre você</label><textarea id="edit-sobre"
+              class="form-control" rows="4"></textarea></div>
+        </div>
+        <div class="upsell-box p-4 mb-4">
+          <div class="d-flex align-items-start gap-3"><span style="font-size:1.8rem">🏅</span>
+            <div>
+              <div class="fw-700 mb-1">Perfil Verificado <span class="badge text-bg-warning ms-1">Em breve</span></div>
+              <p class="small text-muted mb-2">Perfis verificados recebem <strong>3x mais contatos</strong>.</p>
+              <div class="form-check"><input class="form-check-input" type="checkbox"
+                  id="edit-quero-verificacao" /><label class="form-check-label small fw-500"
+                  for="edit-quero-verificacao">Quero me verificar quando disponível</label></div>
+            </div>
+          </div>
+        </div>
+        <button id="btn-atualizar" class="btn btn-brand btn-lg w-100 py-3"><i class="bi bi-save me-2"></i>Atualizar
+          Perfil</button>
+      </div>
+    </div>
+  </div>
 
-<!-- TOAST -->
-<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index:9999"><div id="toast-ok" class="toast align-items-center border-0" role="alert"><div class="d-flex"><div class="toast-body fw-500" id="toast-msg"></div><button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast"></button></div></div></div>
+  <!-- CADASTRO USUÁRIO -->
+  <div id="screen-cadastro-usuario" class="screen">
+    <div class="container py-5">
+      <div class="cadastro-wrap">
+        <button class="btn btn-sm btn-outline-brand mb-4" id="cadastro-usuario-voltar"><i
+            class="bi bi-arrow-left me-1"></i>Voltar</button><br>
+        <span class="step-pill">Cadastro de Usuário</span>
+        <h2 class="font-display mt-2 mb-1">Avalie cuidadores</h2>
+        <p class="text-muted mb-5">Crie sua conta para avaliar e acompanhar profissionais.</p>
+        <div class="mb-4"><label class="form-label fw-600">Sua foto</label><input type="file" id="user-foto-input"
+            accept="image/*" style="display:none" />
+          <div class="upload-area" id="user-upload-area"><img id="user-foto-preview" src="" alt=""
+              style="display:none;width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--brand-light);margin-bottom:.75rem" /><i
+              class="bi bi-camera fs-2 mb-2" id="user-upload-icon" style="color:var(--brand)"></i>
+            <div class="fw-500" id="user-upload-label">Clique para enviar sua foto</div>
+            <div class="text-muted small mt-1" id="user-upload-sub">JPG ou PNG · máx. 500 KB</div>
+          </div>
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-12"><label class="form-label fw-500">Nome completo</label><input type="text" id="user-nome"
+              class="form-control" placeholder="Seu nome e sobrenome" /></div>
+          <div class="col-md-6"><label class="form-label fw-500">Cidade</label><select id="user-cidade"
+              class="form-select">
+              <option value="">Selecione</option>
+              <option>DF - Asa Norte</option>
+              <option>DF - Asa Sul</option>
+              <option>DF - Água Quente</option>
+              <option>DF - Arapoanga</option>
+              <option>DF - Águas Claras</option>
+              <option>DF - Arniqueira</option>
+              <option>DF - Brazlândia</option>
+              <option>DF - Candangolândia</option>
+              <option>DF - Ceilândia</option>
+              <option>DF - Cruzeiro</option>
+              <option>DF - Fercal</option>
+              <option>DF - Gama</option>
+              <option>DF - Guará</option>
+              <option>DF - Itapoã</option>
+              <option>DF - Jardim Botânico</option>
+              <option>DF - Lago Norte</option>
+              <option>DF - Lago Sul</option>
+              <option>DF - Núcleo Bandeirante</option>
+              <option>DF - Paranoá</option>
+              <option>DF - Park Way</option>
+              <option>DF - Planaltina</option>
+              <option>DF - Plano Piloto</option>
+              <option>DF - Recanto das Emas</option>
+              <option>DF - Riacho Fundo</option>
+              <option>DF - Riacho Fundo II</option>
+              <option>DF - Samambaia</option>
+              <option>DF - Santa Maria</option>
+              <option>DF - São Sebastião</option>
+              <option>DF - SCIA/Estrutural</option>
+              <option>DF - SIA</option>
+              <option>DF - Sobradinho</option>
+              <option>DF - Sobradinho II</option>
+              <option>DF - Sol Nascente</option>
+              <option>DF - Sudoeste/Octogonal</option>
+              <option>DF - Taguatinga</option>
+              <option>DF - Varjão</option>
+              <option>DF - Vicente Pires</option>
+              <option>GO - Planaltina</option>
+            </select></div>
+          <div class="col-md-6"><label class="form-label fw-500">WhatsApp</label><input type="tel" id="user-whatsapp"
+              onkeyup="formatarCelular(this)" value="" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+              class="form-control" placeholder="(61) 9 9999-9999" /></div>
+        </div>
+        <button id="btn-cadastrar-usuario" class="btn btn-brand btn-lg w-100 py-3"><i
+            class="bi bi-check2-circle me-2"></i>Criar minha conta</button>
+        <p class="text-center text-muted small mt-3">Ao cadastrar, você concorda com os <a href="javascript:void(0)"
+            style="color:var(--brand)">Termos de Uso</a></p>
+      </div>
+    </div>
+  </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const script = document.createElement('script');
-  script.src = 'js/funcoes.js?v=' + new Date().getTime();
-  document.head.appendChild(script);
-</script>
+  <!-- WHATSAPP -->
+  <div id="screen-whatsapp" class="screen">
+    <div class="wa-screen">
+      <div class="wa-bubble">
+        <div class="wa-icon mb-3"><i class="bi bi-whatsapp"></i></div>
+        <h3 id="wa-nome" class="font-display mb-2">—</h3>
+        <p class="text-muted mb-1"><img id="wa-foto" src=""
+            style="width:40px;height:40px;border-radius:50%;object-fit:cover;margin-right:.5rem" alt="" /><span
+            id="wa-info"></span></p>
+        <div class="d-flex justify-content-center gap-3 my-3 small text-muted"><span id="wa-avaliacao"></span><span><i
+              class="bi bi-clock me-1 text-success"></i>Responde rápido</span></div>
+        <hr class="my-3" />
+        <p class="text-muted small mb-1">
+          <strong>Uma mensagem já foi preparada para você:</strong></strong>
+        </p>
+        <textarea id="wa-msg" class="rounded-3 p-1 text-start" style="background:#f0fdf4;border:1px solid #bbf7d0;width: 100%;font-size:.9rem" maxlength="100" oninput="contarCaracteres()"></textarea>
+        <p class="text-muted mb-4">Caracteres restantes: <span id="contador">100</span></p>
+        <p class="text-muted small mb-1">Seu nome *</p><input type="text" id="seu-nome" class="form-control"
+          placeholder="Ex.: Maria" maxlength="30" value=""
+          style="background:#f0fdf4;border:1px solid #bbf7d0;font-size:.9rem; margin-bottom: 18px;" />
+        <p class="text-muted small mb-1">Seu WhatsApp *</p><input type="text" id="seu-whats" class="form-control"
+          placeholder="Ex.: (61) 9 9999-9999" onkeyup="formatarCelular(this)" value=""
+          oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+          style="background:#f0fdf4;border:1px solid #bbf7d0;font-size:.9rem; margin-bottom: 18px;" />
+        <span id="wa-info mb-4">Este profissional é um prestador <b>independente </b>cadastrado na plataforma.</span>
+
+        <a id="wa-link" href="javascript:void(0)" class="btn btn-whatsapp w-100 mb-3 pb-3 py-3 mt-4"><i
+            class="bi bi-whatsapp me-2 fs-5"></i>Enviar Mensagem</a><button class="btn btn-outline-brand w-100"
+          id="wa-voltar"><i class="bi bi-arrow-left me-1"></i>Voltar ao perfil</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index:9999">
+    <div id="toast-ok" class="toast align-items-center border-0" role="alert">
+      <div class="d-flex">
+        <div class="toast-body fw-500" id="toast-msg"></div><button type="button" class="btn-close me-2 m-auto"
+          data-bs-dismiss="toast"></button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const script = document.createElement('script');
+    script.src = 'js/funcoes.js?v=' + new Date().getTime();
+    document.head.appendChild(script);
+  </script>
 
 </body>
+
 </html>
