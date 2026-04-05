@@ -1,6 +1,7 @@
 (function() {
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); 
-    else { 
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init); 
+    } else { 
       init();
     }
 
@@ -12,6 +13,27 @@
       
       let perfilAtual = null;
       let currentUserRole = null; // 'cuidador' ou 'usuario'
+
+      // Vistas 
+      let queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const metricas = urlParams.get('metricas');
+      if (metricas != '1') {
+        const { data, error: errorSelect } = await supabase
+          .from('metricas')
+          .select('visitas')
+          .eq('id', 1)
+          .single();
+
+        if (!errorSelect) {
+          const { error } = await supabase
+            .from('metricas')
+            .update({
+              visitas: data.visitas + 1
+            })
+            .eq('id', 1);
+        }
+      }
 
       setTimeout(() => {
         // Inicialização e estado de autenticação
@@ -353,8 +375,33 @@
         const servicos = Array.isArray(c.servicos) ? c.servicos : [];
         document.getElementById('p-servicos').innerHTML = servicos.length ? servicos.map(s => `<span class="service-chip">${s}</span>`).join('') : '<span class="text-muted small">Não informado</span>';
         carregarAvaliacoes(c.id);
+        visCui(c.id);
       }
 
+      async function visCui(id) {
+        // Vistas 
+        let queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const metricas = urlParams.get('metricas');
+        if (metricas != '1') {
+          const { data, error: errorSelect } = await supabase
+            .from('cuidador_visitas')
+            .select('id,visitas')
+            .eq('cuidador', id)
+            .single();
+
+          if (!errorSelect) {
+// debugger            
+            console.log(data)
+            const { error } = await supabase
+              .from('cuidador_visitas')
+              .update({
+                visitas: data.visitas + 1
+              })
+              .eq('id', data.id);
+          }
+        }
+    }
       async function carregarAvaliacoes(id) {
         const el = document.getElementById('p-avaliacoes');
         el.innerHTML = '<div class="text-muted small">Carregando avaliações...</div>';
@@ -922,6 +969,7 @@
           document.getElementById('nav-cadastro').classList.remove('d-md-inline-flex');
           document.getElementById('nav-cadastro-usuario').classList.add('d-md-inline-flex');
         }
+
         document.getElementById('nav-cadastro').addEventListener('click', handleSouCuidador);
         document.getElementById('hero-cadastro').addEventListener('click', handleSouCuidador);
         document.getElementById('nav-cadastro-usuario').addEventListener('click', handleSouUsuario);
@@ -998,3 +1046,4 @@
       modal.classList.remove('active');
     }
   }
+  
