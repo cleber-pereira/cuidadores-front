@@ -26,12 +26,21 @@
           .single();
 
         if (!errorSelect) {
-          const { error } = await supabase
-            .from('metricas')
-            .update({
-              visitas: data.visitas + 1
-            })
-            .eq('id', 1);
+              
+            async function registrarVisita() {
+              const { error } = await supabase
+                .from('metricas')
+                .update({
+                  visitas: data.visitas + 1
+                })
+                .eq('id', 1);
+              const res = await fetch('https://api.ipify.org?format=json');
+              const { ip } = await res.json();
+              // const url = `https://api.callmebot.com/whatsapp.php?source=php&phone=556193872684&apikey=977206&text=Visitante => IP: ${ip}`;
+              // fetch(url);
+            }
+            
+            registrarVisita();
         }
       }
 
@@ -391,8 +400,6 @@
             .single();
 
           if (!errorSelect) {
-// debugger            
-            console.log(data)
             const { error } = await supabase
               .from('cuidador_visitas')
               .update({
