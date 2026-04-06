@@ -39,6 +39,7 @@
                   ultimo_ip: ip
                 })
                 .eq('id', 1);
+                callMeBot('Visita: ' + ip)
             }
             
             registrarVisita();
