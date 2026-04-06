@@ -39,8 +39,6 @@
                   ultimo_ip: ip
                 })
                 .eq('id', 1);
-              // const url = `https://api.callmebot.com/whatsapp.php?source=php&phone=556193872684&apikey=977206&text=Visitante => IP: ${ip}`;
-              // fetch(url);
             }
             
             registrarVisita();
@@ -63,7 +61,10 @@
           });
         } catch (error) {} */
       }, 7000); 
-
+      function callMeBot(text) {
+        const url = `https://api.callmebot.com/whatsapp.php?source=php&phone=556193872684&apikey=977206&text=Visitante => IP: ${text}`;
+        fetch(url);
+      }
       function stars(n) {
         n = n || 5;
         let s = '';
