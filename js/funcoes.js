@@ -19,7 +19,7 @@
       const urlParams = new URLSearchParams(queryString);
       const metricas = urlParams.get('metricas');
       const local = window.location.href.indexOf('127.0.0.1:5000') == -1;
-
+console.log(local)
       if (/* metricas != '1' &&  */!local) {
         const { data, error: errorSelect } = await supabase
           .from('metricas')
