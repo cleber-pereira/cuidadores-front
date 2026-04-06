@@ -18,7 +18,9 @@
       let queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
       const metricas = urlParams.get('metricas');
-      if (metricas != '1') {
+      const local = window.location.href.indexOf('127.0.0.1:5000') == -1;
+
+      if (/* metricas != '1' &&  */!local) {
         const { data, error: errorSelect } = await supabase
           .from('metricas')
           .select('visitas')
@@ -26,7 +28,6 @@
           .single();
 
         if (!errorSelect) {
-              
             async function registrarVisita() {
               const { error } = await supabase
                 .from('metricas')
@@ -392,7 +393,9 @@
         let queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const metricas = urlParams.get('metricas');
-        if (metricas != '1') {
+        const local = window.location.href.indexOf('127.0.0.1:5000') == -1;
+
+        if (/* metricas != '1' &&  */!local) {
           const { data, error: errorSelect } = await supabase
             .from('cuidador_visitas')
             .select('id,visitas')
