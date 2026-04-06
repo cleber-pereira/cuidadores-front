@@ -19,7 +19,7 @@
       const urlParams = new URLSearchParams(queryString);
       const metricas = urlParams.get('metricas');
       const local = window.location.href.indexOf('127.0.0.1') != -1;
-      
+
       if (metricas != '1' && !local) {
         console.log('metric')
         const { data, error: errorSelect } = await supabase
@@ -30,14 +30,15 @@
 
         if (!errorSelect) {
             async function registrarVisita() {
+              const res = await fetch('https://api.ipify.org?format=json');
+              const { ip } = await res.json();
               const { error } = await supabase
                 .from('metricas')
                 .update({
-                  visitas: data.visitas + 1
+                  visitas: data.visitas + 1,
+                  ultimo_ip: ip
                 })
                 .eq('id', 1);
-              const res = await fetch('https://api.ipify.org?format=json');
-              const { ip } = await res.json();
               // const url = `https://api.callmebot.com/whatsapp.php?source=php&phone=556193872684&apikey=977206&text=Visitante => IP: ${ip}`;
               // fetch(url);
             }
