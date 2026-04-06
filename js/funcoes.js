@@ -62,10 +62,6 @@
           });
         } catch (error) {} */
       }, 7000); 
-      function callMeBot(text) {
-        const url = `https://api.callmebot.com/whatsapp.php?source=php&phone=556193872684&apikey=977206&text=Visitante => IP: ${text}`;
-        fetch(url);
-      }
       function stars(n) {
         n = n || 5;
         let s = '';
@@ -87,6 +83,11 @@
       function expToAnos(str) {
         const m = (str || '').match(/\d+/);
         return m ? parseInt(m[0]) : 0;
+      }
+
+      async function callMeBot(text) {
+        const url = `https://api.callmebot.com/whatsapp.php?source=php&phone=556193872684&apikey=977206&text=Visitante => IP: ${text}`;
+        fetch(url);
       }
 
       async function updateAuthUI(user) {
