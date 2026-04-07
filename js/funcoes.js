@@ -29,20 +29,19 @@
           .single();
 
         if (!errorSelect) {
-            async function registrarVisita() {
-              const res = await fetch('https://api.ipify.org?format=json');
-              const { ip } = await res.json();
-              const { error } = await supabase
-                .from('metricas')
-                .update({
-                  visitas: data.visitas + 1,
-                  ultimo_ip: ip
-                })
-                .eq('id', 1);
-            }
-            callMeBot('Visita: ' + ip)
-            
-            registrarVisita();
+          const res = await fetch('https://api.ipify.org?format=json');
+          const { ip } = await res.json();
+          async function registrarVisita() {
+            const { error } = await supabase
+              .from('metricas')
+              .update({
+                visitas: data.visitas + 1,
+                ultimo_ip: ip
+              })
+              .eq('id', 1);
+          }
+          callMeBot('Visita: ' + ip)
+          registrarVisita();
         }
       }
 
