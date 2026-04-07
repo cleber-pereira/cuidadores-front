@@ -16,7 +16,7 @@
 
       // Vistas 
       let queryString = window.location.search;
-      const urlParams = new URLSearchParams(queryString);
+      let urlParams = new URLSearchParams(queryString);
       const metricas = urlParams.get('metricas');
       const local = window.location.href.indexOf('127.0.0.1') != -1;
 
@@ -87,6 +87,44 @@
       async function callMeBot(text) {
         const url = `https://api.callmebot.com/whatsapp.php?source=php&phone=556193872684&apikey=977206&text=Visitante => IP: ${text}`;
         fetch(url);
+      }
+      
+      queryString = window.location.search;
+      urlParams = new URLSearchParams(queryString);
+      const alias = urlParams.get('alias');
+    
+      if (alias != null) {
+        obterAlias();
+      }
+      
+      async function obterAlias() {
+        const { data, error } = await supabase
+          .from('cuidadores')
+          .select(`id,nome,cuidador_visitas!inner (id)`)
+        
+        if (error) {
+          console.error('Erro:', error)
+          return []
+        }
+        
+        // Processar os dados para criar o ALIAS
+        const resultado = data.map(item => ({
+          ALIAS: `${item.cuidador_visitas.id}-${item.nome.toLowerCase().replace(/ /g, '-')}`,
+          IDENTIFICADOR: item.id,
+          // NOME: item.nome
+        }))
+        const aliasEspecifico = resultado.find(item => item.ALIAS === alias)
+
+        // Ordenar por ALIAS
+        resultado.sort((a, b) => a.ALIAS.localeCompare(b.ALIAS))
+
+        if(aliasEspecifico){
+          const { data: cuidadorAtualizado } = await supabase.from('cuidadores').select('*').eq('id', aliasEspecifico.IDENTIFICADOR).single();
+          perfilAtual = cuidadorAtualizado;
+          goTo('perfil');
+        } else {
+          showToast('Perfil não encontrado', 'danger');
+        }
       }
 
       async function updateAuthUI(user) {
@@ -395,7 +433,7 @@
       async function visCui(id) {
         // Vistas 
         let queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
+        let urlParams = new URLSearchParams(queryString);
         const metricas = urlParams.get('metricas');
         const local = window.location.href.indexOf('127.0.0.1') != -1;
 
@@ -1020,7 +1058,7 @@
       if(session != undefined) {
         updateAuthUI(session?.user ?? null);
       }
-      // localStorage.removeItem('intencao');
+
       bindEvents();
       document.getElementById('screen-home').style.display = 'block';
     }
