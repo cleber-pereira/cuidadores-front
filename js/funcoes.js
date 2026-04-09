@@ -427,18 +427,17 @@
         const servicos = Array.isArray(c.servicos) ? c.servicos : [];
         document.getElementById('p-servicos').innerHTML = servicos.length ? servicos.map(s => `<span class="service-chip">${s}</span>`).join('') : '<span class="text-muted small">Não informado</span>';
         carregarAvaliacoes(c.id);
-        visCui(c.id);
+        clicksCuidadores(c.id);
       }
 
-      async function visCui(id) {
+      async function clicksCuidadores(id) {
         // Vistas 
         let queryString = window.location.search;
         let urlParams = new URLSearchParams(queryString);
         const metricas = urlParams.get('metricas');
         const local = window.location.href.indexOf('127.0.0.1') != -1;
-
+8
         if (metricas != '1' && !local) {
-          console.log('metric')
           const { data, error: errorSelect } = await supabase
             .from('cuidador_visitas')
             .select('id,visitas')
@@ -601,6 +600,7 @@
         btn.disabled = false;
         btn.innerHTML = 'Enviar Avaliação';
         }
+
       let contMsg = 0;
       const tamanhoMsg = 300;
       // WhatsApp
@@ -663,7 +663,7 @@
         };
           
       }
-
+      
       // Navegação
       function goTo(id) {
         const current = document.querySelector('.screen.active');
@@ -684,6 +684,7 @@
             if (id === 'lista') carregarLista();
             if (id === 'perfil' && perfilAtual) renderPerfil(perfilAtual);
             if (id === 'whatsapp' && perfilAtual) renderWhatsapp(perfilAtual);
+            if (id === 'como-funciona') renderComoFunciona();
           });
         }, current ? 160 : 0);
       }
@@ -728,9 +729,20 @@
           console.error('Erro ao carregar cidades:', error.message);
         }
       }
+
+      async function renderComoFunciona() {
+        const current = document.querySelector('.screen.active');
+        const container = document.getElementById('como-funciona');
+
+        if (current) {
+          current.classList.remove('active');
+        }
+        if (container) {
+          container.classList.add('active');
+        }
+      }
       // Carregar lista de cuidadores
       async function carregarLista() { 
-        
         const current = document.querySelector('.screen.active');
         const container = document.getElementById('lista-cards');
         container.innerHTML = `<div class="col-12 text-center py-5"><div class="spinner-border text-success" role="status"></div><div class="text-muted mt-3 small">Buscando cuidadores...</div></div>`;
@@ -942,6 +954,7 @@
         document.getElementById('nav-logo').addEventListener('click', () => goTo('home'));
         document.getElementById('nav-buscar').addEventListener('click', () => goTo('lista'));
         document.getElementById('hero-buscar').addEventListener('click', () => goTo('lista'));
+        document.getElementById('func-buscar').addEventListener('click', () => goTo('lista'));
         document.getElementById('btn-buscar-home').addEventListener('click', () => goTo('lista'));
         /* document.getElementById('btn-buscar-home').addEventListener('click', () => {
           const cidade = document.getElementById('input-cidade').value;
@@ -958,6 +971,7 @@
           }, 350);
         }); */
         document.getElementById('lista-voltar').addEventListener('click', () => goTo('home'));
+        document.getElementById('func-voltar').addEventListener('click', () => goTo('home'));
         document.getElementById('perfil-voltar').addEventListener('click', () => goTo('lista'));
         document.getElementById('perfil-contato-desktop').addEventListener('click', () => goTo('whatsapp'));
         document.getElementById('perfil-contato-mobile').addEventListener('click', () => goTo('whatsapp'));
@@ -1025,6 +1039,8 @@
 
         document.getElementById('nav-cadastro').addEventListener('click', handleSouCuidador);
         document.getElementById('hero-cadastro').addEventListener('click', handleSouCuidador);
+        document.getElementById('func-cadastro').addEventListener('click', handleSouCuidador);
+        document.getElementById('hero-como-funciona').addEventListener('click', () => goTo('como-funciona'));
         document.getElementById('nav-cadastro-usuario').addEventListener('click', handleSouUsuario);
         document.getElementById('hero-cadastro-usuario').addEventListener('click', handleSouUsuario);
 

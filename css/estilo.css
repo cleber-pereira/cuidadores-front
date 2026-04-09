@@ -147,6 +147,20 @@
     #hero-buscar a {
       width: 100%;
     }
+    #func-buscar {
+      width: 100%;
+    }
+    #func-buscar button,
+    #func-buscar a {
+      width: 100%;
+    }
+    #hero-como-funciona {
+      width: 100%;
+    }
+    #hero-como-funciona button,
+    #hero-como-funciona a {
+      width: 100%;
+    }
     #hero-cadastro-usuario {
       width: 100%;
     }
@@ -159,6 +173,13 @@
     }
     #hero-cadastro button,
     #hero-cadastro a {
+      width: 100%;
+    }
+    #func-cadastro {
+      width: 100%;
+    }
+    #func-cadastro button,
+    #func-cadastro a {
       width: 100%;
     }
   }
