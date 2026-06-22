@@ -404,7 +404,7 @@
       }
 
       // Renderização do perfil (cuidador)
-      function renderPerfil(c) {
+      function renderPerfil(c) { 
         const foto = c.foto_url || `https://duoobpxovvpxfgvvghgk.supabase.co/storage/v1/object/public/fotos-cuidadores/avatar-neutro.png`;
         document.getElementById('p-foto').src = foto;
         document.getElementById('p-nome').textContent = c.nome;
