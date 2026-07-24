@@ -40,7 +40,7 @@
               })
               .eq('id', 1);
           }
-          callMeBot('Visita: ' + ip)
+          callMeBot('Visitante => IP: ' + ip)
           registrarVisita();
         }
       }
@@ -85,7 +85,7 @@
       }
 
       async function callMeBot(text) {
-        const url = `https://api.callmebot.com/whatsapp.php?source=php&phone=556193872684&apikey=977206&text=Visitante => IP: ${text}`;
+        const url = `https://api.callmebot.com/whatsapp.php?source=php&phone=556193872684&apikey=977206&text=${text}`;
         fetch(url);
       }
       
@@ -644,8 +644,7 @@
 
           const cuidadorId = c.id;
 
-          const url = `https://api.callmebot.com/whatsapp.php?source=php&phone=556193872684&apikey=977206&text=${msgCompleta}`;
-          fetch(url)
+          callMeBot(${msgCompleta})
             .then(() => showToast('Mensagem enviada com sucesso!', 'success'))
             .catch(() => showToast('Erro ao enviar mensagem. Tente novamente.', 'danger'))
             .finally(() => {
