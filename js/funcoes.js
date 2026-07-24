@@ -644,7 +644,7 @@
 
           const cuidadorId = c.id;
 
-          callMeBot(msgCompleta)
+          /* callMeBot(msgCompleta)
             .then(() => showToast('Mensagem enviada com sucesso!', 'success'))
             .catch(() => showToast('Erro ao enviar mensagem. Tente novamente.', 'danger'))
             .finally(() => {
@@ -652,7 +652,7 @@
               waLink.style.cursor = 'not-allowed';
               waLink.classList.add('opacity-50');
               waLink.innerHTML = 'Mensagem enviada!';
-            });
+            }); */
             const { error } = await supabase.from('mensagens').insert([{
               cuidador: cuidadorId,
               nome: nomeInput.value,
