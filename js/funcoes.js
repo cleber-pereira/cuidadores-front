@@ -644,7 +644,7 @@
 
           const cuidadorId = c.id;
 
-          callMeBot(${msgCompleta}
+          callMeBot(msgCompleta)
             .then(() => showToast('Mensagem enviada com sucesso!', 'success'))
             .catch(() => showToast('Erro ao enviar mensagem. Tente novamente.', 'danger'))
             .finally(() => {
