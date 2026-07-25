@@ -658,7 +658,15 @@
               nome: nomeInput.value,
               whatsapp: whatsInput.value,
               mensagem: waMsg.value
-            }]);
+            }])
+            .then(() => showToast('Mensagem enviada com sucesso!', 'success'))
+            .catch(() => showToast('Erro ao enviar mensagem. Tente novamente.', 'danger'))
+            .finally(() => {
+              waLink.disabled = true;
+              waLink.style.cursor = 'not-allowed';
+              waLink.classList.add('opacity-50');
+              waLink.innerHTML = 'Mensagem enviada!';
+            }); ;
         };
           
       }
