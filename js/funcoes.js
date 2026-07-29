@@ -669,9 +669,6 @@
 
           showToast("Mensagem enviada com sucesso!", "success");
 
-          console.log(data);      // registro completo
-          console.log(data.id);   // ID da nova mensagem
-
         } catch (error) {
           console.error(error);
           showToast("Erro ao enviar mensagem.", "danger");
