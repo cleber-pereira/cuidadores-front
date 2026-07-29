@@ -653,12 +653,14 @@
               waLink.classList.add('opacity-50');
               waLink.innerHTML = 'Mensagem enviada!';
             }); */
-            const { error } = await supabase.from('mensagens').insert([{
+            const { data, error } = await supabase.from('mensagens').insert([{
               cuidador: cuidadorId,
               nome: nomeInput.value,
               whatsapp: whatsInput.value,
               mensagem: waMsg.value
             }])
+            .select()
+            .single()
             .then(() => showToast('Mensagem enviada com sucesso!', 'success'))
             .catch(() => showToast('Erro ao enviar mensagem. Tente novamente.', 'danger'))
             .finally(() => {
@@ -666,7 +668,10 @@
               waLink.style.cursor = 'not-allowed';
               waLink.classList.add('opacity-50');
               waLink.innerHTML = 'Mensagem enviada!';
-            }); ;
+            });
+
+            console.log(data.id); // <-- Aqui está o ID da nova mensagem
+
         };
           
       }
