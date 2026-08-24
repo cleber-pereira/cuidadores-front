@@ -20,7 +20,8 @@
     const metricas = urlParams.get('metricas');
     const local = window.location.href.indexOf('127.0.0.1') != -1;
 
-    // ATUALIZAÇÃO DE VISITAS (REATIVADO)
+    // ATUALIZAÇÃO DE VISITAS (DESATIVADO TEMPORARIAMENTE - reativar quando necessário)
+    /*
     if (metricas != '1' && !local) {
       console.log('metric')
       const { data, error: errorSelect } = await supabase
@@ -45,6 +46,7 @@
         registrarVisita();
       }
     }
+    */
 
     setTimeout(() => {
       // Inicialização e estado de autenticação
@@ -83,21 +85,6 @@
     function expToAnos(str) {
       const m = (str || '').match(/\d+/);
       return m ? parseInt(m[0]) : 0;
-    }
-
-    // Limpa o <input type="file"> de foto e a pré-visualização, evitando que um
-    // arquivo escolhido em uma sessão/tela anterior seja reenviado sem o usuário perceber.
-    function limparInputFoto(inputId, previewId, iconId, labelId, subId, labelPadrao) {
-      const input = document.getElementById(inputId);
-      if (input) input.value = '';
-      const preview = previewId && document.getElementById(previewId);
-      if (preview) { preview.src = ''; preview.style.display = 'none'; }
-      const icon = iconId && document.getElementById(iconId);
-      if (icon) icon.style.display = '';
-      const label = labelId && document.getElementById(labelId);
-      if (label && labelPadrao !== undefined) label.textContent = labelPadrao;
-      const sub = subId && document.getElementById(subId);
-      if (sub) sub.textContent = '';
     }
 
     async function callMeBot(text) {
@@ -290,7 +277,6 @@
 
     // Preencher tela de edição (cuidador)
     async function preencherFormularioEdicao(perfil) {
-      limparInputFoto('edit-foto-input', 'edit-foto-preview', 'edit-upload-icon', 'edit-upload-label', null, 'Clique para enviar sua foto');
       document.getElementById('edit-nome').value = perfil.nome || '';
       document.getElementById('edit-whatsapp').value = perfil.whatsapp || '';
       document.getElementById('edit-preco').value = perfil.preco || '';
@@ -356,13 +342,14 @@
           foto_url = urlData.publicUrl;
         }
 
-        // ATUALIZAÇÃO DE CUIDADOR (REATIVADO)
+        // ATUALIZAÇÃO DE CUIDADOR (DESATIVADO TEMPORARIAMENTE - reativar quando necessário)
+        /*
         const { error } = await supabase.from('cuidadores').update({
           nome, area_atuacao, whatsapp, preco, experiencia, sobre, servicos, quero_verificacao, foto_url
         }).eq('id', session.user.id);
 
         if (error) throw new Error(error.message);
-        limparInputFoto('edit-foto-input', 'edit-foto-preview', 'edit-upload-icon', 'edit-upload-label', null, 'Clique para enviar sua foto');
+        */
         showToast('Perfil atualizado com sucesso!');
         goTo('lista');
       } catch (err) {
@@ -413,7 +400,6 @@
           id: session.user.id, nome, cidade, whatsapp, foto_url
         }]);
         if (error) throw new Error(error.message);
-        limparInputFoto('user-foto-input', 'user-foto-preview', 'user-upload-icon', 'user-upload-label', 'user-upload-sub', 'Clique para enviar sua foto');
         showToast('Cadastro de usuário concluído!');
         goTo('home');
       } catch (err) {
@@ -1032,7 +1018,6 @@
       if (error) {
         showToast('Erro: ' + error.message, 'danger');
       } else {
-        limparInputFoto('cad-foto-input', 'foto-preview', 'upload-icon', 'upload-label', 'upload-sub', 'Clique para enviar sua foto');
         showToast('Perfil publicado com sucesso! 🎉');
         setTimeout(() => goTo('lista'), 2000);
       }
@@ -1116,15 +1101,9 @@
       document.getElementById('perfil-voltar').addEventListener('click', () => goTo('lista'));
       document.getElementById('perfil-contato-desktop').addEventListener('click', () => goTo('whatsapp'));
       document.getElementById('perfil-contato-mobile').addEventListener('click', () => goTo('whatsapp'));
-      document.getElementById('cadastro-voltar').addEventListener('click', () => {
-        limparInputFoto('cad-foto-input', 'foto-preview', 'upload-icon', 'upload-label', 'upload-sub', 'Clique para enviar sua foto');
-        goTo('home');
-      });
+      document.getElementById('cadastro-voltar').addEventListener('click', () => goTo('home'));
       document.getElementById('editar-voltar').addEventListener('click', () => goTo('home'));
-      document.getElementById('cadastro-usuario-voltar').addEventListener('click', () => {
-        limparInputFoto('user-foto-input', 'user-foto-preview', 'user-upload-icon', 'user-upload-label', 'user-upload-sub', 'Clique para enviar sua foto');
-        goTo('home');
-      });
+      document.getElementById('cadastro-usuario-voltar').addEventListener('click', () => goTo('home'));
       document.getElementById('btn-cadastrar').addEventListener('click', salvarCadastro);
       document.getElementById('btn-atualizar').addEventListener('click', (e) => atualizarPerfil(e));
       document.getElementById('btn-cadastrar-usuario').addEventListener('click', salvarCadastroUsuario);
@@ -1158,10 +1137,7 @@
         }
         const perfil = await verificarPerfilAtivo(session.user.id);
         if (perfil) { await preencherFormularioEdicao(perfil); goTo('editar'); }
-        else {
-          limparInputFoto('cad-foto-input', 'foto-preview', 'upload-icon', 'upload-label', 'upload-sub', 'Clique para enviar sua foto');
-          goTo('cadastro');
-        }
+        else goTo('cadastro');
 
         // localStorage.removeItem('intencao');
         document.getElementById('nav-cadastro').classList.add('d-md-inline-flex');
@@ -1179,7 +1155,6 @@
           showToast('Você já possui um perfil de usuário.');
           goTo('home');
         } else {
-          limparInputFoto('user-foto-input', 'user-foto-preview', 'user-upload-icon', 'user-upload-label', 'user-upload-sub', 'Clique para enviar sua foto');
           goTo('cadastro-usuario');
         }
 
