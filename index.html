@@ -43,6 +43,52 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="css/estilo.css">
+  <style>
+    .cidade-checklist {
+      max-height: 260px;
+      overflow-y: auto;
+      border: 1px solid #e2e2e2;
+      border-radius: .5rem;
+      padding: .75rem;
+      background: #fff;
+    }
+    .cidade-checklist .cidade-grupo-label {
+      font-size: .72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+      color: var(--brand);
+      margin: .5rem 0 .35rem;
+    }
+    .cidade-checklist .cidade-grupo-label:first-child { margin-top: 0; }
+    .cidade-checklist label.cidade-item {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .2rem 0;
+      cursor: pointer;
+      font-size: .92rem;
+    }
+    .cidade-checklist .cidade-vazio {
+      color: #999;
+      font-size: .85rem;
+      padding: .5rem 0;
+    }
+    .cidade-selecionadas .chip-cidade {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: var(--brand-light);
+      color: var(--brand);
+      border-radius: 2rem;
+      padding: .25rem .7rem;
+      font-size: .82rem;
+      font-weight: 500;
+    }
+    .cidade-selecionadas .chip-cidade i {
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
@@ -411,11 +457,16 @@
       <div class="row g-4">
         <div class="col-lg-8">
           <div class="mb-4"><span class="section-label">Sobre mim</span>
-            <p id="p-sobre" class="mt-2" style="text-align: justify; white-space: pre-line;"></p>
+            <p id="p-area-intro" class="mt-2 mb-1 text-muted small"></p>
+            <p id="p-sobre" class="mt-1" style="text-align: justify; white-space: pre-line;"></p>
           </div>
           <div class="divider mb-4"></div>
           <div class="mb-4"><span class="section-label">Serviços oferecidos</span>
             <div id="p-servicos" class="mt-3 d-flex flex-wrap gap-2"></div>
+          </div>
+          <div class="divider mb-4"></div>
+          <div class="mb-4"><span class="section-label">Área de atuação</span>
+            <div id="p-area-atuacao" class="mt-3 d-flex flex-wrap gap-2"></div>
           </div>
           <div class="divider mb-4"></div>
           <div class="mb-5"><span class="section-label">Avaliações dos clientes</span>
@@ -474,58 +525,12 @@
         <div class="row g-3 mb-3">
           <div class="col-12"><label class="form-label fw-500">Nome completo</label><input type="text" id="cad-nome"
               class="form-control" placeholder="Seu nome e sobrenome" /></div>
-          <div class="col-md-6"><label class="form-label fw-500">Cidade</label><select id="cad-cidade"
-              class="form-select">
-              <option value="">Selecione</option>
-              <option disabled class="step-pill">DISTRITO FEDERAL</option>
-              <option>DF - Asa Norte</option>
-              <option>DF - Asa Sul</option>
-              <option>DF - Água Quente</option>
-              <option>DF - Arapoanga</option>
-              <option>DF - Águas Claras</option>
-              <option>DF - Arniqueira</option>
-              <option>DF - Brazlândia</option>
-              <option>DF - Candangolândia</option>
-              <option>DF - Ceilândia</option>
-              <option>DF - Cruzeiro</option>
-              <option>DF - Fercal</option>
-              <option>DF - Gama</option>
-              <option>DF - Guará</option>
-              <option>DF - Itapoã</option>
-              <option>DF - Jardim Botânico</option>
-              <option>DF - Lago Norte</option>
-              <option>DF - Lago Sul</option>
-              <option>DF - Núcleo Bandeirante</option>
-              <option>DF - Paranoá</option>
-              <option>DF - Park Way</option>
-              <option>DF - Planaltina</option>
-              <option>DF - Plano Piloto</option>
-              <option>DF - Recanto das Emas</option>
-              <option>DF - Riacho Fundo</option>
-              <option>DF - Riacho Fundo II</option>
-              <option>DF - Samambaia</option>
-              <option>DF - Santa Maria</option>
-              <option>DF - São Sebastião</option>
-              <option>DF - SCIA/Estrutural</option>
-              <option>DF - SIA</option>
-              <option>DF - Sobradinho</option>
-              <option>DF - Sobradinho II</option>
-              <option>DF - Sol Nascente</option>
-              <option>DF - Sudoeste/Octogonal</option>
-              <option>DF - Taguatinga</option>
-              <option>DF - Varjão</option>
-              <option>DF - Vicente Pires</option>
-              <option disabled class="step-pill">GOIÁS</option>
-              <option>GO - Águas Lindas</option>
-              <option>GO - Cidade Ocidental</option>
-              <option>GO - Cristalina</option>
-              <option>GO - Formosa</option>
-              <option>GO - Luziânia</option>
-              <option>GO - Novo Gama</option>
-              <option>GO - Planaltina</option>
-              <option>GO - Santo Antônio do Descoberto</option>
-              <option>GO - Valparaíso</option>
-            </select></div>
+          <div class="col-12">
+            <label class="form-label fw-500">Área de atuação <span class="text-muted small">(selecione uma ou mais cidades)</span></label>
+            <input type="text" id="cad-cidade-filtro" class="form-control form-control-sm mb-2" placeholder="Buscar cidade...">
+            <div id="cad-cidade-check" class="cidade-checklist"></div>
+            <div id="cad-cidade-selecionadas" class="cidade-selecionadas d-flex flex-wrap gap-2 mt-2"></div>
+          </div>
           <div class="col-md-6"><label class="form-label fw-500">WhatsApp</label><input type="tel" id="cad-whatsapp"
               onkeyup="formatarCelular(this)" value="" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
               class="form-control" placeholder="(61) 9 9999-9999" /></div>
@@ -600,58 +605,12 @@
         <div class="row g-3 mb-3">
           <div class="col-12"><label class="form-label fw-500">Nome completo</label><input type="text" id="edit-nome"
               class="form-control" readonly /></div>
-          <div class="col-md-6"><label class="form-label fw-500">Cidade</label><select id="edit-cidade"
-              class="form-select">
-              <option value="">Selecione</option>
-              <option disabled class="step-pill">DISTRITO FEDERAL</option>
-              <option>DF - Asa Norte</option>
-              <option>DF - Asa Sul</option>
-              <option>DF - Água Quente</option>
-              <option>DF - Arapoanga</option>
-              <option>DF - Águas Claras</option>
-              <option>DF - Arniqueira</option>
-              <option>DF - Brazlândia</option>
-              <option>DF - Candangolândia</option>
-              <option>DF - Ceilândia</option>
-              <option>DF - Cruzeiro</option>
-              <option>DF - Fercal</option>
-              <option>DF - Gama</option>
-              <option>DF - Guará</option>
-              <option>DF - Itapoã</option>
-              <option>DF - Jardim Botânico</option>
-              <option>DF - Lago Norte</option>
-              <option>DF - Lago Sul</option>
-              <option>DF - Núcleo Bandeirante</option>
-              <option>DF - Paranoá</option>
-              <option>DF - Park Way</option>
-              <option>DF - Planaltina</option>
-              <option>DF - Plano Piloto</option>
-              <option>DF - Recanto das Emas</option>
-              <option>DF - Riacho Fundo</option>
-              <option>DF - Riacho Fundo II</option>
-              <option>DF - Samambaia</option>
-              <option>DF - Santa Maria</option>
-              <option>DF - São Sebastião</option>
-              <option>DF - SCIA/Estrutural</option>
-              <option>DF - SIA</option>
-              <option>DF - Sobradinho</option>
-              <option>DF - Sobradinho II</option>
-              <option>DF - Sol Nascente</option>
-              <option>DF - Sudoeste/Octogonal</option>
-              <option>DF - Taguatinga</option>
-              <option>DF - Varjão</option>
-              <option>DF - Vicente Pires</option>
-              <option disabled class="step-pill">GOIÁS</option>
-              <option>GO - Águas Lindas</option>
-              <option>GO - Cidade Ocidental</option>
-              <option>GO - Cristalina</option>
-              <option>GO - Formosa</option>
-              <option>GO - Luziânia</option>
-              <option>GO - Novo Gama</option>
-              <option>GO - Planaltina</option>
-              <option>GO - Santo Antônio do Descoberto</option>
-              <option>GO - Valparaíso</option>
-            </select></div>
+          <div class="col-12">
+            <label class="form-label fw-500">Área de atuação <span class="text-muted small">(selecione uma ou mais cidades)</span></label>
+            <input type="text" id="edit-cidade-filtro" class="form-control form-control-sm mb-2" placeholder="Buscar cidade...">
+            <div id="edit-cidade-check" class="cidade-checklist"></div>
+            <div id="edit-cidade-selecionadas" class="cidade-selecionadas d-flex flex-wrap gap-2 mt-2"></div>
+          </div>
           <div class="col-md-6"><label class="form-label fw-500">WhatsApp</label><input type="tel" id="edit-whatsapp"
               oninput="this.value = this.value.replace(/[^0-9]/g, '');" class="form-control" /></div>
           <div class="col-md-6"><label class="form-label fw-500">Valor por plantão (R$)</label><input type="number"

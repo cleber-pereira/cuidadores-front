@@ -275,11 +275,13 @@
     // Preencher tela de edição (cuidador)
     async function preencherFormularioEdicao(perfil) {
       document.getElementById('edit-nome').value = perfil.nome || '';
-      document.getElementById('edit-cidade').value = perfil.cidade || '';
       document.getElementById('edit-whatsapp').value = perfil.whatsapp || '';
       document.getElementById('edit-preco').value = perfil.preco || '';
       document.getElementById('edit-exp').value = perfil.experiencia || 'Menos de 1 ano';
       document.getElementById('edit-sobre').value = perfil.sobre || '';
+      if (!todasCidades.length) await carregarCidades();
+      montarChecklistCidades('edit-cidade-check', 'edit-cidade-filtro', 'edit-cidade-selecionadas');
+      setCidadesSelecionadas('edit-cidade-check', 'edit-cidade-selecionadas', perfil.area_atuacao || []);
       const servicosArray = perfil.servicos || [];
       document.querySelectorAll('#edit-servicos-check input[type="checkbox"]').forEach(cb => {
         const label = cb.parentElement.textContent.trim();
@@ -303,7 +305,7 @@
       if (!session) { showToast('Você precisa estar logado.', 'warning'); abrirModalLogin(); return; }
 
       const nome = document.getElementById('edit-nome').value.trim();
-      const cidade = document.getElementById('edit-cidade').value;
+      const area_atuacao = getCidadesSelecionadas('edit-cidade-check');
       const whatsapp = document.getElementById('edit-whatsapp').value.trim().replace(/\D/g, '');
       const preco = parseFloat(document.getElementById('edit-preco').value);
       const experiencia = document.getElementById('edit-exp').value;
@@ -312,8 +314,8 @@
       const servicos = Array.from(document.querySelectorAll('#edit-servicos-check input:checked')).map(el => el.parentElement.textContent.trim());
       const fotoInput = document.getElementById('edit-foto-input');
 
-      if (!nome || !cidade || !whatsapp || !preco || !sobre) {
-        showToast('Preencha todos os campos obrigatórios!', 'danger');
+      if (!nome || !area_atuacao.length || !whatsapp || !preco || !sobre) {
+        showToast('Preencha todos os campos obrigatórios (inclua ao menos uma área de atuação)!', 'danger');
         return;
       }
 
@@ -338,7 +340,7 @@
         }
 
         const { error } = await supabase.from('cuidadores').update({
-          nome, cidade, whatsapp, preco, experiencia, sobre, servicos, quero_verificacao, foto_url
+          nome, area_atuacao, whatsapp, preco, experiencia, sobre, servicos, quero_verificacao, foto_url
         }).eq('id', session.user.id);
 
         if (error) throw new Error(error.message);
@@ -408,7 +410,9 @@
       const foto = c.foto_url || `https://duoobpxovvpxfgvvghgk.supabase.co/storage/v1/object/public/fotos-cuidadores/avatar-neutro.png`;
       document.getElementById('p-foto').src = foto;
       document.getElementById('p-nome').textContent = c.nome;
-      document.getElementById('p-local').innerHTML = `<i class="bi bi-geo-alt me-1"></i>${c.cidade} · ${c.experiencia} de exp.`;
+      const areaTexto = (Array.isArray(c.area_atuacao) && c.area_atuacao.length) ? c.area_atuacao.join(', ') : 'Área não informada';
+      document.getElementById('p-local').innerHTML = `<i class="bi bi-briefcase me-1"></i>${c.experiencia} de experiência`;
+      document.getElementById('p-area-intro').innerHTML = `<i class="bi bi-geo-alt me-1"></i>Atende em: ${areaTexto}`;
       document.getElementById('p-avaliacao').innerHTML = `${stars(c.avaliacao)} <span class="text-white ms-1 fw-600">${(c.avaliacao || 5).toFixed(1)}</span>`;
       document.getElementById('p-reviews').textContent = `(${c.total_reviews || 0} avaliações)`;
       if (c.preco !== -1) {
@@ -426,6 +430,8 @@
       }
       const servicos = Array.isArray(c.servicos) ? c.servicos : [];
       document.getElementById('p-servicos').innerHTML = servicos.length ? servicos.map(s => `<span class="service-chip">${s}</span>`).join('') : '<span class="text-muted small">Não informado</span>';
+      const areasAtuacao = Array.isArray(c.area_atuacao) ? c.area_atuacao : [];
+      document.getElementById('p-area-atuacao').innerHTML = areasAtuacao.length ? areasAtuacao.map(a => `<span class="service-chip"><i class="bi bi-geo-alt me-1"></i>${a}</span>`).join('') : '<span class="text-muted small">Não informado</span>';
       carregarAvaliacoes(c.id);
       clicksCuidadores(c.id);
     }
@@ -707,45 +713,127 @@
       }, current ? 160 : 0);
     }
 
-    async function loadCitiesIntoSelect() {
+    // Nomes "agregados" (abrangência ampla) que existem na tabela cidades
+    const CIDADES_AGREGADAS = ['Todo o DF', 'Todo o Entorno (GO)', 'DF e Entorno (todas as regiões)'];
+    let todasCidades = []; // cache: [{id, nome}]
+
+    // Carrega a tabela `cidades` e popula: selects de busca (única cidade)
+    // + checklists de área de atuação (cadastro/edição, múltiplas cidades)
+    async function carregarCidades() {
       try {
-        let { data: cidades, error } = await supabase.rpc('get_distinct_cidades');
-
+        const { data, error } = await supabase.from('cidades').select('id,nome').order('nome');
         if (error) throw error;
+        todasCidades = data || [];
 
-        let selectElement = document.getElementById('input-cidade');
-        selectElement.innerHTML = '';
-        let defaultOption = document.createElement('option');
-        defaultOption.value = '';
-        defaultOption.textContent = 'Qualquer cidade';
-        defaultOption.selected = true;
-        selectElement.appendChild(defaultOption);
+        // Selects de busca (uma única cidade) não mostram as opções agregadas
+        const cidadesBusca = todasCidades.filter(c => !CIDADES_AGREGADAS.includes(c.nome));
+        preencherSelectBusca('input-cidade', 'Qualquer cidade', cidadesBusca);
+        preencherSelectBusca('f-cidade', 'Todas as cidades', cidadesBusca);
 
-        cidades.forEach(cidade_array => {
-          let option = document.createElement('option');
-          option.value = cidade_array.cidade_nome || cidade_array.cidade;
-          option.textContent = cidade_array.cidade_nome || cidade_array.cidade;
-          selectElement.appendChild(option);
-        });
-
-        let selectElementLista = document.getElementById('f-cidade');
-        selectElementLista.innerHTML = '';
-        let defaultOptionLista = document.createElement('option');
-        defaultOptionLista.value = '';
-        defaultOptionLista.textContent = 'Todas as cidades';
-        defaultOptionLista.selected = true;
-        selectElementLista.appendChild(defaultOptionLista);
-
-        cidades.forEach(cidade_array => {
-          let optionLista = document.createElement('option');
-          optionLista.value = cidade_array.cidade_nome || cidade_array.cidade;
-          optionLista.textContent = cidade_array.cidade_nome || cidade_array.cidade;
-          selectElementLista.appendChild(optionLista);
-        });
-
+        // Checklists de área de atuação (cadastro e edição do cuidador)
+        montarChecklistCidades('cad-cidade-check', 'cad-cidade-filtro', 'cad-cidade-selecionadas');
+        montarChecklistCidades('edit-cidade-check', 'edit-cidade-filtro', 'edit-cidade-selecionadas');
       } catch (error) {
         console.error('Erro ao carregar cidades:', error.message);
       }
+    }
+
+    function preencherSelectBusca(selectId, textoPadrao, lista) {
+      const select = document.getElementById(selectId);
+      if (!select) return;
+      select.innerHTML = '';
+      const def = document.createElement('option');
+      def.value = '';
+      def.textContent = textoPadrao;
+      def.selected = true;
+      select.appendChild(def);
+      lista.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.nome;
+        opt.textContent = c.nome;
+        select.appendChild(opt);
+      });
+    }
+
+    function agruparCidades(lista) {
+      const grupos = { 'Distrito Federal': [], 'Goiás (Entorno)': [], 'Abrangência': [] };
+      lista.forEach(c => {
+        if (CIDADES_AGREGADAS.includes(c.nome)) grupos['Abrangência'].push(c);
+        else if (c.nome.startsWith('GO -')) grupos['Goiás (Entorno)'].push(c);
+        else grupos['Distrito Federal'].push(c);
+      });
+      return grupos;
+    }
+
+    // Renderiza o checklist de cidades (agrupado) dentro de containerId,
+    // preservando o que já estava marcado e ligando o campo de filtro
+    function montarChecklistCidades(containerId, filtroId, chipsId, termo = '') {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      const selecionadasAntes = getCidadesSelecionadas(containerId);
+      const termoLower = termo.trim().toLowerCase();
+      const lista = todasCidades.filter(c => !termoLower || c.nome.toLowerCase().includes(termoLower));
+      const grupos = agruparCidades(lista);
+
+      container.innerHTML = '';
+      let algumaCidade = false;
+      Object.keys(grupos).forEach(grupo => {
+        if (!grupos[grupo].length) return;
+        algumaCidade = true;
+        const label = document.createElement('div');
+        label.className = 'cidade-grupo-label';
+        label.textContent = grupo;
+        container.appendChild(label);
+        grupos[grupo].forEach(c => {
+          const item = document.createElement('label');
+          item.className = 'cidade-item';
+          item.innerHTML = `<input type="checkbox" class="form-check-input m-0" value="${c.nome}" ${selecionadasAntes.includes(c.nome) ? 'checked' : ''}> ${c.nome}`;
+          item.querySelector('input').addEventListener('change', () => renderChipsSelecionadas(containerId, chipsId));
+          container.appendChild(item);
+        });
+      });
+      if (!algumaCidade) {
+        container.innerHTML = '<div class="cidade-vazio">Nenhuma cidade encontrada.</div>';
+      }
+      renderChipsSelecionadas(containerId, chipsId);
+
+      const filtroInput = document.getElementById(filtroId);
+      if (filtroInput && !filtroInput.dataset.bound) {
+        filtroInput.dataset.bound = '1';
+        filtroInput.addEventListener('input', () => montarChecklistCidades(containerId, filtroId, chipsId, filtroInput.value));
+      }
+    }
+
+    function getCidadesSelecionadas(containerId) {
+      return Array.from(document.querySelectorAll(`#${containerId} input[type="checkbox"]:checked`)).map(el => el.value);
+    }
+
+    // Marca no checklist as cidades já salvas no perfil (usado na edição)
+    function setCidadesSelecionadas(containerId, chipsId, valores) {
+      document.querySelectorAll(`#${containerId} input[type="checkbox"]`).forEach(cb => {
+        cb.checked = (valores || []).includes(cb.value);
+      });
+      renderChipsSelecionadas(containerId, chipsId);
+    }
+
+    function renderChipsSelecionadas(containerId, chipsId) {
+      const chipsEl = document.getElementById(chipsId);
+      if (!chipsEl) return;
+      const selecionadas = getCidadesSelecionadas(containerId);
+      chipsEl.innerHTML = selecionadas.map(nome =>
+        `<span class="chip-cidade" data-nome="${nome}">${nome} <i class="bi bi-x-circle-fill"></i></span>`
+      ).join('');
+      chipsEl.querySelectorAll('.chip-cidade i').forEach(icon => {
+        icon.addEventListener('click', () => {
+          const nome = icon.parentElement.getAttribute('data-nome');
+          const cb = container_findCheckbox(containerId, nome);
+          if (cb) { cb.checked = false; renderChipsSelecionadas(containerId, chipsId); }
+        });
+      });
+    }
+
+    function container_findCheckbox(containerId, nome) {
+      return Array.from(document.querySelectorAll(`#${containerId} input[type="checkbox"]`)).find(cb => cb.value === nome);
     }
 
     async function renderComoFunciona() {
@@ -794,7 +882,7 @@
       if (sorteio == 5)
         campo = 'sobre';
       if (sorteio == 6)
-        campo = 'cidade';
+        campo = 'area_atuacao';
       if (sorteio == 7)
         campo = 'created_at';
 
@@ -805,7 +893,14 @@
 
       let query = supabase.from('cuidadores').select('*').order(campo, { ascending: asc }).eq('disponivel', true);
 
-      if (fc) query = query.ilike('cidade', `%${fc.split(',')[0].trim()}%`);
+      if (fc) {
+        // Um cuidador aparece se a cidade buscada estiver na área dele,
+        // OU se ele atende "Todo o DF"/"Todo o Entorno (GO)" (conforme a região da cidade buscada),
+        // OU se ele atende "DF e Entorno (todas as regiões)".
+        const ehEntorno = fc.startsWith('GO -');
+        const aceitos = [fc, 'DF e Entorno (todas as regiões)', ehEntorno ? 'Todo o Entorno (GO)' : 'Todo o DF'];
+        query = query.overlaps('area_atuacao', aceitos);
+      }
       if (fv === 'Sim') query = query.eq('verificado', true);
       else if (fv === 'Não') query = query.eq('verificado', false);
 
@@ -847,7 +942,8 @@
           P = `R$${c.preco}<small>/plantão</small>`;
         }
 
-        col.innerHTML = `<div class="cuidador-card h-100 p-4"><div class="d-flex align-items-start gap-3 mb-3"><img src="${foto}" class="avatar" alt="${c.nome}" onerror="this.src='https://i.pravatar.cc/200?u=${c.id}'"/><div class="flex-grow-1"><div class="fw-700 mb-1">${c.nome}</div><div class="d-flex flex-wrap gap-1 mb-1">${c.verificado ? '<span class="badge-verificado"><i class="bi bi-patch-check-fill me-1"></i>Verificado</span>' : ''}${c.disponivel ? '<span class="badge-disponivel"><i class="bi bi-circle-fill me-1" style="font-size:.55rem"></i>Disponível</span>' : '<span class="badge bg-secondary bg-opacity-10 text-secondary" style="font-size:.7rem;border-radius:2rem">Indisponível</span>'}</div><div class="stars">${stars(c.avaliacao)} <small class="text-muted ms-1">${(c.avaliacao || 5).toFixed(1)} (${c.total_reviews || 0})</small></div></div></div><div class="small text-muted mb-1"><i class="bi bi-geo-alt me-1"></i>${c.cidade}</div><div class="small text-muted mb-3"><i class="bi bi-briefcase me-1"></i>${c.experiencia} de experiência</div><div class="d-flex align-items-center justify-content-between"><div class="price-tag">${P}</div><button class="btn btn-brand btn-sm px-3">Ver perfil <i class="bi bi-arrow-right ms-1"></i></button></div></div>`;
+        const areaTexto = (Array.isArray(c.area_atuacao) && c.area_atuacao.length) ? c.area_atuacao.join(', ') : 'Área não informada';
+        col.innerHTML = `<div class="cuidador-card h-100 p-4"><div class="d-flex align-items-start gap-3 mb-3"><img src="${foto}" class="avatar" alt="${c.nome}" onerror="this.src='https://i.pravatar.cc/200?u=${c.id}'"/><div class="flex-grow-1"><div class="fw-700 mb-1">${c.nome}</div><div class="d-flex flex-wrap gap-1 mb-1">${c.verificado ? '<span class="badge-verificado"><i class="bi bi-patch-check-fill me-1"></i>Verificado</span>' : ''}${c.disponivel ? '<span class="badge-disponivel"><i class="bi bi-circle-fill me-1" style="font-size:.55rem"></i>Disponível</span>' : '<span class="badge bg-secondary bg-opacity-10 text-secondary" style="font-size:.7rem;border-radius:2rem">Indisponível</span>'}</div><div class="stars">${stars(c.avaliacao)} <small class="text-muted ms-1">${(c.avaliacao || 5).toFixed(1)} (${c.total_reviews || 0})</small></div></div></div><div class="small text-muted mb-1"><i class="bi bi-geo-alt me-1"></i>${areaTexto}</div><div class="small text-muted mb-3"><i class="bi bi-briefcase me-1"></i>${c.experiencia} de experiência</div><div class="d-flex align-items-center justify-content-between"><div class="price-tag">${P}</div><button class="btn btn-brand btn-sm px-3">Ver perfil <i class="bi bi-arrow-right ms-1"></i></button></div></div>`;
         col.querySelector('.cuidador-card').addEventListener('click', () => {
           perfilAtual = c;
           goTo('perfil');
@@ -866,7 +962,7 @@
       if (!session) { showToast('Você precisa estar logado para se cadastrar como cuidador.', 'warning'); abrirModalLogin(); return; }
 
       const nome = document.getElementById('cad-nome').value.trim();
-      const cidade = document.getElementById('cad-cidade').value;
+      const area_atuacao = getCidadesSelecionadas('cad-cidade-check');
       const whatsapp = document.getElementById('cad-whatsapp').value.trim().replace(/\D/g, '');
       const preco = parseFloat(document.getElementById('cad-preco').value);
       const experiencia = document.getElementById('cad-exp').value;
@@ -875,8 +971,8 @@
       const servicos = Array.from(document.querySelectorAll('#servicos-check input:checked')).map(el => el.parentElement.textContent.trim());
       const fotoInput = document.getElementById('cad-foto-input');
 
-      if (!nome || !cidade || !whatsapp || !preco /* || !fotoInput.files[0] */ || !sobre) {
-        showToast('Preencha nome, cidade, WhatsApp, preço e sobre você!', 'danger');
+      if (!nome || !area_atuacao.length || !whatsapp || !preco /* || !fotoInput.files[0] */ || !sobre) {
+        showToast('Preencha nome, área de atuação, WhatsApp, preço e sobre você!', 'danger');
         return;
       }
 
@@ -902,7 +998,7 @@
 
       btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Publicando perfil...';
       const { error } = await supabase.from('cuidadores').insert([{
-        nome, cidade, whatsapp, preco, experiencia, sobre, servicos, quero_verificacao, foto_url,
+        nome, area_atuacao, whatsapp, preco, experiencia, sobre, servicos, quero_verificacao, foto_url,
         disponivel: false, avaliacao: 5.0, total_reviews: 0, id: session.user.id
       }]);
       btn.disabled = false;
@@ -1085,7 +1181,7 @@
           });
         });
       });
-      loadCitiesIntoSelect();
+      carregarCidades();
     }
 
     const { data: { session } } = await supabase.auth.getSession();
