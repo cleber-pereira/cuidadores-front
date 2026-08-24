@@ -20,6 +20,8 @@
     const metricas = urlParams.get('metricas');
     const local = window.location.href.indexOf('127.0.0.1') != -1;
 
+    // ATUALIZAÇÃO DE VISITAS (DESATIVADO TEMPORARIAMENTE - reativar quando necessário)
+    /*
     if (metricas != '1' && !local) {
       console.log('metric')
       const { data, error: errorSelect } = await supabase
@@ -44,6 +46,7 @@
         registrarVisita();
       }
     }
+    */
 
     setTimeout(() => {
       // Inicialização e estado de autenticação
@@ -339,11 +342,14 @@
           foto_url = urlData.publicUrl;
         }
 
+        // ATUALIZAÇÃO DE CUIDADOR (DESATIVADO TEMPORARIAMENTE - reativar quando necessário)
+        /*
         const { error } = await supabase.from('cuidadores').update({
           nome, area_atuacao, whatsapp, preco, experiencia, sobre, servicos, quero_verificacao, foto_url
         }).eq('id', session.user.id);
 
         if (error) throw new Error(error.message);
+        */
         showToast('Perfil atualizado com sucesso!');
         goTo('lista');
       } catch (err) {
@@ -433,9 +439,11 @@
       const areasAtuacao = Array.isArray(c.area_atuacao) ? c.area_atuacao : [];
       document.getElementById('p-area-atuacao').innerHTML = areasAtuacao.length ? areasAtuacao.map(a => `<span class="service-chip"><i class="bi bi-geo-alt me-1"></i>${a}</span>`).join('') : '<span class="text-muted small">Não informado</span>';
       carregarAvaliacoes(c.id);
-      clicksCuidadores(c.id);
+      // clicksCuidadores(c.id); // ATUALIZAÇÃO DE VISITAS DESATIVADA TEMPORARIAMENTE - reativar quando necessário
     }
 
+    // ATUALIZAÇÃO DE VISITAS DO CUIDADOR (DESATIVADO TEMPORARIAMENTE - reativar quando necessário)
+    /*
     async function clicksCuidadores(id) {
       // Vistas 
       let queryString = window.location.search;
@@ -460,6 +468,7 @@
         }
       }
     }
+    */
     async function carregarAvaliacoes(id) {
       const el = document.getElementById('p-avaliacoes');
       el.innerHTML = '<div class="text-muted small">Carregando avaliações...</div>';
@@ -566,6 +575,8 @@
         return;
       }
 
+      // ATUALIZAÇÃO DE CUIDADOR - MÉDIA DE AVALIAÇÃO (DESATIVADO TEMPORARIAMENTE - reativar quando necessário)
+      /*
       // Atualizar soma
       const { data: somaData } = await supabase
         .from('cuidadores')
@@ -591,6 +602,7 @@
           return;
         }
       }
+      */
       // Recarregar o perfil do cuidador para mostrar os dados atualizados
       const { data: cuidadorAtualizado } = await supabase.from('cuidadores').select('*').eq('id', cuidadorId).single();
       if (cuidadorAtualizado) {
