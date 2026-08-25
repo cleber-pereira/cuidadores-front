@@ -64,6 +64,12 @@
          });
        } catch (error) {} */
     }, 7000);
+    function nomePublico(nome) {
+      if (!nome) return '';
+      const partes = nome.trim().split(/\s+/);
+      return partes.slice(0, 2).join(' ');
+    }
+
     function stars(n) {
       n = n || 5;
       let s = '';
@@ -327,7 +333,8 @@
       btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Atualizando...';
 
       try {
-        let foto_url = window.perfilOriginalFoto || null;
+        const fotoAntigaUrl = window.perfilOriginalFoto || null;
+        let foto_url = fotoAntigaUrl;
         if (fotoInput.files && fotoInput.files[0]) {
           const file = fotoInput.files[0];
           if (file.size > 500 * 1024) {
@@ -340,16 +347,25 @@
           if (upErr) throw new Error('Upload da foto: ' + upErr.message);
           const { data: urlData } = supabase.storage.from('fotos-cuidadores').getPublicUrl(upData.path);
           foto_url = urlData.publicUrl;
+
+          // Apagar a foto antiga do storage (evita lixo acumulando no bucket).
+          // Não apaga se a foto antiga era um dos avatares padrão (compartilhados entre usuários).
+          const bucketPrefix = 'https://duoobpxovvpxfgvvghgk.supabase.co/storage/v1/object/public/fotos-cuidadores/';
+          if (fotoAntigaUrl && fotoAntigaUrl.startsWith(bucketPrefix)) {
+            const oldPath = fotoAntigaUrl.slice(bucketPrefix.length);
+            if (oldPath && oldPath !== 'avatar-neutro.png' && oldPath !== 'avatar.png') {
+              const { error: delErr } = await supabase.storage.from('fotos-cuidadores').remove([oldPath]);
+              if (delErr) console.warn('Não foi possível apagar a foto antiga:', delErr.message);
+            }
+          }
         }
 
-        // ATUALIZAÇÃO DE CUIDADOR (DESATIVADO TEMPORARIAMENTE - reativar quando necessário)
-        /*
+        // ATUALIZAÇÃO DE CUIDADOR (REATIVADO)
         const { error } = await supabase.from('cuidadores').update({
           nome, area_atuacao, whatsapp, preco, experiencia, sobre, servicos, quero_verificacao, foto_url
         }).eq('id', session.user.id);
 
         if (error) throw new Error(error.message);
-        */
         showToast('Perfil atualizado com sucesso!');
         goTo('lista');
       } catch (err) {
@@ -415,7 +431,7 @@
     function renderPerfil(c) {
       const foto = c.foto_url || `https://duoobpxovvpxfgvvghgk.supabase.co/storage/v1/object/public/fotos-cuidadores/avatar-neutro.png`;
       document.getElementById('p-foto').src = foto;
-      document.getElementById('p-nome').textContent = c.nome;
+      document.getElementById('p-nome').textContent = nomePublico(c.nome);
       const areaTexto = (Array.isArray(c.area_atuacao) && c.area_atuacao.length) ? c.area_atuacao.join(', ') : 'Área não informada';
       document.getElementById('p-local').innerHTML = `<i class="bi bi-briefcase me-1"></i>${c.experiencia} de experiência`;
       document.getElementById('p-area-intro').innerHTML = `<i class="bi bi-geo-alt me-1"></i>Atende em: ${areaTexto}`;
@@ -633,9 +649,9 @@
       document.getElementById('wa-nome').textContent = `Fale com ${nome1}`;
       document.getElementById('wa-foto').src = foto;
       if (c.preco === -1) {
-        document.getElementById('wa-info').innerHTML = `<strong>${c.nome}</strong> · Valor a combinar `;
+        document.getElementById('wa-info').innerHTML = `<strong>${nomePublico(c.nome)}</strong> · Valor a combinar `;
       } else {
-        document.getElementById('wa-info').innerHTML = `<strong>${c.nome}</strong> · R$${c.preco}/plantão`;
+        document.getElementById('wa-info').innerHTML = `<strong>${nomePublico(c.nome)}</strong> · R$${c.preco}/plantão`;
       }
       document.getElementById('wa-avaliacao').innerHTML = `<i class="bi bi-star-fill text-warning me-1"></i>${(c.avaliacao || 5).toFixed(1)}`;
       document.getElementById('wa-msg').textContent = `Olá, ${nome1}! Vi seu perfil no CuidaDF e `;
@@ -955,7 +971,7 @@
         }
 
         const areaTexto = (Array.isArray(c.area_atuacao) && c.area_atuacao.length) ? c.area_atuacao.join(', ') : 'Área não informada';
-        col.innerHTML = `<div class="cuidador-card h-100 p-4"><div class="d-flex align-items-start gap-3 mb-3"><img src="${foto}" class="avatar" alt="${c.nome}" onerror="this.src='https://i.pravatar.cc/200?u=${c.id}'"/><div class="flex-grow-1"><div class="fw-700 mb-1">${c.nome}</div><div class="d-flex flex-wrap gap-1 mb-1">${c.verificado ? '<span class="badge-verificado"><i class="bi bi-patch-check-fill me-1"></i>Verificado</span>' : ''}${c.disponivel ? '<span class="badge-disponivel"><i class="bi bi-circle-fill me-1" style="font-size:.55rem"></i>Disponível</span>' : '<span class="badge bg-secondary bg-opacity-10 text-secondary" style="font-size:.7rem;border-radius:2rem">Indisponível</span>'}</div><div class="stars">${stars(c.avaliacao)} <small class="text-muted ms-1">${(c.avaliacao || 5).toFixed(1)} (${c.total_reviews || 0})</small></div></div></div><div class="small text-muted mb-1"><i class="bi bi-geo-alt me-1"></i>${areaTexto}</div><div class="small text-muted mb-3"><i class="bi bi-briefcase me-1"></i>${c.experiencia} de experiência</div><div class="d-flex align-items-center justify-content-between"><div class="price-tag">${P}</div><button class="btn btn-brand btn-sm px-3">Ver perfil <i class="bi bi-arrow-right ms-1"></i></button></div></div>`;
+        col.innerHTML = `<div class="cuidador-card h-100 p-4"><div class="d-flex align-items-start gap-3 mb-3"><img src="${foto}" class="avatar" alt="${nomePublico(c.nome)}" onerror="this.src='https://i.pravatar.cc/200?u=${c.id}'"/><div class="flex-grow-1"><div class="fw-700 mb-1">${nomePublico(c.nome)}</div><div class="d-flex flex-wrap gap-1 mb-1">${c.verificado ? '<span class="badge-verificado"><i class="bi bi-patch-check-fill me-1"></i>Verificado</span>' : ''}${c.disponivel ? '<span class="badge-disponivel"><i class="bi bi-circle-fill me-1" style="font-size:.55rem"></i>Disponível</span>' : '<span class="badge bg-secondary bg-opacity-10 text-secondary" style="font-size:.7rem;border-radius:2rem">Indisponível</span>'}</div><div class="stars">${stars(c.avaliacao)} <small class="text-muted ms-1">${(c.avaliacao || 5).toFixed(1)} (${c.total_reviews || 0})</small></div></div></div><div class="small text-muted mb-1"><i class="bi bi-geo-alt me-1"></i>${areaTexto}</div><div class="small text-muted mb-3"><i class="bi bi-briefcase me-1"></i>${c.experiencia} de experiência</div><div class="d-flex align-items-center justify-content-between"><div class="price-tag">${P}</div><button class="btn btn-brand btn-sm px-3">Ver perfil <i class="bi bi-arrow-right ms-1"></i></button></div></div>`;
         col.querySelector('.cuidador-card').addEventListener('click', () => {
           perfilAtual = c;
           goTo('perfil');
