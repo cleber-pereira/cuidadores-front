@@ -799,7 +799,7 @@
     }
 
     function agruparCidades(lista) {
-      const grupos = { 'Distrito Federal': [], 'Goiás (Entorno)': [], 'Abrangência': [] };
+      const grupos = { 'Abrangência': [], 'Distrito Federal': [], 'Goiás (Entorno)': [] };
       lista.forEach(c => {
         if (CIDADES_AGREGADAS.includes(c.nome)) grupos['Abrangência'].push(c);
         else if (c.nome.startsWith('GO -')) grupos['Goiás (Entorno)'].push(c);
@@ -831,7 +831,12 @@
           const item = document.createElement('label');
           item.className = 'cidade-item';
           item.innerHTML = `<input type="checkbox" class="form-check-input m-0" value="${c.nome}" ${selecionadasAntes.includes(c.nome) ? 'checked' : ''}> ${c.nome}`;
-          item.querySelector('input').addEventListener('change', () => renderChipsSelecionadas(containerId, chipsId));
+          item.querySelector('input').addEventListener('change', (e) => {
+            if (e.target.checked && CIDADES_AGREGADAS.includes(e.target.value)) {
+              aplicarExclusaoAbrangencia(containerId, e.target.value);
+            }
+            renderChipsSelecionadas(containerId, chipsId);
+          });
           container.appendChild(item);
         });
       });
@@ -877,6 +882,14 @@
 
     function container_findCheckbox(containerId, nome) {
       return Array.from(document.querySelectorAll(`#${containerId} input[type="checkbox"]`)).find(cb => cb.value === nome);
+    }
+
+    // Ao marcar uma opção agregada (Todo o DF / Todo o Entorno / DF e Entorno),
+    // desmarca todas as demais cidades e opções agregadas do checklist
+    function aplicarExclusaoAbrangencia(containerId, valorMarcado) {
+      document.querySelectorAll(`#${containerId} input[type="checkbox"]`).forEach(cb => {
+        if (cb.value !== valorMarcado) cb.checked = false;
+      });
     }
 
     async function renderComoFunciona() {
