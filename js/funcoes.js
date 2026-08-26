@@ -66,8 +66,23 @@
     }, 7000);
     function nomePublico(nome) {
       if (!nome) return '';
+      const conectivos = ['da', 'de', 'do', 'das', 'dos', 'e'];
       const partes = nome.trim().split(/\s+/);
-      return partes.slice(0, 2).join(' ');
+      const grupos = [];
+      let buffer = '';
+      for (const parte of partes) {
+        if (conectivos.includes(parte.toLowerCase())) {
+          buffer += (buffer ? ' ' : '') + parte;
+        } else {
+          grupos.push(buffer ? `${buffer} ${parte}` : parte);
+          buffer = '';
+        }
+      }
+      if (buffer) {
+        if (grupos.length) grupos[grupos.length - 1] += ` ${buffer}`;
+        else grupos.push(buffer);
+      }
+      return grupos.slice(0, 2).join(' ');
     }
 
     function stars(n) {
