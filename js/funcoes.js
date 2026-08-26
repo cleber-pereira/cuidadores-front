@@ -884,11 +884,21 @@
       return Array.from(document.querySelectorAll(`#${containerId} input[type="checkbox"]`)).find(cb => cb.value === nome);
     }
 
-    // Ao marcar uma opção agregada (Todo o DF / Todo o Entorno / DF e Entorno),
-    // desmarca todas as demais cidades e opções agregadas do checklist
+    // Ao marcar uma opção agregada, desmarca apenas o escopo correspondente:
+    // - "Todo o DF" desmarca só as cidades do Distrito Federal (permite manter cidades específicas do Entorno)
+    // - "Todo o Entorno (GO)" desmarca só as cidades de Goiás (permite manter cidades específicas do DF)
+    // - "DF e Entorno (todas as regiões)" desmarca tudo, já que cobre as duas regiões por completo
     function aplicarExclusaoAbrangencia(containerId, valorMarcado) {
       document.querySelectorAll(`#${containerId} input[type="checkbox"]`).forEach(cb => {
-        if (cb.value !== valorMarcado) cb.checked = false;
+        if (cb.value === valorMarcado) return;
+        const ehCidadeGO = cb.value.startsWith('GO -');
+        if (valorMarcado === 'DF e Entorno (todas as regiões)') {
+          cb.checked = false;
+        } else if (valorMarcado === 'Todo o DF') {
+          if (!ehCidadeGO && !CIDADES_AGREGADAS.includes(cb.value)) cb.checked = false;
+        } else if (valorMarcado === 'Todo o Entorno (GO)') {
+          if (ehCidadeGO) cb.checked = false;
+        }
       });
     }
 
