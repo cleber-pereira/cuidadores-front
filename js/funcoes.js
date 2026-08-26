@@ -703,16 +703,14 @@
             waLink.innerHTML = 'Mensagem enviada!';
           }); */
         try {
-          const { data, error } = await supabase
+          const { error } = await supabase
             .from("mensagens")
             .insert([{
               cuidador: cuidadorId,
               nome: nomeInput.value,
               whatsapp: whatsInput.value,
               mensagem: waMsg.value
-            }])
-            .select()
-            .single();
+            }]);
 
           if (error) throw error;
 
