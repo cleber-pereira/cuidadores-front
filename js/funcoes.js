@@ -85,6 +85,16 @@
       return grupos.slice(0, 2).join(' ');
     }
 
+    function slugNome(nome) {
+      if (!nome) return '';
+      return nome
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '') // remove acentos
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, '-'); // substitui espaços (um ou mais) por traço
+    }
+
     function stars(n) {
       n = n || 5;
       let s = '';
@@ -132,18 +142,33 @@
       }
 
       // Processar os dados para criar o ALIAS
-      const resultado = data.map(item => ({
-        ALIAS: `${item.cuidador_visitas.id}-${item.nome.toLowerCase().replace(/ /g, '-')}`,
-        IDENTIFICADOR: item.id,
-        // NOME: item.nome
-      }))
+      // ALIAS = nome sem acentos (espaços viram traços) + segunda parte do id (dividido por "-")
+      const resultado = data.map(item => {
+        const segundaParteId = item.id.split('-')[1] || item.id;
+        return {
+          ALIAS: `${slugNome(item.nome)}-${segundaParteId}`,
+          IDENTIFICADOR: item.id,
+          // NOME: item.nome
+        };
+      })
       const aliasEspecifico = resultado.find(item => item.ALIAS === alias)
 
       // Ordenar por ALIAS
       resultado.sort((a, b) => a.ALIAS.localeCompare(b.ALIAS))
 
       if (aliasEspecifico) {
-        const { data: cuidadorAtualizado } = await supabase.from('cuidadores').select('*').eq('id', aliasEspecifico.IDENTIFICADOR).single();
+        const { data: cuidadorAtualizado, error: erroCuidador } = await supabase.from('cuidadores').select('*').eq('id', aliasEspecifico.IDENTIFICADOR).single();
+
+        if (erroCuidador || !cuidadorAtualizado) {
+          showToast('Perfil não encontrado', 'danger');
+          return;
+        }
+
+        if (cuidadorAtualizado.disponivel !== true) {
+          goTo('indisponivel');
+          return;
+        }
+
         perfilAtual = cuidadorAtualizado;
         goTo('perfil');
       } else {
@@ -296,8 +321,17 @@
       }
     }
 
+    // Gera o link direto do perfil: nome sem acentos (espaços -> traço) + segunda parte do id
+    function gerarLinkPerfil(perfil) {
+      const segundaParteId = (perfil.id || '').split('-')[1] || perfil.id || '';
+      const alias = `${slugNome(perfil.nome)}-${segundaParteId}`;
+      return `${window.location.origin}${window.location.pathname}?alias=${alias}`;
+    }
+
     // Preencher tela de edição (cuidador)
     async function preencherFormularioEdicao(perfil) {
+      const campoLink = document.getElementById('edit-link-perfil');
+      if (campoLink) campoLink.value = gerarLinkPerfil(perfil);
       document.getElementById('edit-nome').value = perfil.nome || '';
       document.getElementById('edit-sobrenome').value = perfil.sobrenome || '';
       document.getElementById('edit-whatsapp').value = perfil.whatsapp || '';
@@ -1151,12 +1185,33 @@
         }, 350);
       }); */
       document.getElementById('lista-voltar').addEventListener('click', () => goTo('home'));
+      document.getElementById('indisponivel-voltar').addEventListener('click', () => goTo('lista'));
       document.getElementById('func-voltar').addEventListener('click', () => goTo('home'));
       document.getElementById('perfil-voltar').addEventListener('click', () => goTo('lista'));
       document.getElementById('perfil-contato-desktop').addEventListener('click', () => goTo('whatsapp'));
       document.getElementById('perfil-contato-mobile').addEventListener('click', () => goTo('whatsapp'));
       document.getElementById('cadastro-voltar').addEventListener('click', () => goTo('home'));
       document.getElementById('editar-voltar').addEventListener('click', () => goTo('home'));
+      document.getElementById('btn-copiar-link-perfil').addEventListener('click', () => {
+        const campoLink = document.getElementById('edit-link-perfil');
+        campoLink.select();
+        campoLink.setSelectionRange(0, 99999);
+        const copiarFallback = () => {
+          try {
+            document.execCommand('copy');
+            showToast('Link copiado!');
+          } catch (e) {
+            showToast('Não foi possível copiar o link', 'danger');
+          }
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(campoLink.value).then(() => {
+            showToast('Link copiado!');
+          }).catch(copiarFallback);
+        } else {
+          copiarFallback();
+        }
+      });
       document.getElementById('cadastro-usuario-voltar').addEventListener('click', () => goTo('home'));
       document.getElementById('btn-cadastrar').addEventListener('click', salvarCadastro);
       document.getElementById('btn-atualizar').addEventListener('click', (e) => atualizarPerfil(e));

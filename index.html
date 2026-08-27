@@ -181,16 +181,16 @@
                 <i class="bi bi-search me-2"></i>
                 Encontrar Cuidador
               </button>
-              <button class="btn btn-outline-light btn-lg px-4" id="hero-como-funciona">
-                <i class="fas fa-circle-info me-2"></i>
-                Como Funciona
-              </button>
               <button class="btn btn-outline-light btn-lg px-4" id="hero-cadastro">
                 <i class="fas fa-hand-holding-heart"></i>
                 Sou Cuidador</button>
               <button class="btn btn-outline-light btn-lg px-4" id="hero-cadastro-usuario">
                 <i class="fas fa-user"></i>
                 Sou Usuário</button>
+              <button class="btn btn-outline-light btn-lg px-4" id="hero-como-funciona">
+                <i class="fas fa-circle-info me-2"></i>
+                Como Funciona
+              </button>
             </div>
           </div>
           <div class="col-lg-6">
@@ -603,6 +603,16 @@
         <span class="step-pill">Editar Perfil</span>
         <h2 class="font-display mt-2 mb-1">Atualize seus dados</h2>
         <p class="text-muted mb-5">Mantenha suas informações sempre atualizadas.</p>
+        <div class="upsell-box p-4 mb-4">
+          <label class="form-label fw-600 mb-2">Seu link direto de perfil</label>
+          <div class="input-group">
+            <input type="text" id="edit-link-perfil" class="form-control" readonly />
+            <button type="button" id="btn-copiar-link-perfil" class="btn btn-outline-brand">
+              <i class="bi bi-clipboard"></i> Copiar
+            </button>
+          </div>
+          <p class="small text-muted mb-0 mt-2">Compartilhe este link com quem quiser: ele leva direto ao seu perfil.</p>
+        </div>
         <div class="mb-4"><label class="form-label fw-600">Sua foto</label><input type="file" id="edit-foto-input"
             accept="image/*" style="display:none" />
           <div class="upload-area" id="edit-upload-area"><img id="edit-foto-preview" src="" alt=""
@@ -779,6 +789,29 @@
         <a id="wa-link" href="javascript:void(0)" class="btn btn-whatsapp w-100 mb-3 pb-3 py-3 mt-4"><i
             class="bi bi-whatsapp me-2 fs-5"></i>Enviar Mensagem</a><button class="btn btn-outline-brand w-100"
           id="wa-voltar"><i class="bi bi-arrow-left me-1"></i>Voltar ao perfil</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- INDISPONÍVEL -->
+  <div id="screen-indisponivel" class="screen">
+    <div class="d-flex align-items-center justify-content-center" style="min-height:80vh">
+      <div class="container">
+        <div class="mx-auto text-center p-4 p-md-5"
+          style="max-width:480px;background:#fff;border-radius:1.25rem;box-shadow:0 10px 40px rgba(0,0,0,.08);border:1px solid #f1e9da">
+          <div class="d-flex align-items-center justify-content-center mx-auto mb-4"
+            style="width:84px;height:84px;border-radius:50%;background:#fff4e5">
+            <i class="bi bi-person-fill-slash" style="font-size:2.3rem;color:#e08a00"></i>
+          </div>
+          <h3 class="font-display mb-3">Cuidador ainda não está ativo</h3>
+          <p class="text-muted mb-4">
+            Este perfil ainda não está disponível na plataforma no momento.
+            Ele pode estar em análise ou ter pausado seus atendimentos temporariamente.
+          </p>
+          <button class="btn btn-brand w-100 py-2" id="indisponivel-voltar">
+            <i class="bi bi-search me-2"></i>Ver outros cuidadores
+          </button>
+        </div>
       </div>
     </div>
   </div>
