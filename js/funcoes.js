@@ -192,6 +192,15 @@
           currentUserRole = 'cuidador';
           userRoleSpan.textContent = 'Cuidador';
           userRoleSpan.className = 'badge bg-success text-white';
+          userRoleSpan.style.cursor = 'pointer';
+          userRoleSpan.title = 'Editar meu perfil';
+          userRoleSpan.onclick = async () => {
+            const perfil = await verificarPerfilAtivo(user.id);
+            if (perfil) {
+              await preencherFormularioEdicao(perfil);
+              goTo('editar');
+            }
+          };
           document.getElementById('nav-cadastro').classList.add('d-md-inline-flex');
           document.getElementById('nav-cadastro-usuario').classList.remove('d-md-inline-flex');
         } else {
@@ -200,12 +209,18 @@
             currentUserRole = 'usuario';
             userRoleSpan.textContent = 'Usuário';
             userRoleSpan.className = 'badge bg-info text-dark';
+            userRoleSpan.style.cursor = '';
+            userRoleSpan.title = '';
+            userRoleSpan.onclick = null;
             document.getElementById('nav-cadastro').classList.remove('d-md-inline-flex');
             document.getElementById('nav-cadastro-usuario').classList.add('d-md-inline-flex');
           } else {
             currentUserRole = null;
             userRoleSpan.textContent = 'Sem perfil';
             userRoleSpan.className = 'badge bg-secondary';
+            userRoleSpan.style.cursor = '';
+            userRoleSpan.title = '';
+            userRoleSpan.onclick = null;
           }
         }
       } else {
