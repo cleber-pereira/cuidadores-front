@@ -106,7 +106,8 @@
     border-color: #ccc;
     transform: translateY(-2px);
   }
-  #edit-nome[readonly] {
+  #edit-nome[readonly],
+  #edit-sobrenome[readonly] {
       background-color: #e9ecef;
       cursor: not-allowed;
   }

@@ -299,6 +299,7 @@
     // Preencher tela de edição (cuidador)
     async function preencherFormularioEdicao(perfil) {
       document.getElementById('edit-nome').value = perfil.nome || '';
+      document.getElementById('edit-sobrenome').value = perfil.sobrenome || '';
       document.getElementById('edit-whatsapp').value = perfil.whatsapp || '';
       document.getElementById('edit-preco').value = perfil.preco || '';
       document.getElementById('edit-exp').value = perfil.experiencia || 'Menos de 1 ano';
@@ -1026,6 +1027,7 @@
       if (!session) { showToast('Você precisa estar logado para se cadastrar como cuidador.', 'warning'); abrirModalLogin(); return; }
 
       const nome = document.getElementById('cad-nome').value.trim();
+      const sobrenome = document.getElementById('cad-sobrenome').value.trim();
       const area_atuacao = getCidadesSelecionadas('cad-cidade-check');
       const whatsapp = document.getElementById('cad-whatsapp').value.trim().replace(/\D/g, '');
       const preco = parseFloat(document.getElementById('cad-preco').value);
@@ -1035,8 +1037,8 @@
       const servicos = Array.from(document.querySelectorAll('#servicos-check input:checked')).map(el => el.parentElement.textContent.trim());
       const fotoInput = document.getElementById('cad-foto-input');
 
-      if (!nome || !area_atuacao.length || !whatsapp || !preco /* || !fotoInput.files[0] */ || !sobre) {
-        showToast('Preencha nome, área de atuação, WhatsApp, preço e sobre você!', 'danger');
+      if (!nome || !sobrenome || !area_atuacao.length || !whatsapp || !preco /* || !fotoInput.files[0] */ || !sobre) {
+        showToast('Preencha nome, sobrenome, área de atuação, WhatsApp, preço e sobre você!', 'danger');
         return;
       }
 
@@ -1062,7 +1064,7 @@
 
       btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Publicando perfil...';
       const { error } = await supabase.from('cuidadores').insert([{
-        nome, area_atuacao, whatsapp, preco, experiencia, sobre, servicos, quero_verificacao, foto_url,
+        nome, sobrenome, area_atuacao, whatsapp, preco, experiencia, sobre, servicos, quero_verificacao, foto_url,
         disponivel: false, avaliacao: 5.0, total_reviews: 0, id: session.user.id
       }]);
       btn.disabled = false;
