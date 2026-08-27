@@ -331,7 +331,10 @@
     // Preencher tela de edição (cuidador)
     async function preencherFormularioEdicao(perfil) {
       const campoLink = document.getElementById('edit-link-perfil');
-      if (campoLink) campoLink.value = gerarLinkPerfil(perfil);
+      const linkPerfil = gerarLinkPerfil(perfil);
+      if (campoLink) campoLink.value = linkPerfil;
+      const btnAcessar = document.getElementById('btn-acessar-link-perfil');
+      if (btnAcessar) btnAcessar.href = linkPerfil;
       document.getElementById('edit-nome').value = perfil.nome || '';
       document.getElementById('edit-sobrenome').value = perfil.sobrenome || '';
       document.getElementById('edit-whatsapp').value = perfil.whatsapp || '';
