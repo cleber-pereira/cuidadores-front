@@ -293,7 +293,25 @@
 
     // Modal
     const modal = document.getElementById('loginModal');
-    function abrirModalLogin() { modal.style.display = 'flex'; }
+    function abrirModalLogin(mensagem) {
+      const googleBtn = document.getElementById('google-login');
+      let msgEl = document.getElementById('login-modal-msg');
+      if (mensagem) {
+        if (!msgEl && googleBtn) {
+          msgEl = document.createElement('p');
+          msgEl.id = 'login-modal-msg';
+          msgEl.className = 'text-muted small mb-3';
+          googleBtn.parentNode.insertBefore(msgEl, googleBtn);
+        }
+        if (msgEl) {
+          msgEl.textContent = mensagem;
+          msgEl.style.display = 'block';
+        }
+      } else if (msgEl) {
+        msgEl.style.display = 'none';
+      }
+      modal.style.display = 'flex';
+    }
     function fecharModalLogin() { modal.style.display = 'none'; }
 
     //   document.getElementById('login-button').addEventListener('click', abrirModalLogin);
@@ -1259,7 +1277,7 @@
 
         if (!session) {
           localStorage.setItem('intencao', 'c');
-          abrirModalLogin();
+          abrirModalLogin(vindoDeLinkCadastro ? 'Faça login para continuar seu cadastro como cuidador.' : undefined);
           return;
         }
         const perfil = await verificarPerfilAtivo(session.user.id);
@@ -1293,6 +1311,18 @@
       document.getElementById('nav-cadastro').addEventListener('click', handleSouCuidador);
       document.getElementById('hero-cadastro').addEventListener('click', handleSouCuidador);
       document.getElementById('func-cadastro').addEventListener('click', handleSouCuidador);
+
+      // Link direto para o cadastro de cuidador: ?ir=cadastro
+      // Ex.: https://seusite.com/?ir=cadastro
+      const irDireto = urlParams.get('ir');
+      let vindoDeLinkCadastro = false;
+      if (irDireto === 'cadastro') {
+        vindoDeLinkCadastro = true;
+        handleSouCuidador();
+        const urlSemParam = new URL(window.location.href);
+        urlSemParam.searchParams.delete('ir');
+        window.history.replaceState({}, '', urlSemParam);
+      }
       document.getElementById('hero-como-funciona').addEventListener('click', () => goTo('como-funciona'));
       document.getElementById('nav-cadastro-usuario').addEventListener('click', handleSouUsuario);
       document.getElementById('hero-cadastro-usuario').addEventListener('click', handleSouUsuario);
