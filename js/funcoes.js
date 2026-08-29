@@ -25,7 +25,7 @@
     if (metricas != '1' && !local) {
       console.log('metric')
       const { data, error: errorSelect } = await supabase
-        .from('metricas')
+        .from('c_metricas')
         .select('visitas')
         .eq('id', 1)
         .single();
@@ -35,7 +35,7 @@
         const { ip } = await res.json();
         async function registrarVisita() {
           const { error } = await supabase
-            .from('metricas')
+            .from('c_metricas')
             .update({
               visitas: data.visitas + 1,
               ultimo_ip: ip
@@ -133,7 +133,7 @@
 
     async function obterAlias() {
       const { data, error } = await supabase
-        .from('cuidadores')
+        .from('c_cuidadores')
         .select(`id,nome,cuidador_visitas!inner (id)`)
 
       if (error) {
@@ -157,7 +157,7 @@
       resultado.sort((a, b) => a.ALIAS.localeCompare(b.ALIAS))
 
       if (aliasEspecifico) {
-        const { data: cuidadorAtualizado, error: erroCuidador } = await supabase.from('cuidadores').select('*').eq('id', aliasEspecifico.IDENTIFICADOR).single();
+        const { data: cuidadorAtualizado, error: erroCuidador } = await supabase.from('c_cuidadores').select('*').eq('id', aliasEspecifico.IDENTIFICADOR).single();
 
         if (erroCuidador || !cuidadorAtualizado) {
           showToast('Perfil não encontrado', 'danger');
@@ -187,7 +187,7 @@
         userInfo.style.display = 'flex';
 
         // Determinar papel (cuidador ou usuario)
-        const { data: cuidador } = await supabase.from('cuidadores').select('id').eq('id', user.id).single();
+        const { data: cuidador } = await supabase.from('c_cuidadores').select('id').eq('id', user.id).single();
         if (cuidador) {
           currentUserRole = 'cuidador';
           userRoleSpan.textContent = 'Cuidador';
@@ -204,7 +204,7 @@
           document.getElementById('nav-cadastro').classList.add('d-md-inline-flex');
           document.getElementById('nav-cadastro-usuario').classList.remove('d-md-inline-flex');
         } else {
-          const { data: usuario } = await supabase.from('usuarios').select('id').eq('id', user.id).single();
+          const { data: usuario } = await supabase.from('c_usuarios').select('id').eq('id', user.id).single();
           if (usuario) {
             currentUserRole = 'usuario';
             userRoleSpan.textContent = 'Usuário';
@@ -333,7 +333,7 @@
 
     // Verificação de perfil (cuidador)
     async function verificarPerfilAtivo(userId) {
-      const { data, error } = await supabase.from('cuidadores').select('*').eq('id', userId).single();
+      const { data, error } = await supabase.from('c_cuidadores').select('*').eq('id', userId).single();
       if (error && error.code !== 'PGRST116') { console.error('Erro ao verificar perfil:', error); return null; }
       return data;
     }
@@ -346,7 +346,7 @@
         goTo('editar');
       } else {
         // Verifica se é usuário comum
-        const { data: usuario } = await supabase.from('usuarios').select('id', 'nome').eq('id', user.id).single();
+        const { data: usuario } = await supabase.from('c_usuarios').select('id', 'nome').eq('id', user.id).single();
         if (user) {
           // showToast('Bem-vindo de volta, ' + usuario.nome + '!');
           goTo('home');
@@ -447,7 +447,7 @@
         }
 
         // ATUALIZAÇÃO DE CUIDADOR (REATIVADO)
-        const { error } = await supabase.from('cuidadores').update({
+        const { error } = await supabase.from('c_cuidadores').update({
           nome, area_atuacao, whatsapp, preco, experiencia, sobre, servicos, quero_verificacao, foto_url
         }).eq('id', session.user.id);
 
@@ -498,7 +498,7 @@
           foto_url = urlData.publicUrl;
         }
 
-        const { error } = await supabase.from('usuarios').insert([{
+        const { error } = await supabase.from('c_usuarios').insert([{
           id: session.user.id, nome, cidade, whatsapp, foto_url
         }]);
         if (error) throw new Error(error.message);
@@ -555,14 +555,14 @@
       8
       if (metricas != '1' && !local) {
         const { data, error: errorSelect } = await supabase
-          .from('cuidador_visitas')
+          .from('c_cuidador_visitas')
           .select('id,visitas')
           .eq('cuidador', id)
           .single();
 
         if (!errorSelect) {
           const { error } = await supabase
-            .from('cuidador_visitas')
+            .from('c_cuidador_visitas')
             .update({
               visitas: data.visitas + 1
             })
@@ -575,7 +575,7 @@
       const el = document.getElementById('p-avaliacoes');
       el.innerHTML = '<div class="text-muted small">Carregando avaliações...</div>';
       const { data, error } = await supabase
-        .from('avaliacoes')
+        .from('c_avaliacoes')
         .select(`
             *,
             usuarios (
@@ -653,7 +653,7 @@
       const cuidadorId = perfilAtual.id;
 
       // Buscar nome do usuário
-      const { data: usuario } = await supabase.from('usuarios').select('nome').eq('id', session.user.id).single();
+      const { data: usuario } = await supabase.from('c_usuarios').select('nome').eq('id', session.user.id).single();
       if (!usuario) { showToast('Perfil de usuário não encontrado.', 'danger'); return; }
 
       const btn = document.getElementById('btn-enviar-avaliacao');
@@ -661,7 +661,7 @@
       btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Enviando...';
 
       // Inserir avaliação (o trigger cuidará da atualização da soma e dos campos do cuidador)
-      const { error: insertErr } = await supabase.from('avaliacoes').insert([{
+      const { error: insertErr } = await supabase.from('c_avaliacoes').insert([{
         cuidador_id: cuidadorId,
         user_id: session.user.id,
         nome_cliente: usuario.nome,
@@ -681,7 +681,7 @@
       /*
       // Atualizar soma
       const { data: somaData } = await supabase
-        .from('cuidadores')
+        .from('c_cuidadores')
         .select('avaliacao, total_reviews')
         .eq('id', cuidadorId)
         .single();
@@ -690,7 +690,7 @@
         const novaSoma = 1 + somaData.total_reviews;
         const novaMedia = (somaData.avaliacao + avaliacaoNota) / novaSoma;
         const { error: somaErr } = await supabase
-          .from('cuidadores')
+          .from('c_cuidadores')
           .update({
             avaliacao: novaMedia,
             total_reviews: novaSoma
@@ -706,7 +706,7 @@
       }
       */
       // Recarregar o perfil do cuidador para mostrar os dados atualizados
-      const { data: cuidadorAtualizado } = await supabase.from('cuidadores').select('*').eq('id', cuidadorId).single();
+      const { data: cuidadorAtualizado } = await supabase.from('c_cuidadores').select('*').eq('id', cuidadorId).single();
       if (cuidadorAtualizado) {
         perfilAtual = cuidadorAtualizado;
         renderPerfil(perfilAtual);
@@ -775,7 +775,7 @@
           }); */
         try {
           const { error } = await supabase
-            .from("mensagens")
+            .from("c_mensagens")
             .insert([{
               cuidador: cuidadorId,
               nome: nomeInput.value,
@@ -833,7 +833,7 @@
     // + checklists de área de atuação (cadastro/edição, múltiplas cidades)
     async function carregarCidades() {
       try {
-        const { data, error } = await supabase.from('cidades').select('id,nome').order('nome');
+        const { data, error } = await supabase.from('c_cidades').select('id,nome').order('nome');
         if (error) throw error;
         todasCidades = data || [];
 
@@ -1026,7 +1026,7 @@
       if (sorteio == 1)
         asc = false;
 
-      let query = supabase.from('cuidadores').select('*').order(campo, { ascending: asc }).eq('disponivel', true);
+      let query = supabase.from('c_cuidadores').select('*').order(campo, { ascending: asc }).eq('disponivel', true);
 
       if (fc) {
         // Um cuidador aparece se a cidade buscada estiver na área dele,
@@ -1133,7 +1133,7 @@
       }
 
       btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Publicando perfil...';
-      const { error } = await supabase.from('cuidadores').insert([{
+      const { error } = await supabase.from('c_cuidadores').insert([{
         nome, sobrenome, area_atuacao, whatsapp, preco, experiencia, sobre, servicos, quero_verificacao, foto_url,
         disponivel: false, avaliacao: 5.0, total_reviews: 0, id: session.user.id
       }]);
@@ -1295,7 +1295,7 @@
           abrirModalLogin();
           return;
         }
-        const { data: usuario } = await supabase.from('usuarios').select('id').eq('id', session.user.id).single();
+        const { data: usuario } = await supabase.from('c_usuarios').select('id').eq('id', session.user.id).single();
         if (usuario) {
           showToast('Você já possui um perfil de usuário.');
           goTo('home');
