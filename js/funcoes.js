@@ -134,7 +134,7 @@
     async function obterAlias() {
       const { data, error } = await supabase
         .from('c_cuidadores')
-        .select(`id,nome,cuidador_visitas!inner (id)`)
+        .select(`id,nome,c_cuidador_visitas!inner (id)`)
 
       if (error) {
         console.error('Erro:', error)
@@ -578,7 +578,7 @@
         .from('c_avaliacoes')
         .select(`
             *,
-            usuarios (
+            usuarios:c_usuarios (
                 nome,
                 foto_url
             )
