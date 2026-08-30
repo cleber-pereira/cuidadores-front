@@ -30,8 +30,8 @@
 
   .btn-brand{background:var(--brand);color:#fff;border:none;border-radius:.75rem;font-weight:600;letter-spacing:.02em;transition:background .2s,transform .15s,box-shadow .2s;}
   .btn-brand:hover{background:var(--brand-mid);color:#fff;transform:translateY(-2px);box-shadow:0 8px 24px rgba(26,107,74,.3);}
-  .btn-accent{background:var(--accent);color:var(--dark);border:none;border-radius:.75rem;font-weight:700;transition:background .2s,transform .15s;}
-  .btn-accent:hover{background:#e89520;color:var(--dark);transform:translateY(-2px);}
+  .btn-accent{background:var(--accent);color:#333;border:none;border-radius:.75rem;font-weight:700;transition:background .2s,transform .15s;}
+  .btn-accent:hover{background:#e89520;color:#fff;transform:translateY(-2px);}
   .btn-outline-brand{border:2px solid var(--brand);color:var(--brand);border-radius:.75rem;font-weight:600;background:transparent;transition:all .2s;}
   .btn-outline-brand:hover{background:var(--brand);color:#fff;}
   .btn-whatsapp{background:#25d366;color:#fff;border:none;border-radius:.85rem;font-size:1.1rem;font-weight:700;padding:.9rem 2.2rem;transition:background .2s,transform .15s,box-shadow .2s;}
@@ -251,30 +251,33 @@
      Cores individuais dos botões da navbar
      ========================================================== */
   #nav-cadastro {
-    border-color: #E08A3E;
-    color: #E08A3E;
+    background: #F4A65A;
+    border-color: #F4A65A;
+    color: #333;
   }
   #nav-cadastro:hover {
-    background: #E08A3E;
-    border-color: #E08A3E;
+    background: #e8923d;
+    border-color: #e8923d;
     color: #fff;
   }
   #nav-cadastro-usuario {
-    border-color: #3B82C4;
-    color: #3B82C4;
+    background: #7FB8E0;
+    border-color: #7FB8E0;
+    color: #333;
   }
   #nav-cadastro-usuario:hover {
-    background: #3B82C4;
-    border-color: #3B82C4;
+    background: #5fa3d3;
+    border-color: #5fa3d3;
     color: #fff;
   }
   #nav-vagas {
-    border-color: #8B5CF6;
-    color: #8B5CF6;
+    background: #C4A6F0;
+    border-color: #C4A6F0;
+    color: #333;
   }
   #nav-vagas:hover {
-    background: #8B5CF6;
-    border-color: #8B5CF6;
+    background: #ac85ea;
+    border-color: #ac85ea;
     color: #fff;
   }
 
@@ -284,45 +287,45 @@
   #hero-cadastro {
     background: #F4A65A;
     border-color: #F4A65A;
-    color: #1a1a1a;
+    color: #333;
   }
   #hero-cadastro:hover {
     background: #e8923d;
     border-color: #e8923d;
-    color: #1a1a1a;
+    color: #fff;
     transform: translateY(-2px);
   }
   #hero-cadastro-usuario {
     background: #7FB8E0;
     border-color: #7FB8E0;
-    color: #1a1a1a;
+    color: #333;
   }
   #hero-cadastro-usuario:hover {
     background: #5fa3d3;
     border-color: #5fa3d3;
-    color: #1a1a1a;
+    color: #fff;
     transform: translateY(-2px);
   }
   #hero-vagas {
     background: #C4A6F0;
     border-color: #C4A6F0;
-    color: #1a1a1a;
+    color: #333;
   }
   #hero-vagas:hover {
     background: #ac85ea;
     border-color: #ac85ea;
-    color: #1a1a1a;
+    color: #fff;
     transform: translateY(-2px);
   }
   #hero-como-funciona {
     background: #8FD9C4;
     border-color: #8FD9C4;
-    color: #1a1a1a;
+    color: #333;
   }
   #hero-como-funciona:hover {
     background: #6cc9ae;
     border-color: #6cc9ae;
-    color: #1a1a1a;
+    color: #fff;
     transform: translateY(-2px);
   }
 
