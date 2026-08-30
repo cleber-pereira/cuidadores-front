@@ -31,6 +31,25 @@
         .replace(/\s+/g, '-');
     }
 
+    // Só exibe o elemento com a imagem de fundo se ela realmente carregar;
+    // se faltar URL ou o carregamento falhar (link quebrado, 404, etc.),
+    // o elemento permanece escondido em vez de mostrar um quadrado vazio.
+    function carregarImagemDeFundo(el, url) {
+      if (!el) return;
+      el.classList.add('d-none');
+      if (!url) return;
+
+      const img = new Image();
+      img.onload = () => {
+        el.style.backgroundImage = `url('${url}')`;
+        el.classList.remove('d-none');
+      };
+      img.onerror = () => {
+        el.classList.add('d-none');
+      };
+      img.src = url;
+    }
+
     function obterDiretorioAtual() {
       const caminho = window.location.pathname;
       return caminho.substring(0, caminho.lastIndexOf('/') + 1);
@@ -219,7 +238,7 @@
           col.innerHTML = `
             <a href="${gerarLinkArtigo(a)}" class="text-decoration-none" data-artigo-card="${a.id}">
               <div class="artigo-card h-100">
-                <div class="artigo-card-img" style="background-image:url('${a.imagem_capa || ''}')"></div>
+                <div class="artigo-card-img d-none"></div>
                 <div class="p-3">
                   ${a.categoria ? `<span class="artigo-categoria-chip mb-2 d-inline-block">${a.categoria}</span>` : ''}
                   <h5 class="artigo-card-titulo mb-2">${a.titulo}</h5>
@@ -231,6 +250,8 @@
                 </div>
               </div>
             </a>`;
+
+          carregarImagemDeFundo(col.querySelector('.artigo-card-img'), a.imagem_capa);
 
           col.querySelector('[data-artigo-card]').addEventListener('click', () => {
             // Salva exatamente onde o usuário estava (página + rolagem + qual artigo clicou)
@@ -362,10 +383,7 @@
         if (metaDesc) metaDesc.setAttribute('content', a.meta_descricao || resumirTexto(a.resumo || a.conteudo, 155));
 
         const capaEl = document.getElementById('artigo-capa');
-        if (capaEl) {
-          if (a.imagem_capa) { capaEl.style.backgroundImage = `url('${a.imagem_capa}')`; }
-          else { capaEl.classList.add('d-none'); }
-        }
+        carregarImagemDeFundo(capaEl, a.imagem_capa);
 
         setTexto('artigo-categoria', a.categoria);
         setTexto('artigo-titulo', a.titulo);
