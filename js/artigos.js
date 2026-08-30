@@ -31,11 +31,70 @@
         .replace(/\s+/g, '-');
     }
 
-    // Gera o link amigável do artigo: título sem acentos (espaços -> traço) + segunda parte do id
+    function obterDiretorioAtual() {
+      const caminho = window.location.pathname;
+      return caminho.substring(0, caminho.lastIndexOf('/') + 1);
+    }
+
+    // Gera o link amigável e ABSOLUTO do artigo (usado no href dos cards e no compartilhamento)
     function gerarLinkArtigo(artigo) {
       const segundaParteId = (artigo.id || '').split('-')[1] || artigo.id || '';
       const aliasArtigo = `${slugNome(artigo.titulo)}-${segundaParteId}`;
-      return `artigo.html?a=${aliasArtigo}`;
+      return `${window.location.origin}${obterDiretorioAtual()}artigo.html?a=${aliasArtigo}`;
+    }
+
+    // Toast flutuante simples, independente de Bootstrap, usado nas páginas de artigos
+    function mostrarToast(msg, tipo = 'success') {
+      let el = document.getElementById('artigos-toast-flutuante');
+      if (!el) {
+        el = document.createElement('div');
+        el.id = 'artigos-toast-flutuante';
+        document.body.appendChild(el);
+      }
+      el.className = `artigos-toast ${tipo}`;
+      el.textContent = msg;
+      // força reflow para reiniciar a transição caso o toast já esteja visível
+      void el.offsetWidth;
+      el.classList.add('show');
+      clearTimeout(el._timeoutId);
+      el._timeoutId = setTimeout(() => el.classList.remove('show'), 3000);
+    }
+
+    // Compartilha o artigo via Web Share API (mobile) com fallback de copiar o link
+    async function compartilharArtigo(artigo) {
+      const link = gerarLinkArtigo(artigo);
+
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: artigo.titulo, text: 'Confira este artigo do CuidaDF:', url: link });
+          return;
+        } catch (e) {
+          // Usuário cancelou o compartilhamento nativo ou o navegador falhou; cai no fallback de copiar.
+        }
+      }
+
+      const copiarFallback = () => {
+        const temp = document.createElement('input');
+        temp.value = link;
+        document.body.appendChild(temp);
+        temp.select();
+        temp.setSelectionRange(0, 99999);
+        try {
+          document.execCommand('copy');
+          mostrarToast('Link do artigo copiado!');
+        } catch (e) {
+          mostrarToast('Não foi possível copiar o link.', 'danger');
+        }
+        document.body.removeChild(temp);
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(link).then(() => {
+          mostrarToast('Link do artigo copiado!');
+        }).catch(copiarFallback);
+      } else {
+        copiarFallback();
+      }
     }
 
     function resumirTexto(texto, limite = 140) {
@@ -287,6 +346,9 @@
       }
 
       renderArtigo(artigo);
+
+      const btnCompartilhar = document.getElementById('artigo-compartilhar');
+      if (btnCompartilhar) btnCompartilhar.addEventListener('click', () => compartilharArtigo(artigo));
 
       // Incrementa visualizações de forma assíncrona, sem travar a renderização
       supabase.rpc('incrementar_visualizacao_artigo', { artigo_id: artigo.id }).then(() => { });
