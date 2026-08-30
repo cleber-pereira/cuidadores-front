@@ -282,40 +282,48 @@
      Cores individuais dos botões do hero (fundo escuro)
      ========================================================== */
   #hero-cadastro {
-    border-color: #F4A65A;
-    color: #F4A65A;
-  }
-  #hero-cadastro:hover {
     background: #F4A65A;
     border-color: #F4A65A;
     color: #1a1a1a;
   }
-  #hero-cadastro-usuario {
-    border-color: #7FB8E0;
-    color: #7FB8E0;
+  #hero-cadastro:hover {
+    background: #e8923d;
+    border-color: #e8923d;
+    color: #1a1a1a;
+    transform: translateY(-2px);
   }
-  #hero-cadastro-usuario:hover {
+  #hero-cadastro-usuario {
     background: #7FB8E0;
     border-color: #7FB8E0;
     color: #1a1a1a;
   }
-  #hero-vagas {
-    border-color: #C4A6F0;
-    color: #C4A6F0;
+  #hero-cadastro-usuario:hover {
+    background: #5fa3d3;
+    border-color: #5fa3d3;
+    color: #1a1a1a;
+    transform: translateY(-2px);
   }
-  #hero-vagas:hover {
+  #hero-vagas {
     background: #C4A6F0;
     border-color: #C4A6F0;
     color: #1a1a1a;
   }
-  #hero-como-funciona {
-    border-color: #8FD9C4;
-    color: #8FD9C4;
+  #hero-vagas:hover {
+    background: #ac85ea;
+    border-color: #ac85ea;
+    color: #1a1a1a;
+    transform: translateY(-2px);
   }
-  #hero-como-funciona:hover {
+  #hero-como-funciona {
     background: #8FD9C4;
     border-color: #8FD9C4;
     color: #1a1a1a;
+  }
+  #hero-como-funciona:hover {
+    background: #6cc9ae;
+    border-color: #6cc9ae;
+    color: #1a1a1a;
+    transform: translateY(-2px);
   }
 
   /* ==========================================================
