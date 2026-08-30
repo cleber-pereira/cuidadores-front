@@ -126,9 +126,47 @@
     queryString = window.location.search;
     urlParams = new URLSearchParams(queryString);
     const alias = urlParams.get('alias');
+    const vagaAliasParam = urlParams.get('vaga');
 
     if (alias != null) {
       obterAlias();
+    }
+    if (vagaAliasParam != null) {
+      obterVagaPorAlias(vagaAliasParam);
+    }
+
+    // Resolve o link amigável de uma vaga (?vaga=slug-do-titulo-id) para o registro real
+    // e abre a modal de detalhes, do mesmo jeito que obterAlias() faz para perfis de cuidador.
+    async function obterVagaPorAlias(aliasParam) {
+      const { data, error } = await supabase
+        .from('c_vagas')
+        .select('id,titulo')
+        .eq('ativa', true);
+
+      if (error) {
+        console.error('Erro:', error);
+        showToast('Não foi possível carregar a vaga.', 'danger');
+        return;
+      }
+
+      const resultado = (data || []).map(item => {
+        const segundaParteId = item.id.split('-')[1] || item.id;
+        return {
+          ALIAS: `${slugNome(item.titulo)}-${segundaParteId}`,
+          IDENTIFICADOR: item.id
+        };
+      });
+
+      const aliasEspecifico = resultado.find(item => item.ALIAS === aliasParam);
+
+      if (!aliasEspecifico) {
+        showToast('Vaga não encontrada ou não está mais disponível.', 'warning');
+        return;
+      }
+
+      goTo('vagas');
+      await carregarVagas();
+      abrirVagaModal(aliasEspecifico.IDENTIFICADOR);
     }
 
     async function obterAlias() {
@@ -391,6 +429,13 @@
       const segundaParteId = (perfil.id || '').split('-')[1] || perfil.id || '';
       const alias = `${slugNome(perfil.nome)}-${segundaParteId}`;
       return `${window.location.origin}${window.location.pathname}?alias=${alias}`;
+    }
+
+    // Gera o link direto de uma vaga: título sem acentos (espaços -> traço) + segunda parte do id
+    function gerarLinkVaga(vaga) {
+      const segundaParteId = (vaga.id || '').split('-')[1] || vaga.id || '';
+      const alias = `${slugNome(vaga.titulo)}-${segundaParteId}`;
+      return `${window.location.origin}${window.location.pathname}?vaga=${alias}`;
     }
 
     // Preencher tela de edição (cuidador)
@@ -1128,6 +1173,7 @@
     // marcar quais o cuidador logado já registrou interesse.
     let vagasCache = [];
     let vagasCandidatadasCache = new Set();
+    let vagaModalAtual = null; // vaga atualmente exibida na modal (usado para gerar o link de compartilhamento)
 
     function resumirTexto(texto, limite = 140) {
       if (!texto) return '';
@@ -1195,6 +1241,8 @@
     function abrirVagaModal(vagaId) {
       const v = vagasCache.find(x => x.id === vagaId);
       if (!v) return;
+
+      vagaModalAtual = v;
 
       const jaCandidatado = vagasCandidatadasCache.has(v.id);
       const detalhes = [v.tipo_contrato, v.carga_horaria, v.remuneracao].filter(Boolean).join(' · ');
@@ -1447,6 +1495,42 @@
       document.getElementById('cadastro-usuario-voltar').addEventListener('click', () => goTo('home'));
       document.getElementById('vagas-voltar').addEventListener('click', () => goTo('home'));
       document.getElementById('close-vaga-modal').addEventListener('click', fecharVagaModal);
+      document.getElementById('vaga-modal-compartilhar').addEventListener('click', async () => {
+        if (!vagaModalAtual) return;
+        const link = gerarLinkVaga(vagaModalAtual);
+
+        if (navigator.share) {
+          try {
+            await navigator.share({ title: vagaModalAtual.titulo, text: 'Confira esta vaga:', url: link });
+            return;
+          } catch (e) {
+            // Usuário cancelou o compartilhamento nativo ou o navegador falhou; cai no fallback de copiar.
+          }
+        }
+
+        const copiarFallback = () => {
+          const temp = document.createElement('input');
+          temp.value = link;
+          document.body.appendChild(temp);
+          temp.select();
+          temp.setSelectionRange(0, 99999);
+          try {
+            document.execCommand('copy');
+            showToast('Link da vaga copiado!');
+          } catch (e) {
+            showToast('Não foi possível copiar o link', 'danger');
+          }
+          document.body.removeChild(temp);
+        };
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(link).then(() => {
+            showToast('Link da vaga copiado!');
+          }).catch(copiarFallback);
+        } else {
+          copiarFallback();
+        }
+      });
       document.getElementById('vagaModal').addEventListener('click', (e) => {
         if (e.target.id === 'vagaModal') fecharVagaModal();
       });
