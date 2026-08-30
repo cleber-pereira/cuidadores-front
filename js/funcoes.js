@@ -1151,7 +1151,7 @@
             <div class="small text-muted mb-1"><i class="bi bi-geo-alt me-1"></i>${v.cidade}</div>
             ${detalhes ? `<div class="small text-muted mb-3"><i class="bi bi-briefcase me-1"></i>${detalhes}</div>` : ''}
             <p class="small mb-3">${resumirTexto(v.descricao)}</p>
-            <div class="small fw-600" style="color:var(--brand)">Ver vaga completa <i class="bi bi-arrow-right"></i></div>
+              <div class="btn btn-brand btn-sm px-3">Ver vaga completa <i class="bi bi-arrow-right"></i></div>
             ${jaCandidatado ? '<div class="small text-muted mt-2"><i class="bi bi-check2 me-1"></i>Você já se candidatou</div>' : ''}
           </div>`;
         col.querySelector('[data-vaga-id]').addEventListener('click', () => abrirVagaModal(v.id));
