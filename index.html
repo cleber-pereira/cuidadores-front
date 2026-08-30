@@ -111,6 +111,9 @@
         <button class="btn btn-sm btn-outline-brand d-none d-md-inline-flex" id="nav-cadastro-usuario">
           <i class="bi bi-person me-1"></i>Sou Usuário
         </button>
+        <button class="btn btn-sm btn-outline-brand d-none d-md-inline-flex" id="nav-vagas">
+          <i class="bi bi-briefcase me-1"></i>Vagas
+        </button>
         <div id="auth-area"></div>
         <button class="btn btn-sm btn-brand" id="nav-buscar">
           <i class="bi bi-search me-1"></i>Buscar
@@ -163,6 +166,27 @@
     </div>
   </div>
 
+  <!-- MODAL VAGA COMPLETA -->
+  <div id="vagaModal" class="login-modal">
+    <div class="modal-content text-start">
+      <div class="vaga-modal-body">
+        <h4 class="mb-1" id="vaga-modal-titulo"></h4>
+        <div class="small text-muted mb-1" id="vaga-modal-empresa"></div>
+        <div class="small text-muted mb-1"><i class="bi bi-geo-alt me-1"></i><span id="vaga-modal-cidade"></span></div>
+        <div class="small text-muted mb-3" id="vaga-modal-detalhes"></div>
+        <p class="mb-3" id="vaga-modal-descricao" style="white-space:pre-line"></p>
+        <div id="vaga-modal-requisitos-wrap" class="mb-3">
+          <strong class="small">Requisitos:</strong>
+          <p class="small text-muted mb-0" id="vaga-modal-requisitos"></p>
+        </div>
+      </div>
+      <div class="vaga-modal-footer">
+        <button class="btn btn-brand w-100 mb-2" id="vaga-modal-candidatar">Candidatar-se</button>
+        <button id="close-vaga-modal" class="btn btn-outline-brand w-100">Fechar</button>
+      </div>
+    </div>
+  </div>
+
   <!-- HOME -->
   <div id="screen-home" class="screen active">
     <div class="hero-wrap">
@@ -187,6 +211,9 @@
               <button class="btn btn-outline-light btn-lg px-4" id="hero-cadastro-usuario">
                 <i class="fas fa-user"></i>
                 Sou Usuário</button>
+              <button class="btn btn-outline-light btn-lg px-4" id="hero-vagas">
+                <i class="fas fa-briefcase"></i>
+                Vagas</button>
               <button class="btn btn-outline-light btn-lg px-4" id="hero-como-funciona">
                 <i class="fas fa-circle-info me-2"></i>
                 Como Funciona
@@ -760,6 +787,17 @@
               </a>
             </p>
       </div>
+    </div>
+  </div>
+
+  <!-- VAGAS -->
+  <div id="screen-vagas" class="screen">
+    <div class="container py-4">
+      <button class="btn btn-sm btn-outline-brand mb-3" id="vagas-voltar"><i
+          class="bi bi-arrow-left me-1"></i>Voltar</button>
+      <h4 class="font-display mb-1">Vagas de emprego</h4>
+      <p class="text-muted small mb-4">Oportunidades para cuidadores cadastradas pela equipe do CuidaDF.</p>
+      <div class="row g-4" id="vagas-cards"></div>
     </div>
   </div>
 

@@ -169,6 +169,13 @@
     #hero-cadastro-usuario a {
       width: 100%;
     }
+    #hero-vagas {
+      width: 100%;
+    }
+    #hero-vagas button,
+    #hero-vagas a {
+      width: 100%;
+    }
     #hero-cadastro {
       width: 100%;
     }
@@ -238,4 +245,124 @@
     overflow-y:auto;
     font-size:14px;
     line-height:1.6;
+  }
+
+  /* ==========================================================
+     Cores individuais dos botões da navbar
+     ========================================================== */
+  #nav-cadastro {
+    border-color: #E08A3E;
+    color: #E08A3E;
+  }
+  #nav-cadastro:hover {
+    background: #E08A3E;
+    border-color: #E08A3E;
+    color: #fff;
+  }
+  #nav-cadastro-usuario {
+    border-color: #3B82C4;
+    color: #3B82C4;
+  }
+  #nav-cadastro-usuario:hover {
+    background: #3B82C4;
+    border-color: #3B82C4;
+    color: #fff;
+  }
+  #nav-vagas {
+    border-color: #8B5CF6;
+    color: #8B5CF6;
+  }
+  #nav-vagas:hover {
+    background: #8B5CF6;
+    border-color: #8B5CF6;
+    color: #fff;
+  }
+
+  /* ==========================================================
+     Cores individuais dos botões do hero (fundo escuro)
+     ========================================================== */
+  #hero-cadastro {
+    border-color: #F4A65A;
+    color: #F4A65A;
+  }
+  #hero-cadastro:hover {
+    background: #F4A65A;
+    border-color: #F4A65A;
+    color: #1a1a1a;
+  }
+  #hero-cadastro-usuario {
+    border-color: #7FB8E0;
+    color: #7FB8E0;
+  }
+  #hero-cadastro-usuario:hover {
+    background: #7FB8E0;
+    border-color: #7FB8E0;
+    color: #1a1a1a;
+  }
+  #hero-vagas {
+    border-color: #C4A6F0;
+    color: #C4A6F0;
+  }
+  #hero-vagas:hover {
+    background: #C4A6F0;
+    border-color: #C4A6F0;
+    color: #1a1a1a;
+  }
+  #hero-como-funciona {
+    border-color: #8FD9C4;
+    color: #8FD9C4;
+  }
+  #hero-como-funciona:hover {
+    background: #8FD9C4;
+    border-color: #8FD9C4;
+    color: #1a1a1a;
+  }
+
+  /* ==========================================================
+     Modal de vaga: rolagem interna (evita travar a página quando
+     a descrição é longa) + barra de rolagem visível na direita
+     ========================================================== */
+  #vagaModal {
+    overflow-y: auto;
+    padding: 2rem 1rem;
+  }
+  #vagaModal .modal-content {
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    padding-right: 0;
+    overflow: hidden;
+  }
+  .vaga-modal-body {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: .75rem 1.25rem .75rem .75rem;
+    background: #f7f7f7;
+    border-radius: .6rem;
+    /* Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: var(--brand) #f0f0f0;
+  }
+  .vaga-modal-footer {
+    flex-shrink: 0;
+    padding-top: 1rem;
+    padding-right: 1.25rem;
+    margin-top: .5rem;
+    border-top: 1px solid var(--border);
+  }
+  /* Barra de rolagem mais visível (Chrome, Edge, Safari) */
+  .vaga-modal-body::-webkit-scrollbar {
+    width: 14px;
+  }
+  .vaga-modal-body::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+  }
+  .vaga-modal-body::-webkit-scrollbar-thumb {
+    background-color: var(--brand);
+    border-radius: 10px;
+    border: 2px solid #f0f0f0;
+  }
+  .vaga-modal-body::-webkit-scrollbar-thumb:hover {
+    background-color: var(--brand-mid);
   }

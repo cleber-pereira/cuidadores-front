@@ -821,6 +821,7 @@
           if (id === 'perfil' && perfilAtual) renderPerfil(perfilAtual);
           if (id === 'whatsapp' && perfilAtual) renderWhatsapp(perfilAtual);
           if (id === 'como-funciona') renderComoFunciona();
+          if (id === 'vagas') carregarVagas();
         });
       }, current ? 160 : 0);
     }
@@ -1091,6 +1092,167 @@
       });
     }
 
+    // Carregar lista de vagas de emprego (cadastradas pelo admin) e
+    // marcar quais o cuidador logado já se candidatou.
+    let vagasCache = [];
+    let vagasCandidatadasCache = new Set();
+
+    function resumirTexto(texto, limite = 140) {
+      if (!texto) return '';
+      if (texto.length <= limite) return texto;
+      const cortado = texto.slice(0, limite);
+      const ultimoEspaco = cortado.lastIndexOf(' ');
+      return cortado.slice(0, ultimoEspaco > 0 ? ultimoEspaco : limite) + '…';
+    }
+
+    async function carregarVagas() {
+      const container = document.getElementById('vagas-cards');
+      container.innerHTML = `<div class="col-12 text-center py-5"><div class="spinner-border text-success" role="status"></div><div class="text-muted mt-3 small">Buscando vagas...</div></div>`;
+
+      const { data: vagas, error } = await supabase
+        .from('c_vagas')
+        .select('*')
+        .eq('ativa', true)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        container.innerHTML = `<div class="col-12"><div class="alert alert-danger">Erro: ${error.message}</div></div>`;
+        return;
+      }
+
+      vagasCache = vagas || [];
+
+      if (vagasCache.length === 0) {
+        container.innerHTML = `<div class="col-12 text-center py-5"><i class="bi bi-briefcase fs-1 text-muted"></i><p class="mt-3 text-muted">Nenhuma vaga disponível no momento.</p></div>`;
+        return;
+      }
+
+      // Descobre quais vagas o cuidador logado (se houver) já se candidatou.
+      vagasCandidatadasCache = new Set();
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session && currentUserRole === 'cuidador') {
+        const { data: candidaturas } = await supabase
+          .from('c_candidaturas')
+          .select('vaga_id')
+          .eq('cuidador_id', session.user.id);
+        vagasCandidatadasCache = new Set((candidaturas || []).map(c => c.vaga_id));
+      }
+
+      container.innerHTML = '';
+      vagasCache.forEach((v) => {
+        const col = document.createElement('div');
+        col.className = 'col-md-6 col-lg-4';
+        const jaCandidatado = vagasCandidatadasCache.has(v.id);
+        const detalhes = [v.tipo_contrato, v.carga_horaria, v.remuneracao].filter(Boolean).join(' · ');
+        col.innerHTML = `
+          <div class="cuidador-card h-100 p-4" style="cursor:pointer" data-vaga-id="${v.id}">
+            <div class="fw-700 mb-1">${v.titulo}</div>
+            ${v.empresa ? `<div class="small text-muted mb-2">${v.empresa}</div>` : ''}
+            <div class="small text-muted mb-1"><i class="bi bi-geo-alt me-1"></i>${v.cidade}</div>
+            ${detalhes ? `<div class="small text-muted mb-3"><i class="bi bi-briefcase me-1"></i>${detalhes}</div>` : ''}
+            <p class="small mb-3">${resumirTexto(v.descricao)}</p>
+            <div class="small fw-600" style="color:var(--brand)">Ver vaga completa <i class="bi bi-arrow-right"></i></div>
+            ${jaCandidatado ? '<div class="small text-muted mt-2"><i class="bi bi-check2 me-1"></i>Você já se candidatou</div>' : ''}
+          </div>`;
+        col.querySelector('[data-vaga-id]').addEventListener('click', () => abrirVagaModal(v.id));
+        container.appendChild(col);
+      });
+    }
+
+    // Abre o modal com a vaga completa a partir do cache carregado em carregarVagas().
+    function abrirVagaModal(vagaId) {
+      const v = vagasCache.find(x => x.id === vagaId);
+      if (!v) return;
+
+      const jaCandidatado = vagasCandidatadasCache.has(v.id);
+      const detalhes = [v.tipo_contrato, v.carga_horaria, v.remuneracao].filter(Boolean).join(' · ');
+
+      document.getElementById('vaga-modal-titulo').textContent = v.titulo;
+      document.getElementById('vaga-modal-empresa').textContent = v.empresa || '';
+      document.getElementById('vaga-modal-empresa').style.display = v.empresa ? '' : 'none';
+      document.getElementById('vaga-modal-cidade').textContent = v.cidade;
+      document.getElementById('vaga-modal-detalhes').textContent = detalhes;
+      document.getElementById('vaga-modal-detalhes').style.display = detalhes ? '' : 'none';
+      document.getElementById('vaga-modal-descricao').textContent = v.descricao;
+
+      const reqWrap = document.getElementById('vaga-modal-requisitos-wrap');
+      if (v.requisitos) {
+        reqWrap.style.display = '';
+        document.getElementById('vaga-modal-requisitos').textContent = v.requisitos;
+      } else {
+        reqWrap.style.display = 'none';
+      }
+
+      const btn = document.getElementById('vaga-modal-candidatar');
+      if (jaCandidatado) {
+        btn.className = 'btn btn-outline-secondary w-100 mb-2';
+        btn.innerHTML = '<i class="bi bi-check2 me-1"></i>Você já se candidatou';
+        btn.disabled = true;
+      } else {
+        btn.className = 'btn btn-brand w-100 mb-2';
+        btn.innerHTML = 'Candidatar-se';
+        btn.disabled = false;
+        btn.onclick = () => candidatarVaga(v.id, btn);
+      }
+
+      document.getElementById('vagaModal').style.display = 'flex';
+    }
+
+    function fecharVagaModal() {
+      document.getElementById('vagaModal').style.display = 'none';
+    }
+
+    // Cuidador logado se candidata a uma vaga.
+    async function candidatarVaga(vagaId, btn) {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        showToast('Você precisa estar logado para se candidatar.', 'warning');
+        abrirModalLogin();
+        return;
+      }
+      if (currentUserRole !== 'cuidador') {
+        showToast('Somente cuidadores cadastrados podem se candidatar às vagas.', 'warning');
+        return;
+      }
+
+      btn.disabled = true;
+      const textoOriginal = btn.innerHTML;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Enviando...';
+
+      const { error } = await supabase.from('c_candidaturas').insert([{
+        vaga_id: vagaId,
+        cuidador_id: session.user.id
+      }]);
+
+      if (error) {
+        // Código 23505 = violação de unicidade (vaga_id, cuidador_id) — já se candidatou antes.
+        if (error.code === '23505') {
+          showToast('Você já havia se candidatado a essa vaga.', 'info');
+          vagasCandidatadasCache.add(vagaId);
+          btn.className = 'btn btn-outline-secondary w-100 mb-2';
+          btn.innerHTML = '<i class="bi bi-check2 me-1"></i>Você já se candidatou';
+          return;
+        }
+        showToast('Erro ao enviar candidatura: ' + error.message, 'danger');
+        btn.disabled = false;
+        btn.innerHTML = textoOriginal;
+        return;
+      }
+
+      vagasCandidatadasCache.add(vagaId);
+      showToast('Candidatura enviada com sucesso!');
+      btn.className = 'btn btn-outline-secondary w-100 mb-2';
+      btn.innerHTML = '<i class="bi bi-check2 me-1"></i>Você já se candidatou';
+      // Atualiza o card da lista por trás do modal também.
+      const cardBtn = document.querySelector(`[data-vaga-id="${vagaId}"]`);
+      if (cardBtn && !cardBtn.querySelector('.text-muted.mt-2')) {
+        const aviso = document.createElement('div');
+        aviso.className = 'small text-muted mt-2';
+        aviso.innerHTML = '<i class="bi bi-check2 me-1"></i>Você já se candidatou';
+        cardBtn.appendChild(aviso);
+      }
+    }
+
     // Cadastro de cuidador (criação)
     async function salvarCadastro() {
       const { data: { session } } = await supabase.auth.getSession();
@@ -1249,6 +1411,11 @@
         }
       });
       document.getElementById('cadastro-usuario-voltar').addEventListener('click', () => goTo('home'));
+      document.getElementById('vagas-voltar').addEventListener('click', () => goTo('home'));
+      document.getElementById('close-vaga-modal').addEventListener('click', fecharVagaModal);
+      document.getElementById('vagaModal').addEventListener('click', (e) => {
+        if (e.target.id === 'vagaModal') fecharVagaModal();
+      });
       document.getElementById('btn-cadastrar').addEventListener('click', salvarCadastro);
       document.getElementById('btn-atualizar').addEventListener('click', (e) => atualizarPerfil(e));
       document.getElementById('btn-cadastrar-usuario').addEventListener('click', salvarCadastroUsuario);
@@ -1326,6 +1493,8 @@
       document.getElementById('hero-como-funciona').addEventListener('click', () => goTo('como-funciona'));
       document.getElementById('nav-cadastro-usuario').addEventListener('click', handleSouUsuario);
       document.getElementById('hero-cadastro-usuario').addEventListener('click', handleSouUsuario);
+      document.getElementById('nav-vagas').addEventListener('click', () => goTo('vagas'));
+      document.getElementById('hero-vagas').addEventListener('click', () => goTo('vagas'));
 
       // Avaliação modal
       document.getElementById('btn-avaliar-cuidador').addEventListener('click', abrirModalAvaliacao);
