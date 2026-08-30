@@ -340,17 +340,49 @@
 
     async function redirecionarAposLogin(user) {
       if (!user) return;
+      const vagaPendente = localStorage.getItem('candidaturaPendente');
       const perfil = await verificarPerfilAtivo(user.id);
       if (perfil) {
+        if (vagaPendente) {
+          localStorage.removeItem('candidaturaPendente');
+          currentUserRole = 'cuidador';
+          await candidatarAposLogin(vagaPendente);
+          return;
+        }
         await preencherFormularioEdicao(perfil);
         goTo('editar');
       } else {
         // Verifica se é usuário comum
         const { data: usuario } = await supabase.from('c_usuarios').select('id', 'nome').eq('id', user.id).single();
         if (user) {
+          if (vagaPendente) {
+            // Cuidador ainda sem perfil: precisa completar o cadastro antes de poder se candidatar.
+            showToast('Complete seu cadastro de cuidador para se candidatar a esta vaga.', 'info');
+            goTo('cadastro');
+            return;
+          }
           // showToast('Bem-vindo de volta, ' + usuario.nome + '!');
           goTo('home');
         }
+      }
+    }
+
+    // Após login vindo de uma candidatura pendente: abre a vaga e confirma o interesse automaticamente.
+    async function candidatarAposLogin(vagaId) {
+      document.querySelectorAll('.screen').forEach(el => {
+        el.classList.remove('active', 'leaving');
+        el.style.display = 'none';
+      });
+      const screenVagas = document.getElementById('screen-vagas');
+      screenVagas.style.display = 'block';
+      screenVagas.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      await carregarVagas();
+      abrirVagaModal(vagaId);
+      const btn = document.getElementById('vaga-modal-candidatar');
+      if (btn && !btn.disabled) {
+        await candidatarVaga(vagaId, btn);
       }
     }
 
@@ -1206,8 +1238,10 @@
     async function candidatarVaga(vagaId, btn) {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
+        localStorage.setItem('intencao', 'c');
+        localStorage.setItem('candidaturaPendente', vagaId);
         showToast('Você precisa estar logado para se candidatar.', 'warning');
-        abrirModalLogin();
+        abrirModalLogin('Faça login como cuidador para se candidatar a esta vaga.');
         return;
       }
       if (currentUserRole !== 'cuidador') {
@@ -1427,12 +1461,22 @@
       const intc = urlParams.get('intc');
 
       if (intc != '' && intc != null) {
-        if (localStorage.getItem('intencao') == 'c') {
-          handleSouCuidador();
-        }
-        if (localStorage.getItem('intencao') == 'u') {
-          handleSouUsuario();
-        }
+        (async () => {
+          const { data: { session } } = await supabase.auth.getSession();
+          const vagaPendente = localStorage.getItem('candidaturaPendente');
+          if (session && vagaPendente) {
+            // Login via Google recarrega a página; delega para a mesma lógica
+            // usada no login por e-mail/senha, que já sabe tratar a vaga pendente.
+            await redirecionarAposLogin(session.user);
+          } else {
+            if (localStorage.getItem('intencao') == 'c') {
+              handleSouCuidador();
+            }
+            if (localStorage.getItem('intencao') == 'u') {
+              handleSouUsuario();
+            }
+          }
+        })();
         let queryString = new URL(window.location.href);
         queryString.searchParams.delete('intc');
         window.history.replaceState({}, '', queryString);
