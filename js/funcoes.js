@@ -1093,7 +1093,7 @@
     }
 
     // Carregar lista de vagas de emprego (cadastradas pelo admin) e
-    // marcar quais o cuidador logado já se candidatou.
+    // marcar quais o cuidador logado já registrou interesse.
     let vagasCache = [];
     let vagasCandidatadasCache = new Set();
 
@@ -1127,7 +1127,7 @@
         return;
       }
 
-      // Descobre quais vagas o cuidador logado (se houver) já se candidatou.
+      // Descobre quais vagas o cuidador logado (se houver) já registrou interesse.
       vagasCandidatadasCache = new Set();
       const { data: { session } } = await supabase.auth.getSession();
       if (session && currentUserRole === 'cuidador') {
@@ -1152,7 +1152,7 @@
             ${detalhes ? `<div class="small text-muted mb-3"><i class="bi bi-briefcase me-1"></i>${detalhes}</div>` : ''}
             <p class="small mb-3">${resumirTexto(v.descricao)}</p>
               <div class="btn btn-brand btn-sm px-3">Ver vaga completa <i class="bi bi-arrow-right"></i></div>
-            ${jaCandidatado ? '<div class="small text-muted mt-2"><i class="bi bi-check2 me-1"></i>Você já se candidatou</div>' : ''}
+            ${jaCandidatado ? '<div class="small text-muted mt-2"><i class="bi bi-check2 me-1"></i>Você já registrou interesse</div>' : ''}
           </div>`;
         col.querySelector('[data-vaga-id]').addEventListener('click', () => abrirVagaModal(v.id));
         container.appendChild(col);
@@ -1186,11 +1186,11 @@
       const btn = document.getElementById('vaga-modal-candidatar');
       if (jaCandidatado) {
         btn.className = 'btn btn-outline-secondary w-100 mb-2';
-        btn.innerHTML = '<i class="bi bi-check2 me-1"></i>Você já se candidatou';
+        btn.innerHTML = '<i class="bi bi-check2 me-1"></i>Você já registrou interesse';
         btn.disabled = true;
       } else {
         btn.className = 'btn btn-brand w-100 mb-2';
-        btn.innerHTML = 'Candidatar-se';
+        btn.innerHTML = 'Tenho interesse';
         btn.disabled = false;
         btn.onclick = () => candidatarVaga(v.id, btn);
       }
@@ -1225,12 +1225,12 @@
       }]);
 
       if (error) {
-        // Código 23505 = violação de unicidade (vaga_id, cuidador_id) — já se candidatou antes.
+        // Código 23505 = violação de unicidade (vaga_id, cuidador_id) — já registrou interesse antes.
         if (error.code === '23505') {
           showToast('Você já havia se candidatado a essa vaga.', 'info');
           vagasCandidatadasCache.add(vagaId);
           btn.className = 'btn btn-outline-secondary w-100 mb-2';
-          btn.innerHTML = '<i class="bi bi-check2 me-1"></i>Você já se candidatou';
+          btn.innerHTML = '<i class="bi bi-check2 me-1"></i>Você já registrou interesse';
           return;
         }
         showToast('Erro ao enviar candidatura: ' + error.message, 'danger');
@@ -1242,13 +1242,13 @@
       vagasCandidatadasCache.add(vagaId);
       showToast('Candidatura enviada com sucesso!');
       btn.className = 'btn btn-outline-secondary w-100 mb-2';
-      btn.innerHTML = '<i class="bi bi-check2 me-1"></i>Você já se candidatou';
+      btn.innerHTML = '<i class="bi bi-check2 me-1"></i>Você já registrou interesse';
       // Atualiza o card da lista por trás do modal também.
       const cardBtn = document.querySelector(`[data-vaga-id="${vagaId}"]`);
       if (cardBtn && !cardBtn.querySelector('.text-muted.mt-2')) {
         const aviso = document.createElement('div');
         aviso.className = 'small text-muted mt-2';
-        aviso.innerHTML = '<i class="bi bi-check2 me-1"></i>Você já se candidatou';
+        aviso.innerHTML = '<i class="bi bi-check2 me-1"></i>Você já registrou interesse';
         cardBtn.appendChild(aviso);
       }
     }
