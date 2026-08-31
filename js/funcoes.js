@@ -113,6 +113,76 @@
       new bootstrap.Toast(el, { delay: 3500 }).show();
     }
 
+    // Exibe uma lista com TODOS os erros de validação encontrados na tentativa
+    // de envio, em vez de mostrar apenas o primeiro problema encontrado.
+    function showToastErros(erros, titulo = 'Corrija os campos abaixo:') {
+      if (!erros || !erros.length) return;
+      const el = document.getElementById('toast-ok');
+      el.className = `toast align-items-center text-bg-danger border-0`;
+      const listaHtml = erros.map(e => `<li>${e}</li>`).join('');
+      document.getElementById('toast-msg').innerHTML =
+        `<i class="bi bi-exclamation-circle-fill me-2"></i>${titulo}` +
+        `<ul class="mb-0 ps-3 mt-1">${listaHtml}</ul>`;
+      // Tempo maior para dar tempo de ler vários erros de uma vez
+      new bootstrap.Toast(el, { delay: 3500 + erros.length * 1200 }).show();
+    }
+
+    // ===================================================================
+    // Validações de campos — cada função valida UM único campo e retorna
+    // a mensagem de erro correspondente (string) ou null quando está OK.
+    // Mantê-las separadas facilita reaproveitar as mesmas regras entre o
+    // cadastro e a edição, além de deixar claro qual regra falhou.
+    // ===================================================================
+    function validarNome(nome) {
+      if (!nome || !nome.trim()) return 'Informe o nome.';
+      if (nome.trim().length < 2) return 'O nome deve ter pelo menos 2 caracteres.';
+      return null;
+    }
+
+    function validarSobrenome(sobrenome) {
+      if (!sobrenome || !sobrenome.trim()) return 'Informe o sobrenome.';
+      return null;
+    }
+
+    function validarAreaAtuacao(areaAtuacao) {
+      if (!areaAtuacao || !areaAtuacao.length) return 'Selecione ao menos uma área de atuação.';
+      return null;
+    }
+
+    function validarCidade(cidade) {
+      if (!cidade) return 'Selecione a cidade.';
+      return null;
+    }
+
+    function validarWhatsapp(whatsapp) {
+      if (!whatsapp) return 'Informe o número de WhatsApp.';
+      if (whatsapp.length < 10 || whatsapp.length > 11) return 'Informe um WhatsApp válido, com DDD (10 ou 11 dígitos).';
+      return null;
+    }
+
+    function validarPreco(preco) {
+      if (preco === undefined || preco === null || isNaN(preco)) return 'Informe o preço do plantão.';
+      if (preco !== -1 && preco <= 0) return 'O preço deve ser maior que zero (ou marque como "a combinar").';
+      return null;
+    }
+
+    function validarSobre(sobre) {
+      if (!sobre || !sobre.trim()) return 'Preencha o campo "Sobre você".';
+      if (sobre.trim().length < 20) return 'O campo "Sobre você" deve ter pelo menos 20 caracteres.';
+      return null;
+    }
+
+    function validarFoto(file) {
+      if (file && file.size > 500 * 1024) return 'A foto deve ter no máximo 500 KB.';
+      return null;
+    }
+
+    // Executa uma lista de funções de validação (cada uma retornando erro ou null)
+    // e devolve apenas as mensagens de erro que realmente ocorreram.
+    function coletarErros(validacoes) {
+      return validacoes.filter(Boolean);
+    }
+
     function expToAnos(str) {
       const m = (str || '').match(/\d+/);
       return m ? parseInt(m[0]) : 0;
@@ -486,8 +556,17 @@
       const servicos = Array.from(document.querySelectorAll('#edit-servicos-check input:checked')).map(el => el.parentElement.textContent.trim());
       const fotoInput = document.getElementById('edit-foto-input');
 
-      if (!nome || !area_atuacao.length || !whatsapp || !preco || !sobre) {
-        showToast('Preencha todos os campos obrigatórios (inclua ao menos uma área de atuação)!', 'danger');
+      const erros = coletarErros([
+        validarNome(nome),
+        validarAreaAtuacao(area_atuacao),
+        validarWhatsapp(whatsapp),
+        validarPreco(preco),
+        validarSobre(sobre),
+        validarFoto(fotoInput.files && fotoInput.files[0])
+      ]);
+
+      if (erros.length) {
+        showToastErros(erros);
         return;
       }
 
@@ -550,8 +629,15 @@
       const whatsapp = document.getElementById('user-whatsapp').value.trim().replace(/\D/g, '');
       const fotoInput = document.getElementById('user-foto-input');
 
-      if (!nome || !cidade || !whatsapp) {
-        showToast('Preencha nome, cidade e WhatsApp!', 'danger');
+      const erros = coletarErros([
+        validarNome(nome),
+        validarCidade(cidade),
+        validarWhatsapp(whatsapp),
+        validarFoto(fotoInput.files && fotoInput.files[0])
+      ]);
+
+      if (erros.length) {
+        showToastErros(erros);
         return;
       }
 
@@ -1351,8 +1437,18 @@
       const servicos = Array.from(document.querySelectorAll('#servicos-check input:checked')).map(el => el.parentElement.textContent.trim());
       const fotoInput = document.getElementById('cad-foto-input');
 
-      if (!nome || !sobrenome || !area_atuacao.length || !whatsapp || !preco /* || !fotoInput.files[0] */ || !sobre) {
-        showToast('Preencha nome, sobrenome, área de atuação, WhatsApp, preço e sobre você!', 'danger');
+      const erros = coletarErros([
+        validarNome(nome),
+        validarSobrenome(sobrenome),
+        validarAreaAtuacao(area_atuacao),
+        validarWhatsapp(whatsapp),
+        validarPreco(preco),
+        validarSobre(sobre),
+        validarFoto(fotoInput.files && fotoInput.files[0])
+      ]);
+
+      if (erros.length) {
+        showToastErros(erros);
         return;
       }
 
