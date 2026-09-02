@@ -311,8 +311,13 @@
           };
           document.getElementById('nav-cadastro').classList.add('d-md-inline-flex');
           document.getElementById('nav-cadastro-usuario').classList.remove('d-md-inline-flex');
+          // Apenas cuidadores possuem mensagens recebidas para visualizar.
+          const navMensagens = document.getElementById('nav-mensagens');
+          if (navMensagens) navMensagens.style.display = 'inline-flex';
         } else {
           const { data: usuario } = await supabase.from('c_usuarios').select('id').eq('id', user.id).single();
+          const navMensagens = document.getElementById('nav-mensagens');
+          if (navMensagens) navMensagens.style.display = 'none';
           if (usuario) {
             currentUserRole = 'usuario';
             userRoleSpan.textContent = 'Usuário';
@@ -337,6 +342,8 @@
         //   loginBtn.style.display = 'inline-flex';
         userInfo.style.display = 'none';
         currentUserRole = null;
+        const navMensagens = document.getElementById('nav-mensagens');
+        if (navMensagens) navMensagens.style.display = 'none';
       }
     }
 
@@ -886,6 +893,104 @@
 
     let contMsg = 0;
     const tamanhoMsg = 300;
+
+    // Envia a mensagem para o cuidador (usado tanto no clique direto quanto
+    // na retomada automática após o login com Google) e limpa os campos
+    // do formulário quando o envio é concluído com sucesso.
+    async function enviarMensagemCuidador(dados, waLinkEl) {
+      const originalHtml = waLinkEl ? waLinkEl.innerHTML : '';
+      if (waLinkEl) {
+        waLinkEl.disabled = true;
+        waLinkEl.style.cursor = 'not-allowed';
+        waLinkEl.classList.add('opacity-50');
+        waLinkEl.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Enviando...';
+      }
+
+      try {
+        const { error } = await supabase
+          .from('c_mensagens')
+          .insert([dados]);
+
+        if (error) throw error;
+
+        showToast('Mensagem enviada com sucesso!', 'success');
+
+        // Limpa todos os campos do formulário após o envio
+        const whatsMsgEl = document.getElementById('wa-msg');
+        const whatsInputEl = document.getElementById('seu-whats');
+        const nomeInputEl = document.getElementById('seu-nome');
+        if (whatsMsgEl) whatsMsgEl.value = '';
+        if (whatsInputEl) whatsInputEl.value = '';
+        if (nomeInputEl) nomeInputEl.value = '';
+        const contadorEl = document.getElementById('contador');
+        contMsg = tamanhoMsg;
+        if (contadorEl) contadorEl.innerHTML = contMsg;
+
+        // Reabilita o botão de envio para permitir uma nova mensagem
+        if (waLinkEl) {
+          waLinkEl.disabled = false;
+          waLinkEl.style.cursor = '';
+          waLinkEl.classList.remove('opacity-50');
+          waLinkEl.innerHTML = originalHtml;
+        }
+
+        // Volta para o perfil do cuidador após o envio
+        goTo('perfil');
+      } catch (error) {
+        console.error(error);
+        showToast('Erro ao enviar mensagem.', 'danger');
+        if (waLinkEl) {
+          waLinkEl.disabled = false;
+          waLinkEl.style.cursor = '';
+          waLinkEl.classList.remove('opacity-50');
+          waLinkEl.innerHTML = originalHtml;
+        }
+      }
+    }
+
+    // Após login vindo de uma mensagem pendente: reabre a tela de envio de
+    // mensagem do mesmo cuidador (preenchida com os dados guardados), conclui
+    // o envio automaticamente e, ao final, volta para a tela de perfil desse
+    // cuidador (mesmo comportamento do envio feito diretamente pelo botão).
+    async function enviarMensagemPendenteAposLogin(dadosMensagem, userId) {
+      const { data: cuidador, error: erroCuidador } = await supabase
+        .from('c_cuidadores')
+        .select('*')
+        .eq('id', dadosMensagem.cuidador)
+        .single();
+
+      document.querySelectorAll('.screen').forEach(el => {
+        el.classList.remove('active', 'leaving');
+        el.style.display = 'none';
+      });
+      const screenWhatsapp = document.getElementById('screen-whatsapp');
+      if (screenWhatsapp) {
+        screenWhatsapp.style.display = 'block';
+        screenWhatsapp.classList.add('active');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (!erroCuidador && cuidador) {
+        perfilAtual = cuidador;
+        await renderWhatsapp(cuidador);
+      } else {
+        console.error('Erro ao carregar cuidador para reenvio da mensagem pendente:', erroCuidador);
+      }
+
+      // renderWhatsapp reseta a mensagem para o texto padrão; preenche de
+      // volta com os dados que o usuário havia digitado antes do login.
+      const whatsMsgEl = document.getElementById('wa-msg');
+      const whatsInputEl = document.getElementById('seu-whats');
+      const nomeInputEl = document.getElementById('seu-nome');
+      if (whatsMsgEl) whatsMsgEl.value = dadosMensagem.mensagem;
+      if (whatsInputEl) whatsInputEl.value = dadosMensagem.whatsapp;
+      if (nomeInputEl) nomeInputEl.value = dadosMensagem.nome;
+
+      dadosMensagem.usuario = userId;
+      const waLink = document.getElementById('wa-link');
+      await enviarMensagemCuidador(dadosMensagem, waLink);
+    }
+
     // WhatsApp
     async function renderWhatsapp(c) {
       const foto = c.foto_url || `https://duoobpxovvpxfgvvghgk.supabase.co/storage/v1/object/public/fotos-cuidadores/avatar-neutro.png`;
@@ -917,48 +1022,28 @@
           showToast('Você precisa digitar uma mensagem e informar seu nome e um WhatsApp válido para contato.', 'danger');
           return;
         }
-        waLink.disabled = true;
-        waLink.style.cursor = 'not-allowed';
-        waLink.classList.add('opacity-50');
-        const originalText = waLink.innerHTML;
-        waLink.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Enviando...';
-        const msg = encodeURIComponent(waMsg.value);
-        const msgCompleta = `*CuidaDF:* %0A ${nomeInput.value} enviou uma mensagem para ${c.nome} 55${c.whatsapp}: %0A ${msg} %0A Podemos conversar? %0A *Meu whatsapp:* ${whatsInput.value}`;
 
         const cuidadorId = c.id;
 
-        /* callMeBot(msgCompleta)
-          .then(() => showToast('Mensagem enviada com sucesso!', 'success'))
-          .catch(() => showToast('Erro ao enviar mensagem. Tente novamente.', 'danger'))
-          .finally(() => {
-            waLink.disabled = true;
-            waLink.style.cursor = 'not-allowed';
-            waLink.classList.add('opacity-50');
-            waLink.innerHTML = 'Mensagem enviada!';
-          }); */
-        try {
-          const { error } = await supabase
-            .from("c_mensagens")
-            .insert([{
-              cuidador: cuidadorId,
-              nome: nomeInput.value,
-              whatsapp: whatsInput.value,
-              mensagem: waMsg.value
-            }]);
+        const dadosMensagem = {
+          cuidador: cuidadorId,
+          nome: nomeInput.value,
+          whatsapp: whatsInput.value,
+          mensagem: whatsMsg.value
+        };
 
-          if (error) throw error;
-
-          showToast("Mensagem enviada com sucesso!", "success");
-
-        } catch (error) {
-          console.error(error);
-          showToast("Erro ao enviar mensagem.", "danger");
-        } finally {
-          waLink.disabled = true;
-          waLink.style.cursor = "not-allowed";
-          waLink.classList.add("opacity-50");
-          waLink.innerHTML = "Mensagem enviada!";
+        // Exige login com Google antes de enviar a mensagem
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          // Guarda a mensagem para ser enviada automaticamente assim que o
+          // login com Google for concluído (o login recarrega a página).
+          localStorage.setItem('mensagemPendente', JSON.stringify(dadosMensagem));
+          abrirModalLogin('Faça login com o Google para enviar sua mensagem.');
+          return;
         }
+
+        dadosMensagem.usuario = session.user.id;
+        await enviarMensagemCuidador(dadosMensagem, waLink);
       };
 
     }
@@ -985,6 +1070,7 @@
           if (id === 'whatsapp' && perfilAtual) renderWhatsapp(perfilAtual);
           if (id === 'como-funciona') renderComoFunciona();
           if (id === 'vagas') carregarVagas();
+          if (id === 'mensagens') carregarMensagensCuidador();
         });
       }, current ? 160 : 0);
     }
@@ -1323,6 +1409,56 @@
       });
     }
 
+    // Carrega as mensagens recebidas pelo cuidador logado, da mais recente
+    // para a mais antiga. Cada cuidador só vê as próprias mensagens: a
+    // consulta já filtra por cuidador = id do usuário logado, e o mesmo
+    // filtro deve existir como política de RLS na tabela c_mensagens para
+    // impedir que alguém acesse mensagens de outro cuidador via API.
+    async function carregarMensagensCuidador() {
+      const container = document.getElementById('mensagens-lista');
+      if (!container) return;
+      container.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-success" role="status"></div><div class="text-muted mt-3 small">Carregando mensagens...</div></div>`;
+
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session || currentUserRole !== 'cuidador') {
+        container.innerHTML = `<div class="alert alert-warning">Você precisa estar logado como cuidador para ver suas mensagens.</div>`;
+        return;
+      }
+
+      const { data: mensagens, error } = await supabase
+        .from('c_mensagens')
+        .select('*')
+        .eq('cuidador', session.user.id)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        container.innerHTML = `<div class="alert alert-danger">Erro ao carregar mensagens: ${error.message}</div>`;
+        return;
+      }
+
+      if (!mensagens || mensagens.length === 0) {
+        container.innerHTML = `<div class="text-center py-5"><i class="bi bi-chat-dots fs-1 text-muted"></i><p class="mt-3 text-muted">Você ainda não recebeu nenhuma mensagem.</p></div>`;
+        return;
+      }
+
+      container.innerHTML = '';
+      mensagens.forEach((m) => {
+        const dataFormatada = new Date(m.created_at).toLocaleString('pt-BR');
+        const whatsLink = (m.whatsapp || '').replace(/\D/g, '');
+        const card = document.createElement('div');
+        card.className = 'cuidador-card p-4 mb-3';
+        card.innerHTML = `
+          <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
+            <div class="fw-700">${m.nome}</div>
+            <span class="text-muted" style="font-size:.75rem">${dataFormatada}</span>
+          </div>
+          <p class="mb-3" style="white-space:pre-line">${m.mensagem || ''}</p>
+          ${whatsLink ? `<a class="btn btn-whatsapp btn-sm" href="https://wa.me/55${whatsLink}" target="_blank" rel="noopener"><i class="bi bi-whatsapp me-1"></i>Chamar no WhatsApp</a>` : ''}
+        `;
+        container.appendChild(card);
+      });
+    }
+
     // Abre o modal com a vaga completa a partir do cache carregado em carregarVagas().
     function abrirVagaModal(vagaId) {
       const v = vagasCache.find(x => x.id === vagaId);
@@ -1644,6 +1780,37 @@
         (async () => {
           const { data: { session } } = await supabase.auth.getSession();
           const vagaPendente = localStorage.getItem('candidaturaPendente');
+          const mensagemPendenteRaw = localStorage.getItem('mensagemPendente');
+
+          if (session && mensagemPendenteRaw) {
+            // Login via Google recarrega a página; retoma o envio da
+            // mensagem que estava pendente antes do login, permanecendo
+            // na tela de envio.
+            localStorage.removeItem('mensagemPendente');
+            try {
+              const dadosMensagem = JSON.parse(mensagemPendenteRaw);
+              await enviarMensagemPendenteAposLogin(dadosMensagem, session.user.id);
+            } catch (e) {
+              console.error('Erro ao reenviar mensagem pendente:', e);
+            }
+            return;
+          }
+
+          const destinoAposLogin = localStorage.getItem('destinoAposLogin');
+          if (session && destinoAposLogin === 'mensagens') {
+            // Login via Google recarrega a página; retoma o acesso direto
+            // à tela de mensagens (ex.: link vindo de ?ir=mensagens).
+            localStorage.removeItem('destinoAposLogin');
+            const perfilCuidador = await verificarPerfilAtivo(session.user.id);
+            if (perfilCuidador) {
+              goTo('mensagens');
+            } else {
+              showToast('A área de mensagens é exclusiva para cuidadores.', 'warning');
+              goTo('home');
+            }
+            return;
+          }
+
           if (session && vagaPendente) {
             // Login via Google recarrega a página; delega para a mesma lógica
             // usada no login por e-mail/senha, que já sabe tratar a vaga pendente.
@@ -1714,11 +1881,56 @@
         urlSemParam.searchParams.delete('ir');
         window.history.replaceState({}, '', urlSemParam);
       }
+
+      // Link direto para as mensagens do cuidador: ?ir=mensagens
+      // Ex.: https://seusite.com/?ir=mensagens
+      // Pensado para uso em notificações/Edge Functions (ex.: avisar o
+      // cuidador por WhatsApp que chegou uma nova mensagem, com um link que
+      // já abre a tela de mensagens). Exige login do cuidador.
+      if (irDireto === 'mensagens') {
+        handleIrMensagens();
+        const urlSemParam = new URL(window.location.href);
+        urlSemParam.searchParams.delete('ir');
+        window.history.replaceState({}, '', urlSemParam);
+      }
       document.getElementById('hero-como-funciona').addEventListener('click', () => goTo('como-funciona'));
       document.getElementById('nav-cadastro-usuario').addEventListener('click', handleSouUsuario);
       document.getElementById('hero-cadastro-usuario').addEventListener('click', handleSouUsuario);
+
+      // Abre diretamente a tela de mensagens do cuidador logado. Usada pelo
+      // link direto ?ir=mensagens (por exemplo, enviado por uma Edge Function
+      // quando uma nova mensagem chega para o cuidador). Exige login: se não
+      // houver sessão, guarda a intenção e abre o modal de login com Google;
+      // o fluxo é retomado automaticamente após o redirecionamento (ver
+      // bloco de tratamento do parâmetro "intc" mais abaixo).
+      async function handleIrMensagens() {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          localStorage.setItem('destinoAposLogin', 'mensagens');
+          abrirModalLogin('Faça login como cuidador para ver suas mensagens.');
+          return;
+        }
+        const perfilCuidador = await verificarPerfilAtivo(session.user.id);
+        if (!perfilCuidador) {
+          showToast('A área de mensagens é exclusiva para cuidadores.', 'warning');
+          goTo('home');
+          return;
+        }
+        goTo('mensagens');
+      }
       document.getElementById('nav-vagas').addEventListener('click', () => goTo('vagas'));
       document.getElementById('hero-vagas').addEventListener('click', () => goTo('vagas'));
+
+      // Botão "Mensagens" (visível somente para cuidadores logados)
+      document.getElementById('nav-mensagens').addEventListener('click', async () => {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session || currentUserRole !== 'cuidador') {
+          showToast('Você precisa estar logado como cuidador para ver suas mensagens.', 'warning');
+          return;
+        }
+        goTo('mensagens');
+      });
+      document.getElementById('mensagens-voltar').addEventListener('click', () => goTo('home'));
 
       // Avaliação modal
       document.getElementById('btn-avaliar-cuidador').addEventListener('click', abrirModalAvaliacao);

@@ -126,6 +126,9 @@
       </button> -->
         <div id="user-info" style="display:none;" class="d-flex align-items-center gap-2">
           <span id="user-role" class="badge bg-light text-dark"></span>
+          <button id="nav-mensagens" class="btn btn-sm btn-outline-brand" style="display:none;">
+            <i class="bi bi-chat-dots me-1"></i>Mensagens
+          </button>
           <button id="logout-button" class="btn btn-sm btn-outline-danger">Sair</button>
         </div>
       </div>
@@ -807,6 +810,18 @@
       <h4 class="font-display mb-1">Vagas de emprego</h4>
       <p class="text-muted small mb-4">Oportunidades para cuidadores cadastradas pela equipe do CuidaDF.</p>
       <div class="row g-4" id="vagas-cards"></div>
+    </div>
+  </div>
+
+  <!-- MINHAS MENSAGENS (CUIDADOR) -->
+  <div id="screen-mensagens" class="screen">
+    <div class="container py-4">
+      <button class="btn btn-sm btn-outline-brand mb-3" id="mensagens-voltar"><i
+          class="bi bi-arrow-left me-1"></i>Voltar</button>
+      <h4 class="font-display mb-1">Minhas mensagens</h4>
+      <p class="text-muted small mb-4">Mensagens enviadas por interessados no seu perfil, das mais recentes para as
+        mais antigas.</p>
+      <div id="mensagens-lista"></div>
     </div>
   </div>
 
