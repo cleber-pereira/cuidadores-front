@@ -88,6 +88,16 @@
     .cidade-selecionadas .chip-cidade i {
       cursor: pointer;
     }
+    #nav-mensagens {
+      padding: .3rem .5rem;
+      line-height: 1;
+    }
+    #nav-mensagens i.bi-envelope {
+      font-size: .8rem;
+    }
+    .btn-whatsapp.btn-sm i.bi-whatsapp {
+      font-size: .8rem;
+    }
   </style>
 </head>
 <!-- Google tag (gtag.js) -->
@@ -126,8 +136,10 @@
       </button> -->
         <div id="user-info" style="display:none;" class="d-flex align-items-center gap-2">
           <span id="user-role" class="badge bg-light text-dark"></span>
-          <button id="nav-mensagens" class="btn btn-sm btn-outline-brand" style="display:none;">
-            <i class="bi bi-chat-dots me-1"></i>Mensagens
+          <button id="nav-mensagens" class="btn btn-sm btn-outline-brand position-relative" style="display:none;" title="Mensagens">
+            <i class="bi bi-envelope"></i>
+            <span id="mensagens-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+              style="display:none;font-size:.62rem;">0</span>
           </button>
           <button id="logout-button" class="btn btn-sm btn-outline-danger">Sair</button>
         </div>

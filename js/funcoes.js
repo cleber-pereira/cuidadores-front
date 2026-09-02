@@ -314,10 +314,12 @@
           // Apenas cuidadores possuem mensagens recebidas para visualizar.
           const navMensagens = document.getElementById('nav-mensagens');
           if (navMensagens) navMensagens.style.display = 'inline-flex';
+          atualizarBadgeMensagensNaoLidas(user.id);
         } else {
           const { data: usuario } = await supabase.from('c_usuarios').select('id').eq('id', user.id).single();
           const navMensagens = document.getElementById('nav-mensagens');
           if (navMensagens) navMensagens.style.display = 'none';
+          ocultarBadgeMensagens();
           if (usuario) {
             currentUserRole = 'usuario';
             userRoleSpan.textContent = 'Usuário';
@@ -344,7 +346,40 @@
         currentUserRole = null;
         const navMensagens = document.getElementById('nav-mensagens');
         if (navMensagens) navMensagens.style.display = 'none';
+        ocultarBadgeMensagens();
       }
+    }
+
+    // Consulta quantas mensagens não lidas o cuidador tem e atualiza o
+    // badge numérico no ícone de envelope da navbar.
+    async function atualizarBadgeMensagensNaoLidas(cuidadorId) {
+      const badge = document.getElementById('mensagens-badge');
+      if (!badge) return;
+      const { count, error } = await supabase
+        .from('c_mensagens')
+        .select('id', { count: 'exact', head: true })
+        .eq('cuidador', cuidadorId)
+        .eq('lida', false);
+
+      if (error) {
+        console.error('Erro ao contar mensagens não lidas:', error);
+        return;
+      }
+
+      if (count && count > 0) {
+        badge.textContent = count > 99 ? '99+' : String(count);
+        badge.style.display = 'inline-block';
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+
+    // Esconde e zera o badge (usado ao deslogar ou quando o usuário não é cuidador).
+    function ocultarBadgeMensagens() {
+      const badge = document.getElementById('mensagens-badge');
+      if (!badge) return;
+      badge.style.display = 'none';
+      badge.textContent = '0';
     }
 
     // Autenticação
@@ -1029,7 +1064,8 @@
           cuidador: cuidadorId,
           nome: nomeInput.value,
           whatsapp: whatsInput.value,
-          mensagem: whatsMsg.value
+          mensagem: whatsMsg.value,
+          lida: false
         };
 
         // Exige login com Google antes de enviar a mensagem
@@ -1449,14 +1485,29 @@
         card.className = 'cuidador-card p-4 mb-3';
         card.innerHTML = `
           <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
-            <div class="fw-700">${m.nome}</div>
+            <div class="fw-700">${m.nome} ${!m.lida ? '<span class="badge bg-danger ms-1">Nova</span>' : ''}</div>
             <span class="text-muted" style="font-size:.75rem">${dataFormatada}</span>
           </div>
           <p class="mb-3" style="white-space:pre-line">${m.mensagem || ''}</p>
-          ${whatsLink ? `<a class="btn btn-whatsapp btn-sm" href="https://wa.me/55${whatsLink}" target="_blank" rel="noopener"><i class="bi bi-whatsapp me-1"></i>Chamar no WhatsApp</a>` : ''}
+          ${whatsLink ? `<a class="btn btn-whatsapp btn-sm" href="https://wa.me/55${whatsLink}" target="_blank" rel="noopener"><i class="bi bi-whatsapp me-1" style="font-size:.8rem"></i>Chamar no WhatsApp</a>` : ''}
         `;
         container.appendChild(card);
       });
+
+      // Marca como lidas as mensagens que acabaram de ser exibidas e
+      // atualiza o badge de não lidas na navbar.
+      const idsNaoLidos = mensagens.filter(m => !m.lida).map(m => m.id);
+      if (idsNaoLidos.length) {
+        const { error: erroLido } = await supabase
+          .from('c_mensagens')
+          .update({ lida: true })
+          .in('id', idsNaoLidos);
+        if (erroLido) {
+          console.error('Erro ao marcar mensagens como lidas:', erroLido);
+        } else {
+          atualizarBadgeMensagensNaoLidas(session.user.id);
+        }
+      }
     }
 
     // Abre o modal com a vaga completa a partir do cache carregado em carregarVagas().
