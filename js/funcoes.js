@@ -298,7 +298,7 @@
         const { data: cuidador } = await supabase.from('c_cuidadores').select('id').eq('id', user.id).single();
         if (cuidador) {
           currentUserRole = 'cuidador';
-          userRoleSpan.textContent = 'Cuidador';
+          userRoleSpan.textContent = 'Perfil';
           userRoleSpan.className = 'badge bg-success text-white';
           userRoleSpan.style.cursor = 'pointer';
           userRoleSpan.title = 'Editar meu perfil';
@@ -322,7 +322,7 @@
           ocultarBadgeMensagens();
           if (usuario) {
             currentUserRole = 'usuario';
-            userRoleSpan.textContent = 'Usuário';
+            userRoleSpan.textContent = 'Perfil';
             userRoleSpan.className = 'badge bg-info text-dark';
             userRoleSpan.style.cursor = '';
             userRoleSpan.title = '';
@@ -1484,30 +1484,70 @@
         const card = document.createElement('div');
         card.className = 'cuidador-card p-4 mb-3';
         card.innerHTML = `
-          <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
-            <div class="fw-700">${m.nome} ${!m.lida ? '<span class="badge bg-danger ms-1">Nova</span>' : ''}</div>
-            <span class="text-muted" style="font-size:.75rem">${dataFormatada}</span>
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mensagem-resumo" style="cursor:pointer">
+            <div class="fw-700">Mensagem de ${m.nome} ${!m.lida ? '<span class="badge bg-danger ms-1">Nova</span>' : ''}</div>
+            <div class="d-flex align-items-center gap-2">
+              <span class="text-muted" style="font-size:.75rem">${dataFormatada}</span>
+              <i class="bi bi-chevron-down mensagem-chevron text-muted"></i>
+            </div>
           </div>
-          <p class="mb-3" style="white-space:pre-line">${m.mensagem || ''}</p>
-          ${whatsLink ? `<a class="btn btn-whatsapp btn-sm" href="https://wa.me/55${whatsLink}" target="_blank" rel="noopener"><i class="bi bi-whatsapp me-1" style="font-size:.8rem"></i>Chamar no WhatsApp</a>` : ''}
+          <div class="mensagem-detalhes mt-3" style="display:none">
+            <p class="mb-3" style="white-space:pre-line">${m.mensagem || ''}</p>
+            ${whatsLink ? `<a class="btn btn-whatsapp btn-sm" href="https://wa.me/55${whatsLink}" target="_blank" rel="noopener"><i class="bi bi-whatsapp me-1" style="font-size:.8rem"></i>Chamar no WhatsApp</a>` : ''}
+          </div>
         `;
+
+        const resumo = card.querySelector('.mensagem-resumo');
+        const detalhes = card.querySelector('.mensagem-detalhes');
+        const chevron = card.querySelector('.mensagem-chevron');
+        let aberto = false;
+
+        resumo.addEventListener('click', async () => {
+          aberto = !aberto;
+          detalhes.style.display = aberto ? 'block' : 'none';
+          chevron.className = aberto ? 'bi bi-chevron-up mensagem-chevron text-muted' : 'bi bi-chevron-down mensagem-chevron text-muted';
+
+          // Ao exibir os detalhes, marca a mensagem como lida (se ainda não estiver).
+          if (aberto && !m.lida) {
+            m.lida = true;
+            const badgeNova = resumo.querySelector('.badge');
+            if (badgeNova) badgeNova.remove();
+
+            // Atualiza o indicador da navbar imediatamente, sem esperar a resposta do servidor.
+            const badgeNav = document.getElementById('mensagens-badge');
+            if (badgeNav) {
+              const atual = parseInt(badgeNav.textContent, 10) || 0;
+              const novoValor = Math.max(atual - 1, 0);
+              if (novoValor > 0) {
+                badgeNav.textContent = String(novoValor);
+                badgeNav.style.display = 'inline-block';
+              } else {
+                badgeNav.textContent = '0';
+                badgeNav.style.display = 'none';
+              }
+            }
+
+            const { data: dataLido, error: erroLido } = await supabase
+              .from('c_mensagens')
+              .update({ lida: true })
+              .eq('id', m.id)
+              .select();
+
+            if (erroLido) {
+              console.error('Erro ao marcar mensagem como lida:', erroLido);
+            } else if (!dataLido || dataLido.length === 0) {
+              // A query não retornou erro, mas também não alterou nenhuma linha —
+              // sinal clássico de que falta uma policy de UPDATE para "c_mensagens"
+              // no Supabase (RLS bloqueia silenciosamente, sem gerar erro).
+              console.warn('A mensagem não foi marcada como lida no banco: nenhuma linha foi atualizada. Verifique se existe uma policy de UPDATE para a tabela c_mensagens permitindo que o cuidador atualize suas próprias mensagens.');
+            }
+            // Reconfirma a contagem exata a partir do servidor.
+            atualizarBadgeMensagensNaoLidas(session.user.id);
+          }
+        });
+
         container.appendChild(card);
       });
-
-      // Marca como lidas as mensagens que acabaram de ser exibidas e
-      // atualiza o badge de não lidas na navbar.
-      const idsNaoLidos = mensagens.filter(m => !m.lida).map(m => m.id);
-      if (idsNaoLidos.length) {
-        const { error: erroLido } = await supabase
-          .from('c_mensagens')
-          .update({ lida: true })
-          .in('id', idsNaoLidos);
-        if (erroLido) {
-          console.error('Erro ao marcar mensagens como lidas:', erroLido);
-        } else {
-          atualizarBadgeMensagensNaoLidas(session.user.id);
-        }
-      }
     }
 
     // Abre o modal com a vaga completa a partir do cache carregado em carregarVagas().
