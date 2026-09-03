@@ -807,7 +807,7 @@
       document.getElementById('p-nome').textContent = nomePublico(c.nome);
       const areaTexto = (Array.isArray(c.area_atuacao) && c.area_atuacao.length) ? c.area_atuacao.join(', ') : 'Área não informada';
       document.getElementById('p-local').innerHTML = `<i class="bi bi-briefcase me-1"></i>${c.experiencia} de experiência`;
-      document.getElementById('p-area-intro').innerHTML = `<i class="bi bi-geo-alt me-1"></i>Atende em: ${areaTexto}`;
+      document.getElementById('p-area-intro').innerHTML = ''; ;//`<i class="bi bi-geo-alt me-1"></i>Atende em: ${areaTexto}`;
       document.getElementById('p-avaliacao').innerHTML = `${stars(c.avaliacao)} <span class="text-white ms-1 fw-600">${(c.avaliacao || 5).toFixed(1)}</span>`;
       document.getElementById('p-reviews').textContent = `(${c.total_reviews || 0} avaliações)`;
       if (c.preco !== -1) {
