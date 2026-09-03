@@ -211,6 +211,33 @@
       }
     }
 
+    // Registra leitura/compartilhamento de vagas e artigos na tabela
+    // c_clicks_naveg, via RPCs atômicas. Funciona para qualquer visitante,
+    // logado ou não.
+    async function registrarLeitura(tipo, id) {
+      if (!tipo || !id) return;
+      const fn = tipo === 'vaga' ? 'incrementar_leitura_vaga' : 'incrementar_leitura_artigo';
+      const params = tipo === 'vaga' ? { p_vaga: id } : { p_artigo: id };
+      try {
+        const { error } = await supabase.rpc(fn, params);
+        if (error) console.error('Erro ao registrar leitura:', error);
+      } catch (e) {
+        console.error('Erro em registrarLeitura:', e);
+      }
+    }
+
+    async function registrarCompartilhamento(tipo, id) {
+      if (!tipo || !id) return;
+      const fn = tipo === 'vaga' ? 'incrementar_compartilhamento_vaga' : 'incrementar_compartilhamento_artigo';
+      const params = tipo === 'vaga' ? { p_vaga: id } : { p_artigo: id };
+      try {
+        const { error } = await supabase.rpc(fn, params);
+        if (error) console.error('Erro ao registrar compartilhamento:', error);
+      } catch (e) {
+        console.error('Erro em registrarCompartilhamento:', e);
+      }
+    }
+
     // Registra um clique (WhatsApp ou Mensagens) para o cuidador na tabela
     // c_logs. Se ainda não existir uma linha para esse cuidador, ela é
     // criada com o campo em questão já valendo 1. Se já existir, o campo
@@ -1622,6 +1649,7 @@
       if (!v) return;
 
       vagaModalAtual = v;
+      registrarLeitura('vaga', v.id);
 
       const jaCandidatado = vagasCandidatadasCache.has(v.id);
       const detalhes = [v.tipo_contrato, v.carga_horaria, v.remuneracao].filter(Boolean).join(' · ');
@@ -1891,6 +1919,7 @@
         if (navigator.share) {
           try {
             await navigator.share({ title: vagaModalAtual.titulo, text: 'Confira esta vaga:', url: link });
+            registrarCompartilhamento('vaga', vagaModalAtual.id);
             return;
           } catch (e) {
             // Usuário cancelou o compartilhamento nativo ou o navegador falhou; cai no fallback de copiar.
@@ -1906,6 +1935,7 @@
           try {
             document.execCommand('copy');
             showToast('Link da vaga copiado!');
+            registrarCompartilhamento('vaga', vagaModalAtual.id);
           } catch (e) {
             showToast('Não foi possível copiar o link', 'danger');
           }
@@ -1915,6 +1945,7 @@
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(link).then(() => {
             showToast('Link da vaga copiado!');
+            registrarCompartilhamento('vaga', vagaModalAtual.id);
           }).catch(copiarFallback);
         } else {
           copiarFallback();
