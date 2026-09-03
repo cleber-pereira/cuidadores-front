@@ -198,6 +198,45 @@
       fetch(url);
     }
 
+    // Registra um clique (WhatsApp ou Mensagens) para o cuidador na tabela
+    // c_logs. Se ainda não existir uma linha para esse cuidador, ela é
+    // criada com o campo em questão já valendo 1. Se já existir, o campo
+    // é incrementado em 1 a partir do valor atual.
+    async function registrarClique(cuidadorId, campo) {
+      if (!cuidadorId || !campo) return;
+      try {
+        const { data: linha, error: erroSelect } = await supabase
+          .from('c_logs')
+          .select(campo)
+          .eq('cuidador', cuidadorId)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+        if (erroSelect) {
+          console.error('Erro ao consultar c_logs:', erroSelect);
+          return;
+        }
+
+        if (!linha) {
+          const { error: erroInsert } = await supabase
+            .from('c_logs')
+            .insert({ cuidador: cuidadorId, [campo]: 1 });
+          if (erroInsert) console.error('Erro ao criar linha em c_logs:', erroInsert);
+        } else {
+          const valorAtual = linha[campo] || 0;
+          const { error: erroUpdate } = await supabase
+            .from('c_logs')
+            .update({ [campo]: valorAtual + 1 })
+            .eq('cuidador', cuidadorId);
+          if (erroUpdate) console.error('Erro ao atualizar c_logs:', erroUpdate);
+        }
+      } catch (e) {
+        console.error('Erro em registrarClique:', e);
+      }
+    }
+
+
     queryString = window.location.search;
     urlParams = new URLSearchParams(queryString);
     const alias = urlParams.get('alias');
@@ -1058,7 +1097,7 @@
         const whatsMsg = document.getElementById('wa-msg');
         const whatsInput = document.getElementById('seu-whats');
         const nomeInput = document.getElementById('seu-nome');
-        if (whatsInput.value.length < 14 || nomeInput.value.length < 1) {
+        if (whatsInput.value.length < 15 || nomeInput.value.length < 1) {
           showToast('Você precisa digitar uma mensagem e informar seu nome e um WhatsApp válido para contato.', 'danger');
           return;
         }
@@ -1505,7 +1544,15 @@
         const resumo = card.querySelector('.mensagem-resumo');
         const detalhes = card.querySelector('.mensagem-detalhes');
         const chevron = card.querySelector('.mensagem-chevron');
+        const btnWhatsapp = card.querySelector('.btn-whatsapp');
         let aberto = false;
+
+        if (btnWhatsapp) {
+          btnWhatsapp.addEventListener('click', () => {
+            registrarClique(session.user.id, 'clicks_wa');
+          });
+        }
+
 
         resumo.addEventListener('click', async () => {
           aberto = !aberto;
@@ -2024,6 +2071,7 @@
           showToast('Você precisa estar logado como cuidador para ver suas mensagens.', 'warning');
           return;
         }
+        registrarClique(session.user.id, 'clicks_mensagem');
         goTo('mensagens');
       });
       document.getElementById('mensagens-voltar').addEventListener('click', () => goTo('home'));
