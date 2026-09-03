@@ -79,33 +79,9 @@
       el._timeoutId = setTimeout(() => el.classList.remove('show'), 3000);
     }
 
-    // Registra leitura/compartilhamento de artigo via RPC atômica no banco
-    // (mesmo padrão de registrarLeitura/registrarCompartilhamento em funcoes.js).
-    async function registrarLeituraArtigo(artigoId) {
-      if (!artigoId) return;
-      try {
-        const { error } = await supabase.rpc('incrementar_leitura_artigo', { p_artigo: artigoId });
-        if (error) console.error('Erro ao registrar leitura do artigo:', error);
-      } catch (e) {
-        console.error('Erro em registrarLeituraArtigo:', e);
-      }
-    }
-
-    async function registrarCompartilhamentoArtigo(artigoId) {
-      if (!artigoId) return;
-      try {
-        const { error } = await supabase.rpc('incrementar_compartilhamento_artigo', { p_artigo: artigoId });
-        if (error) console.error('Erro ao registrar compartilhamento do artigo:', error);
-      } catch (e) {
-        console.error('Erro em registrarCompartilhamentoArtigo:', e);
-      }
-    }
-
     // Compartilha o artigo via Web Share API (mobile) com fallback de copiar o link
     async function compartilharArtigo(artigo) {
       const link = gerarLinkArtigo(artigo);
-
-      registrarCompartilhamentoArtigo(artigo.id);
 
       if (navigator.share) {
         try {
@@ -396,7 +372,7 @@
       if (btnCompartilhar) btnCompartilhar.addEventListener('click', () => compartilharArtigo(artigo));
 
       // Incrementa visualizações de forma assíncrona, sem travar a renderização
-      registrarLeituraArtigo(artigo.id);
+      supabase.rpc('incrementar_visualizacao_artigo', { artigo_id: artigo.id }).then(() => { });
 
       function renderArtigo(a) {
         if (carregando) carregando.classList.add('d-none');
