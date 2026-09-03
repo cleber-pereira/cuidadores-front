@@ -211,6 +211,31 @@
       }
     }
 
+    // Registra uma visualização de vaga, via RPC atômica no banco
+    // (função incrementar_leitura_vaga). Funciona para qualquer visitante,
+    // logado ou não, já que não depende de sessão.
+    async function registrarVisualizacaoVaga(vagaId) {
+      if (!vagaId) return;
+      try {
+        const { error } = await supabase.rpc('incrementar_leitura_vaga', { p_vaga: vagaId });
+        if (error) console.error('Erro ao registrar visualização da vaga:', error);
+      } catch (e) {
+        console.error('Erro em registrarVisualizacaoVaga:', e);
+      }
+    }
+
+    // Registra um compartilhamento de vaga, via RPC atômica no banco
+    // (função incrementar_compartilhamento_vaga).
+    async function registrarCompartilhamentoVaga(vagaId) {
+      if (!vagaId) return;
+      try {
+        const { error } = await supabase.rpc('incrementar_compartilhamento_vaga', { p_vaga: vagaId });
+        if (error) console.error('Erro ao registrar compartilhamento da vaga:', error);
+      } catch (e) {
+        console.error('Erro em registrarCompartilhamentoVaga:', e);
+      }
+    }
+
     // Registra um clique (WhatsApp ou Mensagens) para o cuidador na tabela
     // c_logs. Se ainda não existir uma linha para esse cuidador, ela é
     // criada com o campo em questão já valendo 1. Se já existir, o campo
@@ -1623,6 +1648,9 @@
 
       vagaModalAtual = v;
 
+      // Incrementa visualizações de forma assíncrona, sem travar a abertura do modal
+      registrarVisualizacaoVaga(v.id);
+
       const jaCandidatado = vagasCandidatadasCache.has(v.id);
       const detalhes = [v.tipo_contrato, v.carga_horaria, v.remuneracao].filter(Boolean).join(' · ');
 
@@ -1886,6 +1914,7 @@
       document.getElementById('close-vaga-modal').addEventListener('click', fecharVagaModal);
       document.getElementById('vaga-modal-compartilhar').addEventListener('click', async () => {
         if (!vagaModalAtual) return;
+        registrarCompartilhamentoVaga(vagaModalAtual.id);
         const link = gerarLinkVaga(vagaModalAtual);
 
         if (navigator.share) {

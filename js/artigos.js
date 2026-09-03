@@ -79,9 +79,22 @@
       el._timeoutId = setTimeout(() => el.classList.remove('show'), 3000);
     }
 
+    // Registra um compartilhamento de artigo, via RPC atômica no banco
+    // (função incrementar_compartilhamento_artigo).
+    async function registrarCompartilhamentoArtigo(artigo) {
+      if (!artigo || !artigo.id) return;
+      try {
+        const { error } = await supabase.rpc('incrementar_compartilhamento_artigo', { p_artigo: artigo.id });
+        if (error) console.error('Erro ao registrar compartilhamento do artigo:', error);
+      } catch (e) {
+        console.error('Erro em registrarCompartilhamentoArtigo:', e);
+      }
+    }
+
     // Compartilha o artigo via Web Share API (mobile) com fallback de copiar o link
     async function compartilharArtigo(artigo) {
       const link = gerarLinkArtigo(artigo);
+      registrarCompartilhamentoArtigo(artigo);
 
       if (navigator.share) {
         try {
@@ -372,7 +385,9 @@
       if (btnCompartilhar) btnCompartilhar.addEventListener('click', () => compartilharArtigo(artigo));
 
       // Incrementa visualizações de forma assíncrona, sem travar a renderização
-      supabase.rpc('incrementar_visualizacao_artigo', { artigo_id: artigo.id }).then(() => { });
+      supabase.rpc('incrementar_leitura_artigo', { p_artigo: artigo.id }).then(({ error }) => {
+        if (error) console.error('Erro ao registrar visualização do artigo:', error);
+      });
 
       function renderArtigo(a) {
         if (carregando) carregando.classList.add('d-none');
