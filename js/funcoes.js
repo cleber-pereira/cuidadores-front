@@ -157,6 +157,11 @@
     function validarWhatsapp(whatsapp) {
       if (!whatsapp) return 'Informe o número de WhatsApp.';
       if (whatsapp.length < 10 || whatsapp.length > 11) return 'Informe um WhatsApp válido, com DDD (10 ou 11 dígitos).';
+      // Com 10 dígitos, o número após o DDD não pode começar com 9 —
+      // números que começam com 9 são celulares e precisam do 9º dígito,
+      // totalizando 11 dígitos (ex.: (61) 9999-9999 é inválido, deveria
+      // ser (61) 99999-9999).
+      if (whatsapp.length === 10 && whatsapp[2] === '9') return 'Número inválido: celulares que começam com 9 precisam ter 11 dígitos (DDD + 9 + 8 números).';
       return null;
     }
 
@@ -2062,7 +2067,9 @@
 function formatarCelular(input) {
   let value = input.value.replace(/\D/g, '');
   value = value.slice(0, 11);
-  if (value.length > 6) value = value.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+  if (value.length === 11) value = value.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+  else if (value.length === 10) value = value.replace(/^(\d{2})(\d{4})(\d{4})$/, '($1) $2-$3');
+  else if (value.length > 6) value = value.replace(/^(\d{2})(\d{4,5})(\d{0,4})$/, '($1) $2-$3');
   else if (value.length > 2) value = value.replace(/^(\d{2})(\d{0,5})$/, '($1) $2');
   else if (value.length > 0) value = value.replace(/^(\d{0,2})$/, '($1');
   input.value = value;
