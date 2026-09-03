@@ -1058,7 +1058,7 @@
         const whatsMsg = document.getElementById('wa-msg');
         const whatsInput = document.getElementById('seu-whats');
         const nomeInput = document.getElementById('seu-nome');
-        if (whatsInput.value.length < 15 || nomeInput.value.length < 1) {
+        if (whatsInput.value.length < 14 || nomeInput.value.length < 1) {
           showToast('Você precisa digitar uma mensagem e informar seu nome e um WhatsApp válido para contato.', 'danger');
           return;
         }
