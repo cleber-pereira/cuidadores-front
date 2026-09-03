@@ -198,6 +198,19 @@
       fetch(url);
     }
 
+    // Registra uma visita ao perfil de um cuidador, via RPC atômica no
+    // banco (função incrementar_visita). Funciona para qualquer visitante,
+    // logado ou não, já que não depende de sessão.
+    async function registrarVisita(cuidadorId) {
+      if (!cuidadorId) return;
+      try {
+        const { error } = await supabase.rpc('incrementar_visita', { p_cuidador: cuidadorId });
+        if (error) console.error('Erro ao registrar visita:', error);
+      } catch (e) {
+        console.error('Erro em registrarVisita:', e);
+      }
+    }
+
     // Registra um clique (WhatsApp ou Mensagens) para o cuidador na tabela
     // c_logs. Se ainda não existir uma linha para esse cuidador, ela é
     // criada com o campo em questão já valendo 1. Se já existir, o campo
@@ -1411,6 +1424,7 @@
         col.innerHTML = `<div class="cuidador-card h-100 p-4"><div class="d-flex align-items-start gap-3 mb-3"><img src="${foto}" class="avatar" alt="${nomePublico(c.nome)}" onerror="this.src='https://i.pravatar.cc/200?u=${c.id}'"/><div class="flex-grow-1"><div class="fw-700 mb-1">${nomePublico(c.nome)}</div><div class="d-flex flex-wrap gap-1 mb-1">${c.verificado ? '<span class="badge-verificado"><i class="bi bi-patch-check-fill me-1"></i>Verificado</span>' : ''}${c.disponivel ? '<span class="badge-disponivel"><i class="bi bi-circle-fill me-1" style="font-size:.55rem"></i>Disponível</span>' : '<span class="badge bg-secondary bg-opacity-10 text-secondary" style="font-size:.7rem;border-radius:2rem">Indisponível</span>'}</div><div class="stars">${stars(c.avaliacao)} <small class="text-muted ms-1">${(c.avaliacao || 5).toFixed(1)} (${c.total_reviews || 0})</small></div></div></div><div class="small text-muted mb-1"><i class="bi bi-geo-alt me-1"></i>${areaTexto}</div><div class="small text-muted mb-3"><i class="bi bi-briefcase me-1"></i>${c.experiencia} de experiência</div><div class="d-flex align-items-center justify-content-between"><div class="price-tag">${P}</div><button class="btn btn-brand btn-sm px-3">Ver perfil <i class="bi bi-arrow-right ms-1"></i></button></div></div>`;
         col.querySelector('.cuidador-card').addEventListener('click', () => {
           perfilAtual = c;
+          registrarVisita(c.id);
           goTo('perfil');
         });
         container.appendChild(col);
