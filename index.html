@@ -98,86 +98,6 @@
     .btn-whatsapp.btn-sm i.bi-whatsapp {
       font-size: .8rem;
     }
-
-    /* CARTÃO DE VISITA — nunca é exibido ao usuário. Fica montado fora da
-       tela (ver JS: gerarCartao) só para poder ser capturado e baixado
-       direto, já na HORIZONTAL (9x5cm), sem nenhum modal e sem rotação. */
-    .cartao-visita-frame {
-      position: relative;
-      overflow: hidden;
-      border-radius: 16px;
-      background: radial-gradient(circle at 100% 0%, #1e4a30 0%, #123321 45%, #0a2116 100%);
-    }
-    .cartao-visita {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      transform-origin: center center;
-      box-sizing: border-box;
-      padding: 0 6%;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 4%;
-      font-family: 'DM Sans', sans-serif;
-      color: #fff;
-    }
-    .cartao-avatar {
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #d9a94e;
-      flex-shrink: 0;
-      background: #0a2116;
-    }
-    .cartao-nome {
-      font-family: 'Fraunces', serif;
-      font-weight: 700;
-      font-size: clamp(.95rem, 4.6vw, 1.3rem);
-      line-height: 1.1;
-      margin: 0;
-      color: #f4e6c8;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-    .cartao-experiencia {
-      display: flex;
-      align-items: center;
-      gap: .3rem;
-      font-size: .7rem;
-      color: #d7e6da;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-    .cartao-funcao {
-      font-weight: 700;
-      font-size: .78rem;
-      letter-spacing: .02em;
-      color: #d9a94e;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-    .cartao-marca {
-      font-size: .6rem;
-      color: #a9c2ac;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-    .cartao-qr-lateral {
-      background: #fff;
-      border-radius: 10px;
-      box-sizing: border-box;
-      padding: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .cartao-qr-lateral canvas {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
   </style>
 </head>
 <!-- Google tag (gtag.js) -->
@@ -284,25 +204,6 @@
           <i class="bi bi-share me-1"></i>Compartilhar vaga
         </button>
         <button id="close-vaga-modal" class="btn btn-outline-brand w-100">Fechar</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- CARTÃO DE VISITA (nunca exibido ao usuário: usado só como base
-       oculta para montar a imagem e gerar o download direto, sem modal) -->
-  <div id="cartaoModal" style="display:none;">
-    <div class="cartao-visita-frame" id="cartao-visita-frame">
-      <div class="cartao-visita" id="cartao-visita">
-        <img id="cartao-foto" class="cartao-avatar" src="" alt="Foto" crossorigin="anonymous" />
-        <p class="cartao-nome" id="cartao-nome">—</p>
-        <span class="cartao-experiencia" id="cartao-experiencia">
-          <i class="bi bi-award-fill"></i><span id="cartao-experiencia-texto"></span>
-        </span>
-        <span class="cartao-funcao" id="cartao-funcao">Cuidador(a)</span>
-        <span class="cartao-marca">By CuidaDF.com.br</span>
-        <div class="cartao-qr-lateral" id="cartao-qr-lateral">
-          <canvas id="cartao-qrcode-canvas"></canvas>
-        </div>
       </div>
     </div>
   </div>
@@ -765,12 +666,6 @@
             </a>
           </div>
           <p class="small text-muted mb-0 mt-2">Compartilhe este link com quem quiser: ele leva direto ao seu perfil.</p>
-          <hr class="my-3" />
-          <label class="form-label fw-600 mb-2">Cartão de visita digital</label>
-          <p class="small text-muted mb-2">Gere seu cartão de visita com QR Code do seu perfil, pronto para enviar ou imprimir (9 x 5 cm).</p>
-          <button type="button" id="btn-gerar-cartao" class="btn btn-outline-brand w-100">
-            <i class="bi bi-person-vcard me-2"></i>Gerar Cartão de Visita
-          </button>
         </div>
         <div class="mb-4"><label class="form-label fw-600">Sua foto</label><input type="file" id="edit-foto-input"
             accept="image/*" style="display:none" />
@@ -1098,32 +993,9 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // Carrega uma lib global tentando a 1ª URL; se falhar (bloqueio de CDN,
-    // ad blocker, etc.), tenta a 2ª automaticamente antes de desistir.
-    function carregarComFallback(urls, aoTerminar) {
-      let i = 0;
-      function tentar() {
-        if (i >= urls.length) { aoTerminar(false); return; }
-        const s = document.createElement('script');
-        s.src = urls[i];
-        s.onload = () => aoTerminar(true);
-        s.onerror = () => { i++; tentar(); };
-        document.head.appendChild(s);
-      }
-      tentar();
-    }
-    carregarComFallback([
-      'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js',
-      'https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js'
-    ], (ok) => { if (!ok) console.error('Não foi possível carregar a biblioteca QRCode (ambas as CDNs falharam).'); });
-    carregarComFallback([
-      'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
-      'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'
-    ], (ok) => { if (!ok) console.error('Não foi possível carregar a biblioteca html2canvas (ambas as CDNs falharam).'); });
-
-    const scriptFuncoes = document.createElement('script');
-    scriptFuncoes.src = 'js/funcoes.js?v=' + new Date().getTime();
-    document.head.appendChild(scriptFuncoes);
+    const script = document.createElement('script');
+    script.src = 'js/funcoes.js?v=' + new Date().getTime();
+    document.head.appendChild(script);
   </script>
 
 </body>
