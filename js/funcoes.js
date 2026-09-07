@@ -745,8 +745,9 @@
         // porque as bibliotecas de QR Code / captura de imagem (vindas de
         // CDN) foram bloqueadas — sem internet, CDN bloqueado por
         // firewall/extensão (ex.: ad blocker), etc.
-        console.error('QRCode e/ou html2canvas não carregados — verifique a conexão com a internet ou se o CDN não está bloqueado.');
-        showToast('Não foi possível carregar o gerador do cartão. Verifique sua conexão.', 'danger');
+        const faltando = [!qrOk ? 'QRCode' : null, !canvasOk ? 'html2canvas' : null].filter(Boolean).join(' e ');
+        console.error(`Biblioteca(s) não carregada(s): ${faltando}. Verifique a conexão com a internet, bloqueadores de anúncio/privacidade ou firewall bloqueando CDNs (jsdelivr.net / unpkg.com / cdnjs.cloudflare.com).`);
+        showToast(`Não foi possível carregar o gerador do cartão (${faltando}). Verifique sua conexão ou desative bloqueadores de anúncio.`, 'danger');
         if (btnGerar) {
           btnGerar.disabled = false;
           btnGerar.innerHTML = textoOriginalBtn;

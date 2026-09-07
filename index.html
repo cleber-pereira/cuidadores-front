@@ -1097,12 +1097,33 @@
   </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
-    const script = document.createElement('script');
-    script.src = 'js/funcoes.js?v=' + new Date().getTime();
-    document.head.appendChild(script);
+    // Carrega uma lib global tentando a 1ª URL; se falhar (bloqueio de CDN,
+    // ad blocker, etc.), tenta a 2ª automaticamente antes de desistir.
+    function carregarComFallback(urls, aoTerminar) {
+      let i = 0;
+      function tentar() {
+        if (i >= urls.length) { aoTerminar(false); return; }
+        const s = document.createElement('script');
+        s.src = urls[i];
+        s.onload = () => aoTerminar(true);
+        s.onerror = () => { i++; tentar(); };
+        document.head.appendChild(s);
+      }
+      tentar();
+    }
+    carregarComFallback([
+      'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js',
+      'https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js'
+    ], (ok) => { if (!ok) console.error('Não foi possível carregar a biblioteca QRCode (ambas as CDNs falharam).'); });
+    carregarComFallback([
+      'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'
+    ], (ok) => { if (!ok) console.error('Não foi possível carregar a biblioteca html2canvas (ambas as CDNs falharam).'); });
+
+    const scriptFuncoes = document.createElement('script');
+    scriptFuncoes.src = 'js/funcoes.js?v=' + new Date().getTime();
+    document.head.appendChild(scriptFuncoes);
   </script>
 
 </body>
