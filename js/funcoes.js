@@ -662,6 +662,174 @@
         document.getElementById('edit-upload-label').innerHTML = 'Clique para alterar a foto';
       }
       window.perfilOriginalFoto = perfil.foto_url;
+      window.perfilParaCartao = perfil;
+    }
+
+    // ===== CARTÃO DE VISITA DIGITAL =====
+    // O cartão NÃO abre mais em modal: ao clicar no botão, ele é montado
+    // "por baixo dos panos" (fora da área visível da tela, sem aparecer
+    // para o usuário), capturado e baixado direto, já na HORIZONTAL
+    // (9cm de largura x 5cm de altura), sem nenhuma rotação.
+    const cartaoModal = document.getElementById('cartaoModal');
+    const CARTAO_LARGURA_CM = 9; // lado maior — largura final do arquivo
+    const CARTAO_ALTURA_CM = 5;  // lado menor — altura final do arquivo
+    const CARTAO_DPI_IMPRESSAO = 300;
+
+    // Dimensiona o cartão já na orientação horizontal final (9x5cm),
+    // sem nenhuma rotação/transform — largura > altura, igual ao arquivo
+    // que será baixado.
+    function dimensionarCartao() {
+      const cartaoEl = document.getElementById('cartao-visita');
+      const frameEl = document.getElementById('cartao-visita-frame');
+      const larguraPx = 340;
+      const alturaPx = Math.round(larguraPx * (CARTAO_ALTURA_CM / CARTAO_LARGURA_CM));
+
+      cartaoEl.style.width = larguraPx + 'px';
+      cartaoEl.style.height = alturaPx + 'px';
+      cartaoEl.style.transform = 'translate(-50%, -50%)';
+      frameEl.style.width = larguraPx + 'px';
+      frameEl.style.height = alturaPx + 'px';
+
+      const avatar = document.getElementById('cartao-foto');
+      const avatarPx = Math.round(alturaPx * 0.62);
+      avatar.style.width = avatarPx + 'px';
+      avatar.style.height = avatarPx + 'px';
+
+      const qrLateral = document.getElementById('cartao-qr-lateral');
+      const qrLadoPx = Math.round(alturaPx * 0.88);
+      qrLateral.style.width = qrLadoPx + 'px';
+      qrLateral.style.height = qrLadoPx + 'px';
+
+      const escalaImpressao = Math.round((CARTAO_LARGURA_CM / 2.54) * CARTAO_DPI_IMPRESSAO) / larguraPx;
+      return { larguraPx, alturaPx, qrLadoPx, escalaImpressao };
+    }
+
+    // Espera uma biblioteca global (carregada via CDN, ex.: QRCode,
+    // html2canvas) ficar disponível, tentando por até `timeoutMs`. Cobre o
+    // caso de a rede estar um pouco mais lenta e o script ainda não ter
+    // terminado de carregar no exato instante do clique.
+    function esperarLibGlobal(nome, timeoutMs = 8000, intervaloMs = 150) {
+      return new Promise((resolve) => {
+        if (typeof window[nome] !== 'undefined') { resolve(true); return; }
+        const inicio = Date.now();
+        const timer = setInterval(() => {
+          if (typeof window[nome] !== 'undefined') {
+            clearInterval(timer);
+            resolve(true);
+          } else if (Date.now() - inicio >= timeoutMs) {
+            clearInterval(timer);
+            resolve(false);
+          }
+        }, intervaloMs);
+      });
+    }
+
+    // Gera e baixa o cartão de visita direto, sem abrir nenhum modal.
+    async function gerarCartao() {
+      const perfil = window.perfilParaCartao || perfilAtual;
+      if (!perfil) { showToast('Não foi possível carregar seus dados.', 'danger'); return; }
+
+      const btnGerar = document.getElementById('btn-gerar-cartao');
+      const textoOriginalBtn = btnGerar ? btnGerar.innerHTML : '';
+      if (btnGerar) {
+        btnGerar.disabled = true;
+        btnGerar.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Gerando...';
+      }
+
+      const [qrOk, canvasOk] = await Promise.all([
+        esperarLibGlobal('QRCode'),
+        esperarLibGlobal('html2canvas'),
+      ]);
+      if (!qrOk || !canvasOk) {
+        // Depois de esperar e ainda assim não carregar, normalmente é
+        // porque as bibliotecas de QR Code / captura de imagem (vindas de
+        // CDN) foram bloqueadas — sem internet, CDN bloqueado por
+        // firewall/extensão (ex.: ad blocker), etc.
+        console.error('QRCode e/ou html2canvas não carregados — verifique a conexão com a internet ou se o CDN não está bloqueado.');
+        showToast('Não foi possível carregar o gerador do cartão. Verifique sua conexão.', 'danger');
+        if (btnGerar) {
+          btnGerar.disabled = false;
+          btnGerar.innerHTML = textoOriginalBtn;
+        }
+        return;
+      }
+
+      try {
+        const foto = perfil.foto_url || `https://duoobpxovvpxfgvvghgk.supabase.co/storage/v1/object/public/fotos-cuidadores/avatar-neutro.png`;
+        document.getElementById('cartao-foto').src = foto;
+        document.getElementById('cartao-nome').textContent = nomePublico(perfil.nome) || perfil.nome || '—';
+
+        // Linha "Mais de X anos de experiência" — ajuste o nome do campo
+        // (perfil.anos_experiencia) se no seu banco ele se chamar diferente.
+        // Se não houver valor, a linha fica oculta em vez de aparecer vazia.
+        const expEl = document.getElementById('cartao-experiencia');
+        const anos = perfil.anos_experiencia;
+        if (anos) {
+          document.getElementById('cartao-experiencia-texto').textContent =
+            `Mais de ${anos} ano${Number(anos) === 1 ? '' : 's'} de experiência`;
+          expEl.style.display = 'flex';
+        } else {
+          expEl.style.display = 'none';
+        }
+
+        // Renderiza o cartão fora da área visível da tela (sem abrir o
+        // modal) apenas para poder medir o layout e capturar com
+        // html2canvas — o usuário nunca vê essa etapa.
+        cartaoModal.style.position = 'fixed';
+        cartaoModal.style.top = '0';
+        cartaoModal.style.left = '-99999px';
+        cartaoModal.style.display = 'flex';
+        await new Promise(requestAnimationFrame);
+
+        const dims = dimensionarCartao();
+
+        const link = gerarLinkPerfil(perfil);
+        const canvasQr = document.getElementById('cartao-qrcode-canvas');
+        // Gera o QR Code já na resolução de impressão (300dpi).
+        const resolucaoQr = Math.max(160, Math.round(dims.qrLadoPx * dims.escalaImpressao));
+        try {
+          await QRCode.toCanvas(canvasQr, link, { width: resolucaoQr, margin: 1, color: { dark: '#123321', light: '#ffffff' } });
+        } catch (err) {
+          console.error('Erro ao gerar QR Code:', err);
+          showToast('Erro ao gerar o QR Code do cartão.', 'danger');
+          return;
+        }
+
+        // Captura o cartão exatamente como está montado — na horizontal,
+        // sem nenhuma rotação — em escala de qualidade de impressão,
+        // mantendo a proporção física de 9cm x 5cm.
+        const cartaoEl = document.getElementById('cartao-visita');
+        const larguraAlvoPx = Math.round((CARTAO_LARGURA_CM / 2.54) * CARTAO_DPI_IMPRESSAO);
+        const escala = larguraAlvoPx / cartaoEl.offsetWidth;
+        const canvasFinal = await html2canvas(cartaoEl, { scale: escala, useCORS: true, backgroundColor: null });
+
+        const nomeArquivo = `cartao-visita-${slugNome((window.perfilParaCartao || perfilAtual || {}).nome || 'cuidador')}.png`;
+        canvasFinal.toBlob((blob) => {
+          if (!blob) { showToast('Não foi possível gerar o cartão.', 'danger'); return; }
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = nomeArquivo;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          showToast('Cartão de visita salvo!');
+        }, 'image/png');
+      } catch (err) {
+        console.error('Erro ao gerar cartão:', err);
+        showToast('Erro ao gerar o cartão de visita.', 'danger');
+      } finally {
+        // Garante que o "modal" nunca fique visível para o usuário.
+        cartaoModal.style.display = 'none';
+        cartaoModal.style.position = '';
+        cartaoModal.style.top = '';
+        cartaoModal.style.left = '';
+        if (btnGerar) {
+          btnGerar.disabled = false;
+          btnGerar.innerHTML = textoOriginalBtn;
+        }
+      }
     }
 
     // Atualizar perfil cuidador
@@ -1909,6 +2077,7 @@
           copiarFallback();
         }
       });
+      document.getElementById('btn-gerar-cartao').addEventListener('click', gerarCartao);
       document.getElementById('cadastro-usuario-voltar').addEventListener('click', () => goTo('home'));
       document.getElementById('vagas-voltar').addEventListener('click', () => goTo('home'));
       document.getElementById('close-vaga-modal').addEventListener('click', fecharVagaModal);
