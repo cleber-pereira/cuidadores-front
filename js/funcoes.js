@@ -20,6 +20,40 @@
     const metricas = urlParams.get('metricas');
     const local = window.location.href.indexOf('127.0.0.1') != -1;
 
+    // ===================================================================
+    // VISITAS AO SITE POR ORIGEM (ex.: https://cuidadf.com.br/?origem=fb)
+    // Grava 1 linha na tabela c_visitas_site a cada visita. A origem vem
+    // do parâmetro ?origem= (ou ?utm_source=); sem parâmetro = 'direto'.
+    // Não conta: acessos locais, ?metricas=1 e recarregamentos da página
+    // na mesma aba (controlado por sessionStorage).
+    // ===================================================================
+    async function registrarVisitaSite() {
+      try {
+        if (metricas === '1' || local) return;
+
+        const bruto = urlParams.get('origem') || urlParams.get('utm_source') || 'direto';
+        const origem = bruto.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 50) || 'direto';
+
+        // Evita contar F5 / navegação dentro do site como nova visita
+        const chave = 'visitaSiteRegistrada';
+        try {
+          if (sessionStorage.getItem(chave)) return;
+          sessionStorage.setItem(chave, '1');
+        } catch (e) { /* navegador bloqueou o storage: segue e registra */ }
+
+        const { error } = await supabase.from('c_visitas_site').insert({
+          origem,
+          pagina: window.location.pathname,
+          referrer: (document.referrer || '').slice(0, 300) || null,
+          dispositivo: /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? 'mobile' : 'desktop'
+        });
+        if (error) console.error('Erro ao registrar visita do site:', error);
+      } catch (e) {
+        console.error('Erro em registrarVisitaSite:', e);
+      }
+    }
+    registrarVisitaSite(); // sem await: não atrasa o carregamento do site
+
     // ATUALIZAÇÃO DE VISITAS (DESATIVADO TEMPORARIAMENTE - reativar quando necessário)
     /*
     if (metricas != '1' && !local) {
