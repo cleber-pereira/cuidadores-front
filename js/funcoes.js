@@ -28,7 +28,8 @@
     // na mesma aba (controlado por sessionStorage).
     // ===================================================================
     async function registrarVisitaSite() {
-    console.log(metricas,local);
+    console.log('metricas: ', metricas, 'local: ', local);
+      debugger;
       try {
         if (metricas === '1' || local) return;
 
@@ -38,6 +39,7 @@
         // Evita contar F5 / navegação dentro do site como nova visita
         const chave = 'visitaSiteRegistrada';
         try {
+          console.log('sessionStorage.getItem(chave): ', sessionStorage.getItem(chave));
           if (sessionStorage.getItem(chave)) return;
           sessionStorage.setItem(chave, '1');
         } catch (e) { /* navegador bloqueou o storage: segue e registra */ }
