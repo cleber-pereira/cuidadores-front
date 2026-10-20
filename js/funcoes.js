@@ -28,7 +28,6 @@
     // na mesma aba (controlado por sessionStorage).
     // ===================================================================
     async function registrarVisitaSite() {
-      debugger;
       try {
         if (metricas === '1' || local) return;
 
@@ -53,6 +52,7 @@
         console.error('Erro em registrarVisitaSite:', e);
       }
     }
+      debugger;
     registrarVisitaSite(); // sem await: não atrasa o carregamento do site
 
     // ATUALIZAÇÃO DE VISITAS (DESATIVADO TEMPORARIAMENTE - reativar quando necessário)
