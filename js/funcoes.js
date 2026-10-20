@@ -28,6 +28,7 @@
     // na mesma aba (controlado por sessionStorage).
     // ===================================================================
     async function registrarVisitaSite() {
+      debugger;
       try {
         if (metricas === '1' || local) return;
 
